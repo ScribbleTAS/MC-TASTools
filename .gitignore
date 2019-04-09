@@ -23,6 +23,5 @@ run
 *.bat
 gradlew
 gradle.properties
-forge-1.12.2-14.23.5.2795-changelog.txt
-CREDITS.txt
+*.txt
 
