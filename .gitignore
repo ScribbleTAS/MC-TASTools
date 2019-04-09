@@ -22,7 +22,7 @@ eclipse
 run
 *.bat
 gradlew
-gradlew.properties
+gradle.properties
 forge-1.12.2-14.23.5.2795-changelog.txt
 CREDITS.txt
 
