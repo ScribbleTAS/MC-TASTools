@@ -1,0 +1,16 @@
+[
+{
+  "modid": "tastools",
+  "name": "TAS-Tools",
+  "description": "Tools for MC-TASsing",
+  "version": "1.0",
+  "mcversion": "1.12.2",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ScribbleLP"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
