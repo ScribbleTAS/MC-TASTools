@@ -6,15 +6,17 @@ import java.util.List;
 
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.duping.Refilling;
+import de.scribble.lp.TASTools.proxy.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.World;
 
 public class DupeCommandc extends CommandBase{
-	private Minecraft mc= Minecraft.getMinecraft();
+
 	private	 List<String> tab = new ArrayList<String>();
 	
 	public List<String> emptyList(List<String> full){
@@ -38,13 +40,18 @@ public class DupeCommandc extends CommandBase{
 	public int getRequiredPermissionLevel() {
 		return 2;
 	}
-
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		if(sender instanceof EntityPlayer && mc.player.getEntityWorld().isRemote&&DupeEvents.dupingenabled){
-			if(args.length==0||(args[0].equalsIgnoreCase("chest")&&args.length==1)){
-				File file= new File(mc.mcDataDir, "saves" + File.separator +mc.getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
-				if (file.exists())new Refilling().refill(file, (EntityPlayer)sender);
+		World world =sender.getEntityWorld();
+		if (world.isRemote) {
+			CommonProxy.logger.info("Client side");
+			return;
+		}else {
+			if(sender instanceof EntityPlayer &&DupeEvents.dupingenabled){
+				if(args.length==0||(args[0].equalsIgnoreCase("chest")&&args.length==1)){
+					File file= new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator +Minecraft.getMinecraft().getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
+					if (file.exists())new Refilling().refill(file, (EntityPlayer)sender);
+				}
 			}
 		}
 	}

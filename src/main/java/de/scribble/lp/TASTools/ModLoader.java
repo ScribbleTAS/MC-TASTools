@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Mod(modid = "tastools", name = "TAS-Tools", version = "1.0")
 public class ModLoader {
@@ -27,8 +28,7 @@ public class ModLoader {
 	@SidedProxy(serverSide = "de.scribble.lp.TASTools.proxy.CommonProxy", clientSide = "de.scribble.lp.TASTools.proxy.ClientProxy")
 	public static CommonProxy proxy;
 	
-	//Keybinds
-	public static KeyBinding DupeKey = new KeyBinding("Load Chests/Items", Keyboard.KEY_I, "DupeMod");
+	
 	
 
 	@EventHandler
@@ -46,9 +46,8 @@ public class ModLoader {
 	public void postInit(FMLPostInitializationEvent ev) {
 		proxy.postInit(ev);
 	}
-	
 	@EventHandler
-	public void ServerStart(FMLServerStartingEvent ev) {
+	public void serverStart(FMLServerStartingEvent ev) {
 		ev.registerServerCommand(new DupeCommandc());
 		ev.registerServerCommand(new TastoolsCommandc());
 	}
