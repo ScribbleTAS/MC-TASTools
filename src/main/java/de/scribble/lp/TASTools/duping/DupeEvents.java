@@ -16,7 +16,7 @@ public class DupeEvents {
 	
 	@SubscribeEvent
 	public void onCloseServer(PlayerEvent.PlayerLoggedOutEvent ev){
-		if(dupingenabled) {
+		if(dupingenabled&&ev.player.world.isRemote) {
 			CommonProxy.logger.info("Start saving...");
 			new Recording().saveFile(ev.player);
 		}
@@ -24,7 +24,7 @@ public class DupeEvents {
 	
 	@SubscribeEvent
 	public void onOpenServer(PlayerEvent.PlayerLoggedInEvent ev){
-		if (dupingenabled) {
+		if (dupingenabled&&ev.player.world.isRemote) {
 			File file= new File(mc.mcDataDir, "saves" + File.separator +mc.getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
 			if (file.exists()){
 				CommonProxy.logger.info("Start refilling...");
@@ -35,7 +35,7 @@ public class DupeEvents {
 	
 	@SubscribeEvent
 	public void pressKeybinding(InputEvent.KeyInputEvent ev){
-		if (dupingenabled){
+		if (dupingenabled&&mc.world.isRemote){
 			if(ModLoader.DupeKey.isPressed()){
 				File file= new File(mc.mcDataDir, "saves" + File.separator +mc.getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
 				mc.player.sendChatMessage("/dupe"); //I'm lazy

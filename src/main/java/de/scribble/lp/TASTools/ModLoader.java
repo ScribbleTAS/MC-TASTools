@@ -30,11 +30,7 @@ public class ModLoader {
 	//Keybinds
 	public static KeyBinding DupeKey = new KeyBinding("Load Chests/Items", Keyboard.KEY_I, "DupeMod");
 	
-	
-	
-	
-	
-	
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent ev) {
 		proxy.preInit(ev);

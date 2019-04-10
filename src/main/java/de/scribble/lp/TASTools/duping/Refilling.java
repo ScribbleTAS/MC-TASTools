@@ -58,52 +58,57 @@ public class Refilling {
 				else if(s.startsWith("#")){				//comments
 					continue;
 				}
-				else if(s.startsWith("Chest:")){
+				else if(s.startsWith("Chest:")){		//refill chests
 					while (true){
-						if((s=Buff.readLine()).equalsIgnoreCase("\t-")){
+						if((s=Buff.readLine()).equalsIgnoreCase("\t-")){	//check for the end of the chest section
 							break;
 						}
 						else if(s.startsWith("#")){		//comments
 							continue;
 						}
 						else if(s.startsWith("\tx")){
-							coords=s.split("(x=)|(,\\ y=)|(,\\ z=)");
-							if (world.getBlockState(new BlockPos(Integer.parseInt(coords[1]),Integer.parseInt(coords[2]),Integer.parseInt(coords[3]))).getBlock()== Blocks.CHEST||world.getBlockState(new BlockPos(Integer.parseInt(coords[1]),Integer.parseInt(coords[2]),Integer.parseInt(coords[3]))).getBlock()== Blocks.TRAPPED_CHEST){
+							coords=s.split("(x=)|(,\\ y=)|(,\\ z=)");		//getting the coordinates of the chest
+							if (world.getBlockState(new BlockPos(Integer.parseInt(coords[1]),Integer.parseInt(coords[2]),Integer.parseInt(coords[3]))).getBlock()== Blocks.CHEST||world.getBlockState(new BlockPos(Integer.parseInt(coords[1]),Integer.parseInt(coords[2]),Integer.parseInt(coords[3]))).getBlock()== Blocks.TRAPPED_CHEST){	//check if the targeted block is a chest or a redstone chest
 									
 								foundchest= (TileEntityChest) world.getTileEntity(new BlockPos(Integer.parseInt(coords[1]),Integer.parseInt(coords[2]),Integer.parseInt(coords[3])));
-							
+								
+								/*Check if the player is too far away from the chest and prevents it from being refilled... A failsafe and cheat prevention*/
 								if(playerPos.distanceSq((double)foundchest.getPos().getX(), (double)foundchest.getPos().getY(), (double)foundchest.getPos().getZ())>50.0){
 										CommonProxy.logger.error("Chest at "+Integer.parseInt(coords[1])+" "+Integer.parseInt(coords[2])+" "+Integer.parseInt(coords[3])+" is too far away! Distance: "+playerPos.distanceSq((double)foundchest.getPos().getX(), (double)foundchest.getPos().getY(), (double)foundchest.getPos().getZ()));
 										continue;
 								}
 								while(true){
-									if((s=Buff.readLine()).equalsIgnoreCase("\t\t-")){
+									if((s=Buff.readLine()).equalsIgnoreCase("\t\t-")){ 	//check for the end of the chest contains section
 										break;
 									}
 									else if(s.startsWith("#")){		//comments
 										continue;
 									}
-									else if(s.startsWith("\t\tSlot")){
+									else if(s.startsWith("\t\tSlot")){ 		//read out the items from the line and puts it into the chest slot
 										items=s.split(";");
 										
+										/*items[2]= itemID, items[4]=amount, items[5]=damage*/
 										ItemStack properties= new ItemStack(Item.getItemById(Integer.parseInt(items[2])),
 																								Integer.parseInt(items[4]),
 																								Integer.parseInt(items[5]));
+										
+										/*Split items[7] into enchantmentID and enchantmentLvl*/
 										if(!items[7].equals("[]")){
 											enchantments=items[7].split("(\\[\\{lvl:)|(s,id:)|(s\\},\\{lvl:)|(s\\})");
 											for(int index=1;index<=(enchantments.length-2)/2;index++){
 												properties.addEnchantment(Enchantment.getEnchantmentByID(Integer.parseInt(enchantments[2*index])), Integer.parseInt(enchantments[2*index-1]));
 											}
 										}
+										/*Add the custom name if available*/
 										if(!items[6].equals("null")){
 											properties.setStackDisplayName(items[6]);
 										}
-										foundchest.setInventorySlotContents(Integer.parseInt(items[1]), properties);
+										foundchest.setInventorySlotContents(Integer.parseInt(items[1]), properties);	//Set the item into the slot
 										chestitemcounter++; //for logging
 									}
 								}chestcounter++; //for logging
 							}
-							else{
+							else{	//Message if there is no chest at the specified coordinates, can happen when using /dupe
 								CommonProxy.logger.error("Didn't find a chest at "+Integer.parseInt(coords[1])+" "+Integer.parseInt(coords[2])+" "+Integer.parseInt(coords[3])+".");
 								continue;
 							}
