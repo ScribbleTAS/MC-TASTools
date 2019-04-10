@@ -1,5 +1,6 @@
 package de.scribble.lp.TASTools.keystroke;
 
+import de.scribble.lp.TASTools.proxy.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -15,11 +16,18 @@ public class GuiKeystrokes extends Gui {
 	private static int corner=0;
 	
 	/**
-	 * 
+	 * 0=downLeft
+	 * 1=downRight
+	 * 2=upRight
+	 * 3=upLeft
 	 * @param cornernumber
 	 */
 	public static void changeCorner(int cornernumber) {
-		corner=cornernumber;
+		if(cornernumber<=3&&cornernumber>=0) {
+			corner=cornernumber;
+		}else {
+			CommonProxy.logger.error("Error in changeCorner. The number has to be 0-3. Number entered: "+cornernumber);
+		}
 	}
 	
 	@SubscribeEvent

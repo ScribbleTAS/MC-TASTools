@@ -115,23 +115,23 @@ public class Refilling {
 						}
 					}
 				}
-				else if(s.startsWith("Items:")){
+				else if(s.startsWith("Items:")){ 	//refill items on the ground, here just titled as "Items
 					
 					
 					String[] position=s.split(":");
-					BlockPos dupePos= new BlockPos(Integer.parseInt(position[1]),Integer.parseInt(position[2]),Integer.parseInt(position[3]));
-					List<EntityItem> entitylist= world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(dupePos).grow(10.0));
+					BlockPos dupePos= new BlockPos(Integer.parseInt(position[1]),Integer.parseInt(position[2]),Integer.parseInt(position[3]));	//get the position where the s+q was done
+					List<EntityItem> entitylist= world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(dupePos).grow(10.0));			//get all entityitems around the player
 					
 					
-					if(playerPos.distanceSq((double)dupePos.getX(),(double)dupePos.getY(),(double)dupePos.getZ())>=50.0){
+					if(playerPos.distanceSq((double)dupePos.getX(),(double)dupePos.getY(),(double)dupePos.getZ())>=50.0){						//abort if the player is too far away from the duping position, cheat prevention and failsafe when using /dupe
 						CommonProxy.logger.error("Player moved too far from initial duping position. Aborting EntityDupe! DupePosition: ("+dupePos.getX()+";"+dupePos.getY()+";"+dupePos.getZ()+") Distance: "+playerPos.distanceSq((double)dupePos.getX(),(double)dupePos.getY(),(double)dupePos.getZ()));
 						continue;
 					}
-					if(!entitylist.isEmpty()){
+					if(!entitylist.isEmpty()){	//Kill all items in the surrounding area
 						killItems(entitylist);
 					}
 					while (true){
-						if((s=Buff.readLine()).equalsIgnoreCase("\t-")){
+						if((s=Buff.readLine()).equalsIgnoreCase("\t-")){	//check for the end of the item section
 							break;
 						}
 						else if(s.startsWith("#")){		//comments
@@ -139,38 +139,38 @@ public class Refilling {
 						}
 						else if(s.startsWith("\tItem;")){
 							String[] props=s.split(";");
-							ItemStack Overflow= new ItemStack(Item.getItemById(Integer.parseInt(props[5])),
+							ItemStack Overflow= new ItemStack(Item.getItemById(Integer.parseInt(props[5])), //Create the ItemStack
 									Integer.parseInt(props[7]),
 									Integer.parseInt(props[8]));
 							
-							if(!props[10].equals("[]")){
+							if(!props[10].equals("[]")){	//add Enchantments
 								enchantments=props[10].split("(\\[\\{lvl:)|(s,id:)|(s\\},\\{lvl:)|(s\\})");
 								for(int index=1;index<=(enchantments.length-2)/2;index++){
 									Overflow.addEnchantment(Enchantment.getEnchantmentByID(Integer.parseInt(enchantments[2*index])), Integer.parseInt(enchantments[2*index-1]));
 								}
 							}
-							if(!props[9].equals("null")){
+							if(!props[9].equals("null")){ //set customName
 								Overflow.setStackDisplayName(props[9]);
 							}
+							/*Create the EntityItem. The variable name is stupid, I know*/
 							EntityItem endidyidem=new EntityItem(world, Double.parseDouble(props[2]), Double.parseDouble(props[3]), Double.parseDouble(props[4]), Overflow);
 							world.spawnEntity(endidyidem);
+							
 							if(endidyidem.lifespan>Integer.parseInt(props[11])){	//check if value is bigger than the lifespan aka over 6000
-								endidyidem.lifespan=endidyidem.lifespan-Integer.parseInt(props[11]);
+								endidyidem.lifespan=endidyidem.lifespan-Integer.parseInt(props[11]);	//set lifespan
 							}
-							if(endidyidem.lifespan>Integer.parseInt(props[11])){	//check if value is bigger than the lifespan aka over 6000
-								endidyidem.lifespan=endidyidem.lifespan-Integer.parseInt(props[11]);
-							}
+							
 							if(props[12].equals("null")) {
-								if(endidyidem.getAge()<10){
+								if(endidyidem.getAge()<10){		//set pickup delay
 									endidyidem.setPickupDelay(10-Integer.parseInt(props[11]));
 								}
 							}
 							else {
-								if(endidyidem.getAge()<40){
+								if(endidyidem.getAge()<40){		//set pickup delay when a person threw the block
 									endidyidem.setPickupDelay(40-Integer.parseInt(props[11]));
 								}
 							}
-							endidyidem.motionX=0;
+							endidyidem.motionX=0;	//set the motion to zero so it doesn't fly around
 							endidyidem.motionY=0;
 							endidyidem.motionZ=0;
 							itemcounter++; //for logging

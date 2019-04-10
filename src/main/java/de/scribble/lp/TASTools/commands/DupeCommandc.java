@@ -16,15 +16,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
 public class DupeCommandc extends CommandBase{
-
-	private	 List<String> tab = new ArrayList<String>();
-	
-	public List<String> emptyList(List<String> full){
-		while(full.size()!=0){
-			full.remove(0);
-		}
-		return full;
-	}
 	
 	@Override
 	public String getName() {
@@ -43,15 +34,10 @@ public class DupeCommandc extends CommandBase{
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		World world =sender.getEntityWorld();
-		if (world.isRemote) {
-			CommonProxy.logger.info("Client side");
-			return;
-		}else {
 			if(sender instanceof EntityPlayer &&DupeEvents.dupingenabled){
 				if(args.length==0||(args[0].equalsIgnoreCase("chest")&&args.length==1)){
-					File file= new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator +Minecraft.getMinecraft().getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
-					if (file.exists())new Refilling().refill(file, (EntityPlayer)sender);
-				}
+				File file= new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator +Minecraft.getMinecraft().getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
+				if (file.exists())new Refilling().refill(file, (EntityPlayer)sender);
 			}
 		}
 	}
