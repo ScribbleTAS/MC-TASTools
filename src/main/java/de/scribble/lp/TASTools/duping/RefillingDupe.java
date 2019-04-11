@@ -24,7 +24,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import scala.collection.immutable.VectorBuilder;
 
-public class Refilling {
+public class RefillingDupe {
 	private Minecraft mc= Minecraft.getMinecraft(); 
 	private TileEntityChest foundchest;
 	private int chestcounter=0;

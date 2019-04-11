@@ -4,6 +4,8 @@ import org.lwjgl.input.Keyboard;
 
 import de.scribble.lp.TASTools.commands.DupeCommandc;
 import de.scribble.lp.TASTools.commands.TastoolsCommandc;
+import de.scribble.lp.TASTools.freeze.FreezePacket;
+import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.proxy.CommonProxy;
 import net.minecraft.client.settings.KeyBinding;
@@ -17,6 +19,9 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid = "tastools", name = "TAS-Tools", version = "1.0")
 public class ModLoader {
@@ -28,11 +33,13 @@ public class ModLoader {
 	@SidedProxy(serverSide = "de.scribble.lp.TASTools.proxy.CommonProxy", clientSide = "de.scribble.lp.TASTools.proxy.ClientProxy")
 	public static CommonProxy proxy;
 	
-	
+	public static SimpleNetworkWrapper NETWORK;
 	
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent ev) {
+		NETWORK= NetworkRegistry.INSTANCE.newSimpleChannel("tastools");
+		NETWORK.registerMessage(new FreezePacketHandler(), FreezePacket.class, 0, Side.SERVER);
 		proxy.preInit(ev);
 		
 	}
@@ -48,7 +55,9 @@ public class ModLoader {
 	}
 	@EventHandler
 	public void serverStart(FMLServerStartingEvent ev) {
-		ev.registerServerCommand(new DupeCommandc());
+		if(!CommonProxy.isDupeModLoaded()) {
+			ev.registerServerCommand(new DupeCommandc());
+		}
 		ev.registerServerCommand(new TastoolsCommandc());
 	}
 }

@@ -1,0 +1,12 @@
+
+#lol_US
+
+#Keystrokes
+msg.keystrokes.disabled=§cButtonmashin dizabled
+msg.keystrokes.enabled=§aButtonmashin enabled
+msg.keystrokes.tasmoderr=§cButtonmashin is dizabled due to TASmod buttonmashin. Plis do /tasmod gui to do stuffz
+
+#Duping
+msg.duping.disabled=§cI See Double™ dizabled
+msg.duping.enabled=§aI See Double™ enabled
+msg.duping.dupemoderr=§cI See Double™ is here, so dis commandz is dizabled

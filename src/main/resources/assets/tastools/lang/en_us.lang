@@ -1,0 +1,12 @@
+
+#en_US
+
+#Keystrokes
+msg.keystrokes.disabled=§cKeystrokes disabled
+msg.keystrokes.enabled=§aKeystrokes enabled
+msg.keystrokes.tasmoderr=§cKeystrokes are disabled due to the TASmod keystrokes. Please refer to /tasmod gui to change the settings
+
+#Duping
+msg.duping.disabled=§cDuping disabled
+msg.duping.enabled=§aDuping enabled
+msg.duping.dupemoderr=§cDupeMod is loaded, so this command is disabled

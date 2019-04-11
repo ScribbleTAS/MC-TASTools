@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
-public class Recording {
+public class RecordingDupe {
 	private Minecraft mc= Minecraft.getMinecraft();
 	private StringBuilder output = new StringBuilder();
 	private int chestcounter=0;

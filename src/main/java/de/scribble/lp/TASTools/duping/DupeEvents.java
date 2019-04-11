@@ -21,7 +21,7 @@ public class DupeEvents {
 	public void onCloseServer(PlayerEvent.PlayerLoggedOutEvent ev){
 		if(dupingenabled&&!ev.player.world.isRemote) {
 			CommonProxy.logger.info("Start saving...");
-			new Recording().saveFile(ev.player);
+			new RecordingDupe().saveFile(ev.player);
 		}
 	}
 	
@@ -31,7 +31,7 @@ public class DupeEvents {
 			File file= new File(mc.mcDataDir, "saves" + File.separator +mc.getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
 			if (file.exists()){
 				CommonProxy.logger.info("Start refilling...");
-				new Refilling().refill(file, ev.player);
+				new RefillingDupe().refill(file, ev.player);
 			}
 		}
 	}

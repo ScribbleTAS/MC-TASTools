@@ -7,6 +7,7 @@ import de.scribble.lp.TASTools.commands.DupeCommandc;
 import de.scribble.lp.TASTools.commands.TastoolsCommandc;
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
+import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -27,7 +28,8 @@ public class ClientProxy extends CommonProxy{
 		config.load();
 		GuiKeystrokes.guienabled=config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").getBoolean();
 		String position=config.get("Keystrokes","CornerPos", "downLeft", "Sets the Keystroke to that specific corner. Options: downLeft,downRight,upRight,upLeft").getString();
-		DupeEvents.dupingenabled=config.get("Duping","Enabled", true, "Activates the duping on startup").getBoolean();
+		DupeEvents.dupingenabled=config.get("Duping","Enabled", false, "Activates the duping on startup").getBoolean();
+		VelocityEvents.velocityenabled=config.get("Velocity", "Enabled", true, "Activates velocity saving on startup").getBoolean();
 		config.save();
 		
 		if (position.equals("downLeft")) {
@@ -45,9 +47,19 @@ public class ClientProxy extends CommonProxy{
 	}
 	
 	public void init(FMLInitializationEvent ev) {
-		MinecraftForge.EVENT_BUS.register(new DupeEvents());
-		MinecraftForge.EVENT_BUS.register(new GuiKeystrokes());
 		super.init(ev);
+		//disable dupemod in this mod
+		if(!CommonProxy.isDupeModLoaded()){
+			MinecraftForge.EVENT_BUS.register(new DupeEvents());
+		}
+		else {
+			CommonProxy.logger.warn("Found the DupeMod to be installed! DupeMod is integrated in TAStools, so no need to load that!");
+		}
+		//disable keystrokes from this mod
+		if(!CommonProxy.isTASModLoaded()) {
+			MinecraftForge.EVENT_BUS.register(new GuiKeystrokes());
+		}
+		
 	}
 	
 	public void postInit(FMLPostInitializationEvent ev) {

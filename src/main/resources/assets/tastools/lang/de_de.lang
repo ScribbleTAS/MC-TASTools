@@ -1,0 +1,13 @@
+
+#de_DE
+
+#Keystrokes
+msg.keystrokes.disabled=§cKeystrokes ausgeschaltet
+msg.keystrokes.enabled=§aKeystrokes eingeschaltet
+msg.keystrokes.tasmoderr=§cKeystrokes sind ausgeschaltet da die TASmod ebenfalls keystrokes benutzt. Bitte benutze /tasmod gui um die Einstellungen zu ändern
+
+
+#Duping
+msg.duping.disabled=§cDuping ausgeschaltet
+msg.duping.enabled=§aDuping eingeschaltet
+msg.duping.dupemoderr=§cDupeMod ist geladen, weswegen dieser Befehl ausgeschaltet ist
