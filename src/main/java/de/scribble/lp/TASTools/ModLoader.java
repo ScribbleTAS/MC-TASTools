@@ -38,10 +38,7 @@ public class ModLoader {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent ev) {
-		NETWORK= NetworkRegistry.INSTANCE.newSimpleChannel("tastools");
-		NETWORK.registerMessage(new FreezePacketHandler(), FreezePacket.class, 0, Side.SERVER);
 		proxy.preInit(ev);
-		
 	}
 	
 	@EventHandler

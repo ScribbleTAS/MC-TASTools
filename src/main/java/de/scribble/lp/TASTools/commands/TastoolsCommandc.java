@@ -4,23 +4,35 @@ import java.util.List;
 
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.duping.DupeEvents;
+import de.scribble.lp.TASTools.freeze.EntityDataStuff;
+import de.scribble.lp.TASTools.freeze.FreezeEvents;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.proxy.ClientProxy;
 import de.scribble.lp.TASTools.proxy.CommonProxy;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class TastoolsCommandc extends CommandBase{
-	static boolean freeze=false;
+	public static boolean freeze=false;
+	public static EntityDataStuff entity;
+	private static FreezeEvents Freezer =new FreezeEvents();
+
+	
 	public List<String> emptyList(List<String> full){
 		while(full.size()!=0){
 			full.remove(0);
@@ -120,12 +132,29 @@ public class TastoolsCommandc extends CommandBase{
 				}
 			}
 		} if (args.length==1&&args[0].equalsIgnoreCase("freeze")) {
-			if (!freeze) {
-				freeze=true;
-				ModLoader.NETWORK.sendToServer(new FreezePacket(true));
-			}else if (freeze) {
-				freeze=false;
-				ModLoader.NETWORK.sendToServer(new FreezePacket(false));
+			if(!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
+				if (!freeze) {
+					freeze=true;
+					ModLoader.NETWORK.sendToServer(new FreezePacket(true));
+				}else if (freeze) {
+					freeze=false;
+					ModLoader.NETWORK.sendToServer(new FreezePacket(false));
+				}
+			}else {
+				if (!freeze) {
+					freeze=true;
+					
+					Freezer.playerMP=(EntityPlayerMP)sender;
+					
+					MinecraftForge.EVENT_BUS.register(Freezer);
+					EntityPlayer sendman =(EntityPlayer) sender;
+					//TODO cleanup this nonsense
+					entity=new EntityDataStuff(sendman.posX, sendman.posY, sendman.posZ, sendman.rotationPitch, sendman.rotationYaw, sendman.motionX, sendman.motionY, sendman.motionZ);
+					CommonProxy.logger.info("Success!");
+				}else if (freeze) {
+					freeze=false;
+					MinecraftForge.EVENT_BUS.unregister(Freezer);
+				}
 			}
 		}
 		
@@ -134,7 +163,7 @@ public class TastoolsCommandc extends CommandBase{
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
 		if (args.length==1){
-			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping"});
+			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze"});
 		}
 		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
 			return getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft"});

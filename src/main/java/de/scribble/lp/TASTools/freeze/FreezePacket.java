@@ -27,17 +27,11 @@ public class FreezePacket implements IMessage{
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		this.init=buf.readBoolean();
-		motionX=buf.readDouble();
-		motionY=buf.readDouble();
-		motionZ=buf.readDouble();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeBoolean(init);
-		buf.writeDouble(motionX);
-		buf.writeDouble(motionY);
-		buf.writeDouble(motionZ);
 	}
 	
 	public boolean isMotion() {

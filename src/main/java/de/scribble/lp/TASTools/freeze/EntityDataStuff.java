@@ -1,14 +1,14 @@
 package de.scribble.lp.TASTools.freeze;
 
 public class EntityDataStuff {
-	double posX;
-	double posY;
-	double posZ;
-	float pitch;
-	float yaw;
-	double motionX;
-	double motionY;
-	double motionZ;
+	private double posX;
+	private double posY;
+	private double posZ;
+	private float pitch;
+	private float yaw;
+	private double motionX;
+	private double motionY;
+	private double motionZ;
 	
 	public EntityDataStuff(double posX, double posY , double posZ, float pitch, float yaw, double motionX,double motionY,double motionZ) {
 		this.posX=posX;
