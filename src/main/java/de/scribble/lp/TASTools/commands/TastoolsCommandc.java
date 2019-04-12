@@ -29,7 +29,8 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class TastoolsCommandc extends CommandBase{
 	public static boolean freeze=false;
-	public static EntityDataStuff entity;
+	public static List<EntityDataStuff> entity;
+	List<EntityPlayerMP> playerMP;
 	private static FreezeEvents Freezer =new FreezeEvents();
 
 	
@@ -143,14 +144,20 @@ public class TastoolsCommandc extends CommandBase{
 			}else {
 				if (!freeze) {
 					freeze=true;
+					playerMP=FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
+					if(playerMP.size()>0) {
+						for(int i=0;i<=(playerMP.size());i++) {
+							entity.set(i, new EntityDataStuff(playerMP.get(i).posX,
+									playerMP.get(i).posY, playerMP.get(i).posZ, 
+									playerMP.get(i).rotationPitch, playerMP.get(i).rotationYaw, playerMP.get(i).motionX, playerMP.get(i).motionY, playerMP.get(i).motionZ));
+						}
+						Freezer.playerMP=playerMP;
+						MinecraftForge.EVENT_BUS.register(Freezer);
+						CommonProxy.logger.info("Success!");
+					}else {
+						CommonProxy.logger.warn("No player is on the server");
+					}
 					
-					Freezer.playerMP=(EntityPlayerMP)sender;
-					
-					MinecraftForge.EVENT_BUS.register(Freezer);
-					EntityPlayer sendman =(EntityPlayer) sender;
-					//TODO cleanup this nonsense
-					entity=new EntityDataStuff(sendman.posX, sendman.posY, sendman.posZ, sendman.rotationPitch, sendman.rotationYaw, sendman.motionX, sendman.motionY, sendman.motionZ);
-					CommonProxy.logger.info("Success!");
 				}else if (freeze) {
 					freeze=false;
 					MinecraftForge.EVENT_BUS.unregister(Freezer);

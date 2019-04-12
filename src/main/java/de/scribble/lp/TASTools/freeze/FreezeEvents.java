@@ -22,7 +22,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 public class FreezeEvents {
 	
 	public static EntityPlayer playerSp;
-	public static EntityPlayerMP playerMP;
+	public static List<EntityPlayerMP> playerMP;
 	
 
 	@SubscribeEvent
@@ -33,9 +33,11 @@ public class FreezeEvents {
 			playerSp.rotationYaw=FreezePacketHandler.entity.getYaw();
 		}
 		else {
-			playerMP.setPositionAndUpdate(TastoolsCommandc.entity.getPosX(), TastoolsCommandc.entity.getPosY(), TastoolsCommandc.entity.getPosZ());
-			playerMP.rotationPitch=TastoolsCommandc.entity.getPitch();
-			playerMP.rotationYaw=TastoolsCommandc.entity.getYaw();
+			for(int i=0;i<playerMP.size();i++) {
+				playerMP.get(i).setPositionAndUpdate(TastoolsCommandc.entity.get(i).getPosX(), TastoolsCommandc.entity.get(i).getPosY(), TastoolsCommandc.entity.get(i).getPosZ());
+				playerMP.get(i).rotationPitch=TastoolsCommandc.entity.get(i).getPitch();
+				playerMP.get(i).prevRotationYaw=TastoolsCommandc.entity.get(i).getYaw();
+			}
 		}
 	}
 	@SubscribeEvent
