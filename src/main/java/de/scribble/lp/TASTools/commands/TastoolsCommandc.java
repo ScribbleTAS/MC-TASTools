@@ -1,11 +1,12 @@
 package de.scribble.lp.TASTools.commands;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.freeze.EntityDataStuff;
-import de.scribble.lp.TASTools.freeze.FreezeEvents;
+import de.scribble.lp.TASTools.freeze.FreezeEventsServer;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.proxy.ClientProxy;
@@ -28,18 +29,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class TastoolsCommandc extends CommandBase{
-	public static boolean freeze=false;
-	public static List<EntityDataStuff> entity;
-	List<EntityPlayerMP> playerMP;
-	private static FreezeEvents Freezer =new FreezeEvents();
 
-	
-	public List<String> emptyList(List<String> full){
-		while(full.size()!=0){
-			full.remove(0);
-		}
-		return full;
-	}
 	
 	@Override
 	public String getName() {
@@ -131,38 +121,11 @@ public class TastoolsCommandc extends CommandBase{
 				}else {
 					sender.sendMessage(new TextComponentTranslation("msg.duping.dupemoderr")); //§cDupeMod is loaded, so this command is disabled
 				}
+			} 
+			if (args.length==1&&args[0].equalsIgnoreCase("freeze")) {
+				
 			}
-		} if (args.length==1&&args[0].equalsIgnoreCase("freeze")) {
-			if(!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
-				if (!freeze) {
-					freeze=true;
-					ModLoader.NETWORK.sendToServer(new FreezePacket(true));
-				}else if (freeze) {
-					freeze=false;
-					ModLoader.NETWORK.sendToServer(new FreezePacket(false));
-				}
-			}else {
-				if (!freeze) {
-					freeze=true;
-					playerMP=FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
-					if(playerMP.size()>0) {
-						for(int i=0;i<=(playerMP.size());i++) {
-							entity.set(i, new EntityDataStuff(playerMP.get(i).posX,
-									playerMP.get(i).posY, playerMP.get(i).posZ, 
-									playerMP.get(i).rotationPitch, playerMP.get(i).rotationYaw, playerMP.get(i).motionX, playerMP.get(i).motionY, playerMP.get(i).motionZ));
-						}
-						Freezer.playerMP=playerMP;
-						MinecraftForge.EVENT_BUS.register(Freezer);
-						CommonProxy.logger.info("Success!");
-					}else {
-						CommonProxy.logger.warn("No player is on the server");
-					}
-					
-				}else if (freeze) {
-					freeze=false;
-					MinecraftForge.EVENT_BUS.unregister(Freezer);
-				}
-			}
+			
 		}
 		
 	}

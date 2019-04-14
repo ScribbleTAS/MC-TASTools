@@ -3,6 +3,7 @@ package de.scribble.lp.TASTools.proxy;
 import org.apache.logging.log4j.Logger;
 
 import de.scribble.lp.TASTools.ModLoader;
+import de.scribble.lp.TASTools.freeze.AnotherFreezeEvents;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
@@ -32,10 +33,11 @@ public class CommonProxy {
 		
 		ModLoader.NETWORK= NetworkRegistry.INSTANCE.newSimpleChannel("tastools");
 		ModLoader.NETWORK.registerMessage(FreezePacketHandler.class, FreezePacket.class, 0, Side.SERVER);
+		ModLoader.NETWORK.registerMessage(FreezePacketHandler.class, FreezePacket.class, 1, Side.CLIENT);
 	}
 	
 	public void init(FMLInitializationEvent ev) {
-		
+		MinecraftForge.EVENT_BUS.register(new AnotherFreezeEvents());
 	}
 	
 	public void postInit(FMLPostInitializationEvent ev) {

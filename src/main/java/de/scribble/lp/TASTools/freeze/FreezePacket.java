@@ -5,24 +5,24 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class FreezePacket implements IMessage{
 
-	private double motionX;
-	private double motionY;
-	private double motionZ;
+	private double posmotionX;
+	private double posmotionY;
+	private double posmotionZ;
 	private boolean init;
 	
 	public FreezePacket() {}
 	
 	public FreezePacket(boolean init, double X,double Y, double Z) {
-		motionX=X;
-		motionY=Y;
-		motionZ=Z;
+		posmotionX=X;
+		posmotionY=Y;
+		posmotionZ=Z;
 		this.init=init;
 	}
 	public FreezePacket(boolean init) {
 		this.init=init;
-		motionX=0;
-		motionY=0;
-		motionZ=0;
+		posmotionX=0;
+		posmotionY=0;
+		posmotionZ=0;
 	}
 	@Override
 	public void fromBytes(ByteBuf buf) {
@@ -35,18 +35,18 @@ public class FreezePacket implements IMessage{
 	}
 	
 	public boolean isMotion() {
-		if (motionX==0&&motionY==0&&motionZ==0) {
+		if (posmotionX==0&&posmotionY==0&&posmotionZ==0) {
 			return false;
 		}else return true;
 	}
 	public double getX() {
-		return motionX;
+		return posmotionX;
 	}
 	public double getY() {
-		return motionY;
+		return posmotionY;
 	}
 	public double getZ() {
-		return motionZ;
+		return posmotionZ;
 	}
 	public boolean startstop() {
 		return init;

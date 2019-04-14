@@ -3,6 +3,7 @@ package de.scribble.lp.TASTools;
 import org.lwjgl.input.Keyboard;
 
 import de.scribble.lp.TASTools.commands.DupeCommandc;
+import de.scribble.lp.TASTools.commands.FreezeCommandc;
 import de.scribble.lp.TASTools.commands.TastoolsCommandc;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
@@ -56,5 +57,6 @@ public class ModLoader {
 			ev.registerServerCommand(new DupeCommandc());
 		}
 		ev.registerServerCommand(new TastoolsCommandc());
+		ev.registerServerCommand(new FreezeCommandc());
 	}
 }
