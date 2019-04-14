@@ -23,10 +23,14 @@ public class GuiKeystrokes extends Gui {
 	 * @param cornernumber
 	 */
 	public static void changeCorner(int cornernumber) {
-		if(cornernumber<=3&&cornernumber>=0) {
+		if(cornernumber<=4&&cornernumber>=0) {
+			if (cornernumber==4) {
+				CommonProxy.logger.info("Didn't change the corner");
+				return;
+			}
 			corner=cornernumber;
 		}else {
-			CommonProxy.logger.error("Error in changeCorner. The number has to be 0-3. Number entered: "+cornernumber);
+			CommonProxy.logger.error("Error in changeCorner. The number has to be 0-4. Number entered: "+cornernumber);
 		}
 	}
 	

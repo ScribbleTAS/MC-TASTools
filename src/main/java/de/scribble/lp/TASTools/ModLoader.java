@@ -10,7 +10,9 @@ import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.proxy.CommonProxy;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -18,6 +20,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -35,6 +38,10 @@ public class ModLoader {
 	public static CommonProxy proxy;
 	
 	public static SimpleNetworkWrapper NETWORK;
+
+	public static boolean freezeenabledSP=false;
+	public static boolean freezeenabledMP=false;
+	public static boolean freeze = false;
 	
 
 	@EventHandler
@@ -53,10 +60,12 @@ public class ModLoader {
 	}
 	@EventHandler
 	public void serverStart(FMLServerStartingEvent ev) {
+		
 		if(!CommonProxy.isDupeModLoaded()) {
 			ev.registerServerCommand(new DupeCommandc());
 		}
 		ev.registerServerCommand(new TastoolsCommandc());
 		ev.registerServerCommand(new FreezeCommandc());
 	}
+
 }

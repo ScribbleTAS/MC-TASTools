@@ -69,6 +69,23 @@ public class FreezePacketHandler implements IMessageHandler<FreezePacket, IMessa
 			MinecraftForge.EVENT_BUS.register(FreezerSE);
 		}
 	}
+	public void startFreezeSetMotion(double X, double Y, double Z) {
+		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
+				.getPlayers();
+
+		if (playerMP.size() > 0) {
+			entity.removeAll(entity);
+			for (int i = 0; i < (playerMP.size()); i++) {
+				entity.add(i, new EntityDataStuff(playerMP.get(i).posX, playerMP.get(i).posY, playerMP.get(i).posZ,
+								playerMP.get(i).rotationPitch, playerMP.get(i).rotationYaw,
+								X, Y, Z));
+				playerMP.get(i).setEntityInvulnerable(true);
+				playerMP.get(i).setNoGravity(true);
+			}
+			FreezerSE.playerMP = playerMP;
+			MinecraftForge.EVENT_BUS.register(FreezerSE);
+		}
+	}
 	
 	
 	public void stopFreeze() {

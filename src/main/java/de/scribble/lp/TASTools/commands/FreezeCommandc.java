@@ -19,8 +19,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class FreezeCommandc extends CommandBase {
-	public static boolean freeze = false;
-
+	
 	@Override
 	public String getName() {
 		return "freeze";
@@ -39,27 +38,27 @@ public class FreezeCommandc extends CommandBase {
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		World world = sender.getEntityWorld();
-		if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
-			if (!freeze) {
-				freeze = true;
+		if (!server.isDedicatedServer()) {
+			if (!ModLoader.freeze) {
+				ModLoader.freeze = true;
 				ModLoader.NETWORK.sendToServer(new FreezePacket(true));
 				ModLoader.NETWORK.sendToAll(new FreezePacket(true));
-			} else if (freeze) {
-				freeze = false;
+			} else if (ModLoader.freeze) {
+				ModLoader.freeze = false;
 				ModLoader.NETWORK.sendToServer(new FreezePacket(false));
 				ModLoader.NETWORK.sendToAll(new FreezePacket(false));
 			}
 
 		} else {
 			FreezePacketHandler Freezer = new FreezePacketHandler();
-			if (!freeze) {
-				freeze = true;
-					Freezer.startFreeze();
-					ModLoader.NETWORK.sendToAll(new FreezePacket(true));
+			if (!ModLoader.freeze) {
+				ModLoader.freeze = true;
+				Freezer.startFreeze();
+				ModLoader.NETWORK.sendToAll(new FreezePacket(true));
 
 
-			} else if (freeze) {
-				freeze = false;
+			} else if (ModLoader.freeze) {
+				ModLoader.freeze = false;
 				Freezer.stopFreeze();
 				ModLoader.NETWORK.sendToAll(new FreezePacket(false));
 			}

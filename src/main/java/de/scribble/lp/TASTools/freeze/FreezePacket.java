@@ -8,7 +8,7 @@ public class FreezePacket implements IMessage{
 	private double posmotionX;
 	private double posmotionY;
 	private double posmotionZ;
-	private boolean init;
+	private boolean enabled;
 	
 	public FreezePacket() {}
 	
@@ -16,22 +16,22 @@ public class FreezePacket implements IMessage{
 		posmotionX=X;
 		posmotionY=Y;
 		posmotionZ=Z;
-		this.init=init;
+		this.enabled=init;
 	}
-	public FreezePacket(boolean init) {
-		this.init=init;
+	public FreezePacket(boolean enable) {
+		this.enabled=enable;
 		posmotionX=0;
 		posmotionY=0;
 		posmotionZ=0;
 	}
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		this.init=buf.readBoolean();
+		this.enabled=buf.readBoolean();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeBoolean(init);
+		buf.writeBoolean(enabled);
 	}
 	
 	public boolean isMotion() {
@@ -49,6 +49,6 @@ public class FreezePacket implements IMessage{
 		return posmotionZ;
 	}
 	public boolean startstop() {
-		return init;
+		return enabled;
 	}
 }

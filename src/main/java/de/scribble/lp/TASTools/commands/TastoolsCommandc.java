@@ -9,6 +9,7 @@ import de.scribble.lp.TASTools.freeze.EntityDataStuff;
 import de.scribble.lp.TASTools.freeze.FreezeEventsServer;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
+import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
 import de.scribble.lp.TASTools.proxy.ClientProxy;
 import de.scribble.lp.TASTools.proxy.CommonProxy;
 import net.minecraft.client.Minecraft;
@@ -26,6 +27,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class TastoolsCommandc extends CommandBase{
@@ -47,54 +49,79 @@ public class TastoolsCommandc extends CommandBase{
 	
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+		
+		boolean isdedicated=server.isDedicatedServer();
 		if(sender instanceof EntityPlayer) {
-			
 			if (args.length==0) {
 				sender.sendMessage(new TextComponentString(TextFormatting.GREEN+"TASTools v1.0"));
 			}
 			if(!CommonProxy.isTASModLoaded()) {
 				//disable/enable keystrokes command
 				if (args.length==1&&args[0].equalsIgnoreCase("keystrokes")) {
-					Configuration config=ClientProxy.config;
-					config.load();
-					if (GuiKeystrokes.guienabled) {
-						sender.sendMessage(new TextComponentTranslation("msg.keystrokes.disabled"));	//§cKeystrokes disabled
-						GuiKeystrokes.guienabled=false;
-						config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").set(false);
-						config.save();
-					}else if (!GuiKeystrokes.guienabled) {
-						sender.sendMessage(new TextComponentTranslation("msg.keystrokes.enabled"));		//§aKeystrokes enabled
-						GuiKeystrokes.guienabled=true;
-						config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").set(true);
-						config.save();
+					
+					if(!isdedicated) {
+						Configuration config=ClientProxy.config;
+						if (GuiKeystrokes.guienabled) {
+							sender.sendMessage(new TextComponentTranslation("msg.keystrokes.disabled"));	//§cKeystrokes disabled
+							GuiKeystrokes.guienabled=false;
+							config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").set(false);
+							config.save();
+						}else if (!GuiKeystrokes.guienabled) {
+							sender.sendMessage(new TextComponentTranslation("msg.keystrokes.enabled"));		//§aKeystrokes enabled
+							GuiKeystrokes.guienabled=true;
+							config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").set(true);
+							config.save();
+						}
+					}else {
+						ModLoader.NETWORK.sendTo(new KeystrokesPacket(), (EntityPlayerMP) sender);
 					}
 				}
+				
 				//change corner
 				
 				if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&args[1].equalsIgnoreCase("downLeft")) {
-					Configuration config=ClientProxy.config;
-					GuiKeystrokes.changeCorner(0);
-					config.load();
-					config.get("Keystrokes","CornerPos", "downLeft", "Sets the keystrokes to that specific corner. Options: downLeft,downRight,upRight,upLeft").set("downLeft");
-					config.save();
+					if (!isdedicated) {
+						Configuration config=ClientProxy.config;
+						GuiKeystrokes.changeCorner(0);
+						config.get("Keystrokes","CornerPos", "downLeft", "Sets the keystrokes to that specific corner. Options: downLeft,downRight,upRight,upLeft").set("downLeft");
+						config.save();
+					}else {
+						ModLoader.NETWORK.sendTo(new KeystrokesPacket(0), (EntityPlayerMP) sender);
+					}
 				}
 				else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&args[1].equalsIgnoreCase("downRight")) {
-					Configuration config=ClientProxy.config;
-					GuiKeystrokes.changeCorner(1);
-					config.get("Keystrokes","CornerPos", "downLeft", "Sets the keystrokes to that specific corner. Options: downLeft,downRight,upRight,upLeft").set("downRight");
-					config.save();
+					if (!isdedicated) {
+						Configuration config=ClientProxy.config;
+						GuiKeystrokes.changeCorner(1);
+						config.get("Keystrokes","CornerPos", "downLeft", "Sets the keystrokes to that specific corner. Options: downLeft,downRight,upRight,upLeft").set("downRight");
+						config.save();
+					}else {
+						ModLoader.NETWORK.sendTo(new KeystrokesPacket(1), (EntityPlayerMP) sender);
+					}
 				}
 				else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&args[1].equalsIgnoreCase("upRight")) {
-					Configuration config=ClientProxy.config;
-					GuiKeystrokes.changeCorner(2);
-					config.get("Keystrokes","CornerPos", "downLeft", "Sets the keystrokes to that specific corner. Options: downLeft,downRight,upRight,upLeft").set("upRight");
-					config.save();
+					if (!isdedicated) {
+						Configuration config=ClientProxy.config;
+						GuiKeystrokes.changeCorner(2);
+						config.get("Keystrokes","CornerPos", "downLeft", "Sets the keystrokes to that specific corner. Options: downLeft,downRight,upRight,upLeft").set("upRight");
+						config.save();
+					}else {
+						ModLoader.NETWORK.sendTo(new KeystrokesPacket(2), (EntityPlayerMP) sender);
+					}
 				}
 				else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&args[1].equalsIgnoreCase("upLeft")) {
-					Configuration config=ClientProxy.config;
-					GuiKeystrokes.changeCorner(3);
-					config.get("Keystrokes","CornerPos", "downLeft", "Sets the keystrokes to that specific corner. Options: downLeft,downRight,upRight,upLeft").set("upLeft");
-					config.save();
+					if (!isdedicated) {
+						Configuration config=ClientProxy.config;
+						GuiKeystrokes.changeCorner(3);
+						config.get("Keystrokes","CornerPos", "downLeft", "Sets the keystrokes to that specific corner. Options: downLeft,downRight,upRight,upLeft").set("upLeft");
+						config.save();
+					}else {
+						ModLoader.NETWORK.sendTo(new KeystrokesPacket(3), (EntityPlayerMP) sender);
+					}
+				}
+				else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&server.getPlayerList().getPlayers().contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
+					notifyCommandListener(sender, this, "msg.keystroke.multiplayerchange", new TextComponentString(args[1]));
+					ModLoader.NETWORK.sendTo(new KeystrokesPacket(), server.getPlayerList().getPlayerByUsername(args[1]));
 				}
 			}else {
 				if (args[0].equalsIgnoreCase("keystrokes")) {
@@ -104,29 +131,37 @@ public class TastoolsCommandc extends CommandBase{
 			
 				//duping command
 			if (args.length==1&&args[0].equalsIgnoreCase("duping")) {
-				if(!CommonProxy.isDupeModLoaded()) {
-					Configuration config=ClientProxy.config;
-					config.load();
-					if (DupeEvents.dupingenabled) {
-						sender.sendMessage(new TextComponentTranslation("msg.duping.disabled")); //§cDuping disabled
-						DupeEvents.dupingenabled=false;
-						config.get("Duping","Enabled", true, "Activates the duping on startup").set(false);
-						config.save();
-					}else if (!DupeEvents.dupingenabled) {
-						sender.sendMessage(new TextComponentTranslation("msg.duping.enabled")); //§aDuping enabled
-						DupeEvents.dupingenabled=true;
-						config.get("Duping","Enabled", true, "Activates the duping on startup").set(true);
-						config.save();
+				if(!isdedicated) {
+					if(!CommonProxy.isDupeModLoaded()) {
+						Configuration config=ClientProxy.config;
+						config.load();
+						if (DupeEvents.dupingenabled) {
+							sender.sendMessage(new TextComponentTranslation("msg.duping.disabled")); //§cDuping disabled
+							DupeEvents.dupingenabled=false;
+							config.get("Duping","Enabled", true, "Activates the duping on startup").set(false);
+							config.save();
+						}else if (!DupeEvents.dupingenabled) {
+							sender.sendMessage(new TextComponentTranslation("msg.duping.enabled")); //§aDuping enabled
+							DupeEvents.dupingenabled=true;
+							config.get("Duping","Enabled", true, "Activates the duping on startup").set(true);
+							config.save();
+						}
+					}else {
+						sender.sendMessage(new TextComponentTranslation("msg.duping.dupemoderr")); //§cDupeMod is loaded, so this command is disabled
 					}
-				}else {
-					sender.sendMessage(new TextComponentTranslation("msg.duping.dupemoderr")); //§cDupeMod is loaded, so this command is disabled
 				}
-			} 
-			if (args.length==1&&args[0].equalsIgnoreCase("freeze")) {
-				
 			}
-			
-		}
+		}else {
+			if (args.length == 1 && args[0].equalsIgnoreCase("freeze")) {
+
+			} else if (args.length == 1 && args[0].equalsIgnoreCase("keystrokes")) {
+				CommonProxy.logger.warn("Cannot enable keystrokes");
+			} else if (args.length == 2 && args[0].equalsIgnoreCase("keystrokes") && server.getPlayerList().getPlayers().contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
+				CommonProxy.logger.info("Changed Keystroke-Settings for "+args[1]);
+				ModLoader.NETWORK.sendTo(new KeystrokesPacket(), server.getPlayerList().getPlayerByUsername(args[1]));
+			}
+		
+	}
 		
 	}
 	@Override
@@ -136,9 +171,12 @@ public class TastoolsCommandc extends CommandBase{
 			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze"});
 		}
 		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
-			return getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft"});
+			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft"});
+			if(server.isDedicatedServer()) {
+				tabs.addAll(getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames()));
+			}
+			return tabs;
 		}
 		return super.getTabCompletions(server, sender, args, targetPos);
 	}
-
 }

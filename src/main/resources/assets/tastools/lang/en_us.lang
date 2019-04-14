@@ -5,6 +5,7 @@
 msg.keystrokes.disabled=§cKeystrokes disabled
 msg.keystrokes.enabled=§aKeystrokes enabled
 msg.keystrokes.tasmoderr=§cKeystrokes are disabled due to the TASmod keystrokes. Please refer to /tasmod gui to change the settings
+msg.keystroke.multiplayerchange=Changed Keystroke-Settings for %s
 
 #Duping
 msg.duping.disabled=§cDuping disabled

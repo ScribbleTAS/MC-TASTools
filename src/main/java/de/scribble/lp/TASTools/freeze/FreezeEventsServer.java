@@ -15,7 +15,7 @@ public class FreezeEventsServer {
 		if (playerMP.size() > 0) {
 			for (int i = 0; i < playerMP.size(); i++) {
 				playerMP.get(i).setPositionAndUpdate(FreezePacketHandler.entity.get(i).getPosX(),
-						FreezePacketHandler.entity.get(i).getPosY(), FreezePacketHandler.entity.get(i).getPosZ());
+				FreezePacketHandler.entity.get(i).getPosY(), FreezePacketHandler.entity.get(i).getPosZ());
 
 				playerMP.get(i).rotationPitch = FreezePacketHandler.entity.get(i).getPitch();
 				playerMP.get(i).prevRotationYaw = FreezePacketHandler.entity.get(i).getYaw();

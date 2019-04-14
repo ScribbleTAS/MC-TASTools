@@ -5,6 +5,7 @@
 msg.keystrokes.disabled=§cButtonmashin dizabled
 msg.keystrokes.enabled=§aButtonmashin enabled
 msg.keystrokes.tasmoderr=§cButtonmashin is dizabled due to TASmod buttonmashin. Plis do /tasmod gui to do stuffz
+msg.keystroke.multiplayerchange=Hack'd new Buttonmashin-Settingz to %s
 
 #Duping
 msg.duping.disabled=§cI See Double™ dizabled
