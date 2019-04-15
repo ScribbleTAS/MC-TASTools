@@ -29,7 +29,7 @@ public class ClientProxy extends CommonProxy{
 		GuiKeystrokes.guienabled=config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").getBoolean();
 		String position=config.get("Keystrokes","CornerPos", "downLeft", "Sets the Keystroke to that specific corner. Options: downLeft,downRight,upRight,upLeft").getString();
 		DupeEvents.dupingenabled=config.get("Duping","Enabled", false, "Activates the duping on startup").getBoolean();
-		VelocityEvents.velocityenabled=config.get("Velocity", "Enabled", true, "Activates velocity saving on startup").getBoolean();
+		VelocityEvents.velocityenabledClient=config.get("Velocity", "Enabled", true, "Activates velocity saving on startup").getBoolean();
 		ModLoader.freezeenabledSP=config.get("Freeze","Enabled", false, "Freezes the game when joining singleplayer").getBoolean();
 		config.save();
 		

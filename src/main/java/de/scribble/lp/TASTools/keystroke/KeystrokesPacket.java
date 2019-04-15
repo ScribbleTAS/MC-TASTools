@@ -18,7 +18,7 @@ public class KeystrokesPacket implements IMessage{
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		this.corner=buf.readInt();
+		this.corner=buf.readInt();;
 	}
 
 	@Override

@@ -14,21 +14,32 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class VelocityEvents {
-		public static boolean velocityenabled;
-		
-		@SubscribeEvent
-		public void onCloseServer(PlayerEvent.PlayerLoggedOutEvent ev){
-			if(velocityenabled) {
-				if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
-					File file= new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator +Minecraft.getMinecraft().getIntegratedServer().getFolderName()+File.separator+"latest_velocity.txt");
-					CommonProxy.logger.info("Start saving velocity...");
-					new SavingVelocity().saveVelocity(ev.player, file);
-				}
+	public static boolean velocityenabledClient;
+	public static boolean velocityenabledServer;
+
+	@SubscribeEvent
+	public void onCloseServer(PlayerEvent.PlayerLoggedOutEvent ev) {
+		if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
+			if (velocityenabledClient) {
+				File file = new File(Minecraft.getMinecraft().mcDataDir,
+						"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
+								+ File.separator + "latest_velocity.txt");
+				CommonProxy.logger.info("Start saving velocity...");
+				new SavingVelocity().saveVelocity(ev.player, file);
+			}
+		}else {
+			if(velocityenabledServer) {
+				File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath() + File.separator + ev.player.getEntityWorld().getWorldInfo().getWorldName()+File.separator
+						+ ev.player.getName() + "_velocity.txt");
+				CommonProxy.logger.info("Saving velocity of "+ev.player.getName());
+				new SavingVelocity().saveVelocity(ev.player, file);
 			}
 		}
-		
-		@SubscribeEvent
-		public void onOpenServer(PlayerEvent.PlayerLoggedInEvent ev){
 
-		}
+	}
+
+	@SubscribeEvent
+	public void onOpenServer(PlayerEvent.PlayerLoggedInEvent ev) {
+
+	}
 }

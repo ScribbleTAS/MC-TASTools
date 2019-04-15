@@ -15,7 +15,7 @@ public class ReapplyingVelocity {
 	
 	private double [] motion= {0,0,0};
 
-	public double[] getVelocity(EntityPlayer player, File file){
+	public double[] getVelocity(File file){
 		try{
 			
 			BufferedReader Buff = new BufferedReader(new FileReader(file));

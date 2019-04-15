@@ -11,7 +11,6 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class SavingVelocity {
 	private StringBuilder output = new StringBuilder();
-	private Minecraft mc= Minecraft.getMinecraft();
 	
 	public void saveVelocity(EntityPlayer player, File file){
 

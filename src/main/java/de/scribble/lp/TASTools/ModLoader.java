@@ -5,6 +5,7 @@ import org.lwjgl.input.Keyboard;
 import de.scribble.lp.TASTools.commands.DupeCommandc;
 import de.scribble.lp.TASTools.commands.FreezeCommandc;
 import de.scribble.lp.TASTools.commands.TastoolsCommandc;
+import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
@@ -39,9 +40,8 @@ public class ModLoader {
 	
 	public static SimpleNetworkWrapper NETWORK;
 
-	public static boolean freezeenabledSP=false;
-	public static boolean freezeenabledMP=false;
-	public static boolean freeze = false;
+	public static boolean freezeenabledSP;
+	public static boolean freezeenabledMP;
 	
 
 	@EventHandler
@@ -67,5 +67,13 @@ public class ModLoader {
 		ev.registerServerCommand(new TastoolsCommandc());
 		ev.registerServerCommand(new FreezeCommandc());
 	}
+	
+	@EventHandler
+	public void serverStarted(FMLServerStartedEvent ev) {
+		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 
+				FreezeHandler.startFreezeServer();
+				FreezeHandler.startFreezeClient();
+		}
+	}
 }

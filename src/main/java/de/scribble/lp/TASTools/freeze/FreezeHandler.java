@@ -41,27 +41,27 @@ public class FreezeHandler {
 				playerTemp.get(i).setEntityInvulnerable(true);
 				playerTemp.get(i).setNoGravity(true);
 			}
-			playerMP = playerTemp;
-			MinecraftForge.EVENT_BUS.register(FreezerSE);
 		}
+		playerMP = playerTemp;
+		MinecraftForge.EVENT_BUS.register(FreezerSE);
 	}
 	public static void startFreezeSetMotionServer(double X, double Y, double Z) {
 		serverfrozen=true;
-		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
+		List<EntityPlayerMP> playerTemp2 = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
 				.getPlayers();
 
-		if (playerMP.size() > 0) {
+		if (playerTemp2.size() > 0) {
 			entity=new ArrayList<EntityDataStuff>();
-			for (int i = 0; i < (playerMP.size()); i++) {
-				entity.add(i, new EntityDataStuff(playerMP.get(i).posX, playerMP.get(i).posY, playerMP.get(i).posZ,
-								playerMP.get(i).rotationPitch, playerMP.get(i).rotationYaw,
+			for (int i = 0; i < (playerTemp2.size()); i++) {
+				entity.add(i, new EntityDataStuff(playerTemp2.get(i).posX, playerTemp2.get(i).posY, playerTemp2.get(i).posZ,
+								playerTemp2.get(i).rotationPitch, playerTemp2.get(i).rotationYaw,
 								X, Y, Z));
-				playerMP.get(i).setEntityInvulnerable(true);
-				playerMP.get(i).setNoGravity(true);
+				playerTemp2.get(i).setEntityInvulnerable(true);
+				playerTemp2.get(i).setNoGravity(true);
 			}
-			FreezerSE.playerMP = playerMP;
-			MinecraftForge.EVENT_BUS.register(FreezerSE);
 		}
+		playerMP = playerTemp2;
+		MinecraftForge.EVENT_BUS.register(FreezerSE);
 	}
 	
 	
@@ -69,20 +69,27 @@ public class FreezeHandler {
 		serverfrozen=false;
 		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
 				.getPlayers();
-		for (int i = 0; i < (playerMP.size()); i++) {
-			playerMP.get(i).setPositionAndUpdate(FreezeHandler.entity.get(i).getPosX(),
-					FreezeHandler.entity.get(i).getPosY(), FreezeHandler.entity.get(i).getPosZ());
-			playerMP.get(i).rotationPitch = FreezeHandler.entity.get(i).getPitch();
-			playerMP.get(i).rotationYaw = FreezeHandler.entity.get(i).getYaw();
-			playerMP.get(i).setEntityInvulnerable(false);
-			playerMP.get(i).setNoGravity(false);
-			playerMP.get(i).motionX = entity.get(i).getMotionX();
-			playerMP.get(i).motionY = entity.get(i).getMotionY();
-			playerMP.get(i).motionZ = entity.get(i).getMotionZ();
-			playerMP.get(i).velocityChanged = true;
+		if (playerMP.size() > 0) {
+			for (int i = 0; i < (playerMP.size()); i++) {
+				playerMP.get(i).setPositionAndUpdate(FreezeHandler.entity.get(i).getPosX(),
+						FreezeHandler.entity.get(i).getPosY(), FreezeHandler.entity.get(i).getPosZ());
+				playerMP.get(i).rotationPitch = FreezeHandler.entity.get(i).getPitch();
+				playerMP.get(i).rotationYaw = FreezeHandler.entity.get(i).getYaw();
+				playerMP.get(i).setEntityInvulnerable(false);
+				playerMP.get(i).setNoGravity(false);
+				playerMP.get(i).motionX = entity.get(i).getMotionX();
+				playerMP.get(i).motionY = entity.get(i).getMotionY();
+				playerMP.get(i).motionZ = entity.get(i).getMotionZ();
+				playerMP.get(i).velocityChanged = true;
+			}
 		}
 		MinecraftForge.EVENT_BUS.unregister(FreezerSE);
 	}
+	public static void stopFreezeServerNoUpdate() {
+		serverfrozen=false;
+		MinecraftForge.EVENT_BUS.unregister(FreezerSE);
+	}
+	
 	public static void startFreezeClient() {
 		clientfrozen=true;
 		MinecraftForge.EVENT_BUS.register(FreezerCL);
@@ -91,10 +98,10 @@ public class FreezeHandler {
 		clientfrozen=false;
 		MinecraftForge.EVENT_BUS.unregister(FreezerCL);
 	}
-	public boolean isServerFrozen() {
+	public static boolean isServerFrozen() {
 		return serverfrozen;
 	}
-	public boolean isClientFrozen() {
+	public static boolean isClientFrozen() {
 		return clientfrozen;
 	}
 }
@@ -107,8 +114,8 @@ class ApplyFreezeServer extends FreezeHandler{
 	public void onServerTick(TickEvent.ServerTickEvent ev) {
 		if (playerMP.size() > 0) {
 			for (int i = 0; i < playerMP.size(); i++) {
-				playerMP.get(i).setPositionAndUpdate(entity.get(i).getPosX(),
-				entity.get(i).getPosY(), entity.get(i).getPosZ());
+				playerMP.get(i).setPositionAndUpdate(entity.get(i).getPosX(), entity.get(i).getPosY(),
+						entity.get(i).getPosZ());
 
 				playerMP.get(i).rotationPitch = FreezeHandler.entity.get(i).getPitch();
 				playerMP.get(i).prevRotationYaw = FreezeHandler.entity.get(i).getYaw();

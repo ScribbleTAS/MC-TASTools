@@ -31,25 +31,21 @@ public class FreezeCommandc extends CommandBase {
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		World world = sender.getEntityWorld();
 		if (!server.isDedicatedServer()) {
-			if (!ModLoader.freeze) {
-				ModLoader.freeze = true;
+			if (!FreezeHandler.isServerFrozen()) {
 				ModLoader.NETWORK.sendToServer(new FreezePacket(true));
 				ModLoader.NETWORK.sendToAll(new FreezePacket(true));
-			} else if (ModLoader.freeze) {
-				ModLoader.freeze = false;
+			} else if (FreezeHandler.isServerFrozen()) {
 				ModLoader.NETWORK.sendToServer(new FreezePacket(false));
 				ModLoader.NETWORK.sendToAll(new FreezePacket(false));
 			}
 
 		} else {
-			if (!ModLoader.freeze) {
-				ModLoader.freeze = true;
+			if (!FreezeHandler.isServerFrozen()) {
 				FreezeHandler.startFreezeServer();
 				ModLoader.NETWORK.sendToAll(new FreezePacket(true));
 
 
-			} else if (ModLoader.freeze) {
-				ModLoader.freeze = false;
+			} else if (FreezeHandler.isServerFrozen()) {
 				FreezeHandler.stopFreezeServer();
 				ModLoader.NETWORK.sendToAll(new FreezePacket(false));
 			}
