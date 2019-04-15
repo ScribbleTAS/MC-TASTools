@@ -1,22 +1,14 @@
 package de.scribble.lp.TASTools.commands;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import de.scribble.lp.TASTools.ModLoader;
-import de.scribble.lp.TASTools.freeze.EntityDataStuff;
-import de.scribble.lp.TASTools.freeze.FreezeEventsServer;
+import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
-import de.scribble.lp.TASTools.proxy.CommonProxy;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class FreezeCommandc extends CommandBase {
 	
@@ -50,16 +42,15 @@ public class FreezeCommandc extends CommandBase {
 			}
 
 		} else {
-			FreezePacketHandler Freezer = new FreezePacketHandler();
 			if (!ModLoader.freeze) {
 				ModLoader.freeze = true;
-				Freezer.startFreeze();
+				FreezeHandler.startFreezeServer();
 				ModLoader.NETWORK.sendToAll(new FreezePacket(true));
 
 
 			} else if (ModLoader.freeze) {
 				ModLoader.freeze = false;
-				Freezer.stopFreeze();
+				FreezeHandler.stopFreezeServer();
 				ModLoader.NETWORK.sendToAll(new FreezePacket(false));
 			}
 		}

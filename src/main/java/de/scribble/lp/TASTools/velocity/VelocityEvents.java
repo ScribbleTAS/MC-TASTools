@@ -29,15 +29,6 @@ public class VelocityEvents {
 		
 		@SubscribeEvent
 		public void onOpenServer(PlayerEvent.PlayerLoggedInEvent ev){
-			if (velocityenabled) {
-				File file= new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator +Minecraft.getMinecraft().getIntegratedServer().getFolderName()+File.separator+"latest_velocity.txt");
-				if (file.exists()){
-					CommonProxy.logger.info("Start reapplying velocity...");
-					double [] motion=new ReapplyingVelocity().getVelocity(ev.player, file);	
-					ev.player.motionX=motion[0];
-					ev.player.motionY=motion[1];
-					ev.player.motionZ=motion[2];
-				}
-			}
+
 		}
 }

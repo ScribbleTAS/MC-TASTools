@@ -5,7 +5,7 @@ import java.io.File;
 import org.apache.logging.log4j.Logger;
 
 import de.scribble.lp.TASTools.ModLoader;
-import de.scribble.lp.TASTools.freeze.AnotherFreezeEvents;
+import de.scribble.lp.TASTools.freeze.FreezeEvents;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
 import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
@@ -54,7 +54,7 @@ public class CommonProxy {
 	}
 	
 	public void init(FMLInitializationEvent ev) {
-		MinecraftForge.EVENT_BUS.register(new AnotherFreezeEvents());
+		MinecraftForge.EVENT_BUS.register(new FreezeEvents());
 	}
 	
 	public void postInit(FMLPostInitializationEvent ev) {

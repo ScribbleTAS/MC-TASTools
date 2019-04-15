@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class ReapplyingVelocity {
 	
-	private static double [] motion= {0,0,0};
+	private double [] motion= {0,0,0};
 
 	public double[] getVelocity(EntityPlayer player, File file){
 		try{
@@ -31,8 +31,9 @@ public class ReapplyingVelocity {
 					String[] vel=s.split(";");
 					
 					motion[0]=Double.parseDouble(vel[1]);
-					motion[1]=Double.parseDouble(vel[1]);
-					motion[2]=Double.parseDouble(vel[1]);
+					motion[1]=Double.parseDouble(vel[2]);
+					motion[2]=Double.parseDouble(vel[3]);
+
 				}
 			}			
 			Buff.close();

@@ -23,86 +23,28 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class FreezePacketHandler implements IMessageHandler<FreezePacket, IMessage> {
 
-	static FreezeEventsServer FreezerSE = new FreezeEventsServer();
-	static FreezeEventsClient FreezerCL = new FreezeEventsClient();
-	public static ArrayList<EntityDataStuff> entity = new ArrayList<EntityDataStuff>();
 
 	@Override
 	public FreezePacket onMessage(FreezePacket msg, MessageContext ctx) {
 		if (ctx.side == Side.SERVER) {
 			if (msg.startstop()) {
-				startFreeze();
+				FreezeHandler.startFreezeServer();
 			}
 
 			else if (!msg.startstop()) {
-				stopFreeze();
+				FreezeHandler.stopFreezeServer();
 			}
 			
 			
 		} else if (ctx.side == Side.CLIENT) {
 			if (msg.startstop()) {
-				MinecraftForge.EVENT_BUS.register(FreezerCL);
+				FreezeHandler.startFreezeClient();
 			}
 
 			else if (!msg.startstop()) {
-				MinecraftForge.EVENT_BUS.unregister(FreezerCL);
+				FreezeHandler.stopFreezeClient();
 			}
 		}
 		return null;
-	}
-	
-	
-	public void startFreeze() {
-		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
-				.getPlayers();
-
-		if (playerMP.size() > 0) {
-			entity.removeAll(entity);
-			for (int i = 0; i < (playerMP.size()); i++) {
-				entity.add(i, new EntityDataStuff(playerMP.get(i).posX, playerMP.get(i).posY, playerMP.get(i).posZ,
-								playerMP.get(i).rotationPitch, playerMP.get(i).rotationYaw,
-								playerMP.get(i).motionX, playerMP.get(i).motionY, playerMP.get(i).motionZ));
-				playerMP.get(i).setEntityInvulnerable(true);
-				playerMP.get(i).setNoGravity(true);
-			}
-			FreezerSE.playerMP = playerMP;
-			MinecraftForge.EVENT_BUS.register(FreezerSE);
-		}
-	}
-	public void startFreezeSetMotion(double X, double Y, double Z) {
-		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
-				.getPlayers();
-
-		if (playerMP.size() > 0) {
-			entity.removeAll(entity);
-			for (int i = 0; i < (playerMP.size()); i++) {
-				entity.add(i, new EntityDataStuff(playerMP.get(i).posX, playerMP.get(i).posY, playerMP.get(i).posZ,
-								playerMP.get(i).rotationPitch, playerMP.get(i).rotationYaw,
-								X, Y, Z));
-				playerMP.get(i).setEntityInvulnerable(true);
-				playerMP.get(i).setNoGravity(true);
-			}
-			FreezerSE.playerMP = playerMP;
-			MinecraftForge.EVENT_BUS.register(FreezerSE);
-		}
-	}
-	
-	
-	public void stopFreeze() {
-		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
-				.getPlayers();
-		for (int i = 0; i < (playerMP.size()); i++) {
-			playerMP.get(i).setPositionAndUpdate(FreezePacketHandler.entity.get(i).getPosX(),
-					FreezePacketHandler.entity.get(i).getPosY(), FreezePacketHandler.entity.get(i).getPosZ());
-			playerMP.get(i).rotationPitch = FreezePacketHandler.entity.get(i).getPitch();
-			playerMP.get(i).rotationYaw = FreezePacketHandler.entity.get(i).getYaw();
-			playerMP.get(i).setEntityInvulnerable(false);
-			playerMP.get(i).setNoGravity(false);
-			playerMP.get(i).motionX = entity.get(i).getMotionX();
-			playerMP.get(i).motionY = entity.get(i).getMotionY();
-			playerMP.get(i).motionZ = entity.get(i).getMotionZ();
-			playerMP.get(i).velocityChanged = true;
-		}
-		MinecraftForge.EVENT_BUS.unregister(FreezerSE);
 	}
 }

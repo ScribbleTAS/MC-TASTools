@@ -1,34 +1,24 @@
 package de.scribble.lp.TASTools.commands;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.duping.DupeEvents;
-import de.scribble.lp.TASTools.freeze.EntityDataStuff;
-import de.scribble.lp.TASTools.freeze.FreezeEventsServer;
-import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
 import de.scribble.lp.TASTools.proxy.ClientProxy;
 import de.scribble.lp.TASTools.proxy.CommonProxy;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class TastoolsCommandc extends CommandBase{
 
