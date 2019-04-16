@@ -35,7 +35,7 @@ public class FreezeHandler {
 		if (playerTemp.size() > 0) {
 			entity=new ArrayList<EntityDataStuff>();
 			for (int i = 0; i < (playerTemp.size()); i++) {
-				entity.add(i, new EntityDataStuff(playerTemp.get(i).posX, playerTemp.get(i).posY, playerTemp.get(i).posZ,
+				entity.add(i, new EntityDataStuff(playerTemp.get(i).getName(), playerTemp.get(i).posX, playerTemp.get(i).posY, playerTemp.get(i).posZ,
 								playerTemp.get(i).rotationPitch, playerTemp.get(i).rotationYaw,
 								playerTemp.get(i).motionX, playerTemp.get(i).motionY, playerTemp.get(i).motionZ));
 				playerTemp.get(i).setEntityInvulnerable(true);
@@ -53,7 +53,7 @@ public class FreezeHandler {
 		if (playerTemp2.size() > 0) {
 			entity=new ArrayList<EntityDataStuff>();
 			for (int i = 0; i < (playerTemp2.size()); i++) {
-				entity.add(i, new EntityDataStuff(playerTemp2.get(i).posX, playerTemp2.get(i).posY, playerTemp2.get(i).posZ,
+				entity.add(i, new EntityDataStuff(playerTemp2.get(i).getName(), playerTemp2.get(i).posX, playerTemp2.get(i).posY, playerTemp2.get(i).posZ,
 								playerTemp2.get(i).rotationPitch, playerTemp2.get(i).rotationYaw,
 								X, Y, Z));
 				playerTemp2.get(i).setEntityInvulnerable(true);

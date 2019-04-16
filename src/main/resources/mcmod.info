@@ -9,7 +9,7 @@
   "updateUrl": "",
   "authorList": ["ScribbleLP"],
   "credits": "",
-  "logoFile": "",
+  "logoFile": "assets/tastools/textures/Logo.png",
   "screenshots": [],
   "dependencies": []
 }

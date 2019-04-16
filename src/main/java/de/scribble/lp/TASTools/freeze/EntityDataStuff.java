@@ -1,6 +1,7 @@
 package de.scribble.lp.TASTools.freeze;
 
 public class EntityDataStuff {
+	private String playername;
 	private double posX;
 	private double posY;
 	private double posZ;
@@ -10,7 +11,8 @@ public class EntityDataStuff {
 	private double motionY;
 	private double motionZ;
 	
-	public EntityDataStuff(double posX, double posY , double posZ, float pitch, float yaw, double motionX,double motionY,double motionZ) {
+	public EntityDataStuff(String playername, double posX, double posY , double posZ, float pitch, float yaw, double motionX,double motionY,double motionZ) {
+		this.playername=playername;
 		this.posX=posX;
 		this.posY=posY;
 		this.posZ=posZ;
@@ -19,6 +21,9 @@ public class EntityDataStuff {
 		this.motionX=motionX;
 		this.motionY=motionY;
 		this.motionZ=motionZ;
+	}
+	public String getPlayername() {
+		return playername;
 	}
 	public double getPosX() {
 		return posX;
