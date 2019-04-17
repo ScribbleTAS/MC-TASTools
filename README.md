@@ -1,4 +1,4 @@
-﻿## Overview
+## Overview
 Useful utilities for Minecraft TASsing  
   
 Classical Minecraft TASing uses the Mod [TickrateChanger](https://minecraft.curseforge.com/projects/tickratechanger) to slow the game down... Now we record the speedrun in slow motion and speed it up in an editing program,  so the game goes to normal speed again.  
@@ -13,7 +13,7 @@ This mod is here to simplify things a bit and is **NOT** a playback tool.
 
 ## Features
 * Duping:
-Minecraft has a duplication glitch which is heavily used by speedrunners to duplicate items using save and quit. Since forge is running an integrated server, this doesn't work (or just very rarely) in forge, which is why this makes it more consistent. More details on the [Wiki]([https://github.com/ScribbleLP/MC-TASTools/wiki/Duping](https://github.com/ScribbleLP/MC-TASTools/wiki/Duping))  
+Minecraft has a duplication glitch which is heavily used by speedrunners to duplicate items using save and quit. Since forge is running an integrated server, this doesn't work (or just very rarely) in forge, which is why this makes it more consistent. More details on the [Wiki](https://github.com/ScribbleLP/MC-TASTools/wiki/Duping)  
 
 * Keystrokes:
 Display your keypresses! [Wiki](https://github.com/ScribbleLP/MC-TASTools/wiki/Keystrokes)
