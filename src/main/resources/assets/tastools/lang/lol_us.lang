@@ -11,3 +11,9 @@ msg.keystroke.multiplayerchange=Hack'd new Buttonmashin-Settingz to %s
 msg.duping.disabled=§cI See Double™ dizabled
 msg.duping.enabled=§aI See Double™ enabled
 msg.duping.dupemoderr=§cI See Double™ is here, so dis commandz is dizabled
+
+#Freeze
+msg.freezeServer.disabled=§cStiffz as a poker™ at servur start dizabled
+msg.freezeServer.enabled=§aStiffz as a poker™ at servur start enabled
+msg.freezeClient.disabled=§cDizabled Stiffz as a poker™ when cat enters the wurld
+msg.freezeClient.enabled=§aEnabled Stiffz as a poker™ when cat enters the wurld

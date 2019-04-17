@@ -113,6 +113,23 @@ public class TastoolsCommandc extends CommandBase{
 					notifyCommandListener(sender, this, "msg.keystroke.multiplayerchange", new TextComponentString(args[1]));
 					ModLoader.NETWORK.sendTo(new KeystrokesPacket(), server.getPlayerList().getPlayerByUsername(args[1]));
 				}
+				//freeze singleplayer
+				//TODO LAN
+				else if (args.length == 1 && args[0].equalsIgnoreCase("freeze")) {
+					if (sender instanceof EntityPlayer) {
+						if (ModLoader.freezeenabledSP) {
+							sender.sendMessage(new TextComponentTranslation("msg.freezeClient.disabled")); // §cDisabled
+							ModLoader.freezeenabledSP = false;
+							ClientProxy.config.get("Freeze","Enabled", false, "Freezes the game when joining singleplayer").set(false);
+							ClientProxy.config.save();
+						} else if (!ModLoader.freezeenabledSP) {
+							sender.sendMessage(new TextComponentTranslation("msg.freezeClient.enabled")); // §aEnabled
+							ModLoader.freezeenabledSP = true;
+							ClientProxy.config.get("Freeze","Enabled", false, "Freezes the game when joining singleplayer").set(true);
+							ClientProxy.config.save();
+						}
+					}
+				}
 			}else {
 				if (args[0].equalsIgnoreCase("keystrokes")) {
 					sender.sendMessage(new TextComponentTranslation("msg.keystrokes.tasmoderr")); //Keystrokes are disabled due to the TASmod keystrokes. Please refer to /tasmod gui to change the settings
@@ -142,8 +159,32 @@ public class TastoolsCommandc extends CommandBase{
 				}
 			}
 		}else {
-			if (args.length == 1 && args[0].equalsIgnoreCase("freeze")) {
-
+			if (args.length == 1 && args[0].equalsIgnoreCase("freeze")&&isdedicated) {
+				if (sender instanceof EntityPlayer) {
+					if(ModLoader.freezeenabledMP) {
+						sender.sendMessage(new TextComponentTranslation("msg.freezeServer.disabled")); //§cDisabled Freezing when starting the server
+						ModLoader.freezeenabledMP=false;
+						CommonProxy.serverconfig.get("Freeze","Enabled", false, "Freezes the game when joining the Server").set(false);
+						CommonProxy.serverconfig.save();
+					}else if (!ModLoader.freezeenabledMP) {
+						sender.sendMessage(new TextComponentTranslation("msg.freezeServer.enabled")); //§aEnabled Freezing when starting the server
+						ModLoader.freezeenabledMP=true;
+						CommonProxy.serverconfig.get("Freeze","Enabled", false, "Freezes the game when joining the Server").set(true);
+						CommonProxy.serverconfig.save();
+					}
+				}else {
+					if(ModLoader.freezeenabledMP) {
+						CommonProxy.logger.info("Disabled Serverside settings for 'freeze'");
+						ModLoader.freezeenabledMP=false;
+						CommonProxy.serverconfig.get("Freeze","Enabled", false, "Freezes the game when joining the Server").set(true);
+						CommonProxy.serverconfig.save();
+					}else if (!ModLoader.freezeenabledMP) {
+						CommonProxy.logger.info("Enabled Serverside settings for 'freeze'");
+						ModLoader.freezeenabledMP=true;
+						CommonProxy.serverconfig.get("Freeze","Enabled", false, "Freezes the game when joining the Server").set(true);
+						CommonProxy.serverconfig.save();
+					}
+				}
 			} else if (args.length == 1 && args[0].equalsIgnoreCase("keystrokes")) {
 				CommonProxy.logger.warn("Cannot enable keystrokes");
 			} else if (args.length == 2 && args[0].equalsIgnoreCase("keystrokes") && server.getPlayerList().getPlayers().contains(server.getPlayerList().getPlayerByUsername(args[1]))) {

@@ -11,3 +11,9 @@ msg.keystroke.multiplayerchange=Keystroke Einstellungen von %s verändert
 msg.duping.disabled=§cDuping ausgeschaltet
 msg.duping.enabled=§aDuping eingeschaltet
 msg.duping.dupemoderr=§cDupeMod ist geladen, weswegen dieser Befehl ausgeschaltet ist
+
+#Freeze
+msg.freezeServer.disabled=§cFreezing, wenn der Server startet, ausgestellt
+msg.freezeServer.enabled=§aFreezing, wenn der Server startet, eingeschaltet
+msg.freezeClient.disabled=§cFreezing, beim Betreten der Welt, ausgeschaltet
+msg.freezeClient.enabled=§aFreezing, beim Betreten der Welt, eingeschaltet

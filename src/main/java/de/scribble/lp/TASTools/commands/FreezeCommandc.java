@@ -32,10 +32,10 @@ public class FreezeCommandc extends CommandBase {
 		World world = sender.getEntityWorld();
 		if (!server.isDedicatedServer()) {
 			if (!FreezeHandler.isServerFrozen()) {
-				ModLoader.NETWORK.sendToServer(new FreezePacket(true));
+				FreezeHandler.startFreezeServer();
 				ModLoader.NETWORK.sendToAll(new FreezePacket(true));
 			} else if (FreezeHandler.isServerFrozen()) {
-				ModLoader.NETWORK.sendToServer(new FreezePacket(false));
+				FreezeHandler.stopFreezeServer();
 				ModLoader.NETWORK.sendToAll(new FreezePacket(false));
 			}
 

@@ -27,7 +27,6 @@ public class FreezePacket implements IMessage{
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		this.enabled=buf.readBoolean();
-		buf.release();
 	}
 
 	@Override

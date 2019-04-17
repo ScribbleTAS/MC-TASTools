@@ -71,16 +71,21 @@ public class FreezeHandler {
 				.getPlayers();
 		if (playerMP.size() > 0) {
 			for (int i = 0; i < (playerMP.size()); i++) {
-				playerMP.get(i).setPositionAndUpdate(FreezeHandler.entity.get(i).getPosX(),
-						FreezeHandler.entity.get(i).getPosY(), FreezeHandler.entity.get(i).getPosZ());
-				playerMP.get(i).rotationPitch = FreezeHandler.entity.get(i).getPitch();
-				playerMP.get(i).rotationYaw = FreezeHandler.entity.get(i).getYaw();
-				playerMP.get(i).setEntityInvulnerable(false);
-				playerMP.get(i).setNoGravity(false);
-				playerMP.get(i).motionX = entity.get(i).getMotionX();
-				playerMP.get(i).motionY = entity.get(i).getMotionY();
-				playerMP.get(i).motionZ = entity.get(i).getMotionZ();
-				playerMP.get(i).velocityChanged = true;
+				for (int o = 0; o < entity.size(); o++) {
+					if (playerMP.get(i).getName().equals(entity.get(o).getPlayername())) {
+						playerMP.get(i).setPositionAndUpdate(entity.get(o).getPosX(), entity.get(o).getPosY(),
+								entity.get(o).getPosZ());
+						playerMP.get(i).rotationPitch = entity.get(o).getPitch();
+						playerMP.get(i).rotationYaw = entity.get(o).getYaw();
+						playerMP.get(i).setEntityInvulnerable(false);
+						playerMP.get(i).setNoGravity(false);
+						playerMP.get(i).motionX = entity.get(o).getMotionX();
+						playerMP.get(i).motionY = entity.get(o).getMotionY();
+						playerMP.get(i).motionZ = entity.get(o).getMotionZ();
+						playerMP.get(i).velocityChanged = true;
+						entity.remove(o);
+					}
+				}
 			}
 		}
 		MinecraftForge.EVENT_BUS.unregister(FreezerSE);
@@ -114,11 +119,15 @@ class ApplyFreezeServer extends FreezeHandler{
 	public void onServerTick(TickEvent.ServerTickEvent ev) {
 		if (playerMP.size() > 0) {
 			for (int i = 0; i < playerMP.size(); i++) {
-				playerMP.get(i).setPositionAndUpdate(entity.get(i).getPosX(), entity.get(i).getPosY(),
-						entity.get(i).getPosZ());
+				for (int o = 0; o < entity.size(); o++) {
+					if (playerMP.get(i).getName().equals(entity.get(o).getPlayername())) {
+						playerMP.get(i).setPositionAndUpdate(entity.get(i).getPosX(), entity.get(i).getPosY(),
+								entity.get(i).getPosZ());
 
-				playerMP.get(i).rotationPitch = FreezeHandler.entity.get(i).getPitch();
-				playerMP.get(i).prevRotationYaw = FreezeHandler.entity.get(i).getYaw();
+						playerMP.get(i).rotationPitch = FreezeHandler.entity.get(i).getPitch();
+						playerMP.get(i).prevRotationYaw = FreezeHandler.entity.get(i).getYaw();
+					}
+				}
 			}
 		}
 	}
