@@ -119,14 +119,12 @@ class ApplyFreezeServer extends FreezeHandler{
 	public void onServerTick(TickEvent.ServerTickEvent ev) {
 		if (playerMP.size() > 0) {
 			for (int i = 0; i < playerMP.size(); i++) {
-				for (int o = 0; o < entity.size(); o++) {
-					if (playerMP.get(i).getName().equals(entity.get(o).getPlayername())) {
+					if (playerMP.get(i).getName().equals(entity.get(i).getPlayername())) {
 						playerMP.get(i).setPositionAndUpdate(entity.get(i).getPosX(), entity.get(i).getPosY(),
 								entity.get(i).getPosZ());
 
 						playerMP.get(i).rotationPitch = FreezeHandler.entity.get(i).getPitch();
 						playerMP.get(i).prevRotationYaw = FreezeHandler.entity.get(i).getYaw();
-					}
 				}
 			}
 		}

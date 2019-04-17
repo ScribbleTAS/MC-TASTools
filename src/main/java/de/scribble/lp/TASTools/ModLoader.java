@@ -60,7 +60,7 @@ public class ModLoader {
 	}
 	@EventHandler
 	public void serverStart(FMLServerStartingEvent ev) {
-		
+		//TODO Get correct level name for folders!
 		if(!CommonProxy.isDupeModLoaded()) {
 			ev.registerServerCommand(new DupeCommandc());
 		}
@@ -71,9 +71,10 @@ public class ModLoader {
 	@EventHandler
 	public void serverStarted(FMLServerStartedEvent ev) {
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
-
+			if(freezeenabledMP) {
 				FreezeHandler.startFreezeServer();
 				FreezeHandler.startFreezeClient();
+			}
 		}
 	}
 }

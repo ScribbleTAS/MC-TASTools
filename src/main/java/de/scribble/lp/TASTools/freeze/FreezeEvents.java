@@ -23,16 +23,16 @@ public class FreezeEvents {
 	@SubscribeEvent
 	public void onjoinServer(PlayerLoggedInEvent ev) {
 		EntityPlayerMP playerev = (EntityPlayerMP) ev.player;
-		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) { //Multiplayer
+		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) { // Multiplayer
 			if (FreezeHandler.isServerFrozen()) {
 
-				if (VelocityEvents.velocityenabledServer) { 	//If velocity in the server config is enabled
+				if (VelocityEvents.velocityenabledServer) { // If velocity in the server config is enabled
 					File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath()
 							+ File.separator + ev.player.getEntityWorld().getWorldInfo().getWorldName() + File.separator
 							+ playerev.getName() + "_velocity.txt");
-					
+
 					if (file.exists()) {
-						//Apply the motion to the player, instead of his current motion
+						// Apply the motion to the player, instead of his current motion
 						double[] bewegung = new ReapplyingVelocity().getVelocity(file); // German for motion lol
 						FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX, playerev.posY,
 								playerev.posZ, playerev.rotationPitch, playerev.rotationYaw, bewegung[0], bewegung[1],
@@ -44,65 +44,72 @@ public class FreezeEvents {
 					}
 					playerev.setEntityInvulnerable(true);
 					playerev.setNoGravity(true);
+				} else { // if velocityserver is disabled
+					FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX, playerev.posY,
+							playerev.posZ, playerev.rotationPitch, playerev.rotationYaw, 0, 0, 0));
+
+					playerev.setEntityInvulnerable(true);
+					playerev.setNoGravity(true);
 				}
-			//if velocityserver is disabled
-			} else {
-				FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX, playerev.posY,
-						playerev.posZ, playerev.rotationPitch, playerev.rotationYaw, playerev.motionX, playerev.motionY,
-						playerev.motionZ));
+				ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
 
-				playerev.setEntityInvulnerable(true);
-				playerev.setNoGravity(true);
 			}
-			FreezeHandler.playerMP.add(playerev); //Add the player to the list
-			ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
+		}else { // Open to LAN
+				if (ModLoader.freezeenabledSP) {
+					List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance()
+							.getPlayerList().getPlayers();
+					if (playerMP.size() > 1) {
+						if (FreezeHandler.isServerFrozen()) {
+							if (VelocityEvents.velocityenabledClient) {
+								File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath()
+										+ File.separator + ev.player.getEntityWorld().getWorldInfo().getWorldName()
+										+ File.separator + playerev.getName() + "_velocity.txt");
 
-		} else { //Open to LAN
-			if (ModLoader.freezeenabledSP) {
-				List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
-						.getPlayers();
-				if (playerMP.size() > 1) {
-					FreezeHandler.entity = new ArrayList<EntityDataStuff>();
-					if (FreezeHandler.isServerFrozen()) {
+								if (file.exists()) {
+									double[] bewegung = new ReapplyingVelocity().getVelocity(file); // German for motion
+																									// lol
+									FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX,
+											playerev.posY, playerev.posZ, playerev.rotationPitch, playerev.rotationYaw,
+											bewegung[0], bewegung[1], bewegung[2]));
+								} else {
+									FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX,
+											playerev.posY, playerev.posZ, playerev.rotationPitch, playerev.rotationYaw,
+											0, 0, 0));
+								}
+								playerev.setEntityInvulnerable(true);
+								playerev.setNoGravity(true);
+								ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
 
-						File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath()
-								+ File.separator + ev.player.getEntityWorld().getWorldInfo().getWorldName()
-								+ File.separator + playerev.getName() + "_velocity.txt");
+							} else { // if velocityclient is disabled
 
-						if (file.exists()) {
-							double[] bewegung = new ReapplyingVelocity().getVelocity(file); // German for motion lol
-							FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX,
-									playerev.posY, playerev.posZ, playerev.rotationPitch, playerev.rotationYaw,
-									bewegung[0], bewegung[1], bewegung[2]));
-						} else {
-							FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX,
-									playerev.posY, playerev.posZ, playerev.rotationPitch, playerev.rotationYaw,
-									playerev.motionX, playerev.motionY, playerev.motionZ));
+								FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX,
+										playerev.posY, playerev.posZ, playerev.rotationPitch, playerev.rotationYaw,
+										playerev.motionX, playerev.motionY, playerev.motionZ));
+
+								playerev.setEntityInvulnerable(true);
+								playerev.setNoGravity(true);
+								ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
+							}
 						}
-						playerev.setEntityInvulnerable(true);
-						playerev.setNoGravity(true);
-						ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
-
-					}
-				} else { //Singleplayer
-					if (VelocityEvents.velocityenabledClient) {
-						File file = new File(Minecraft.getMinecraft().mcDataDir,
-								"saves" + File.separator
-										+ Minecraft.getMinecraft().getIntegratedServer().getFolderName()
-										+ File.separator + "latest_velocity.txt");
-						if (file.exists()) {
-							double[] motion = new ReapplyingVelocity().getVelocity(file);
-							FreezeHandler.startFreezeSetMotionServer(motion[0], motion[1], motion[2]);
-						} else
+					} else { // Singleplayer
+						if (VelocityEvents.velocityenabledClient) {
+							File file = new File(Minecraft.getMinecraft().mcDataDir,
+									"saves" + File.separator
+											+ Minecraft.getMinecraft().getIntegratedServer().getFolderName()
+											+ File.separator + "latest_velocity.txt");
+							if (file.exists()) {
+								double[] motion = new ReapplyingVelocity().getVelocity(file);
+								FreezeHandler.startFreezeSetMotionServer(motion[0], motion[1], motion[2]);
+							} else
+								FreezeHandler.startFreezeServer();
+						} else {
 							FreezeHandler.startFreezeServer();
-					} else {
-						FreezeHandler.startFreezeServer();
+						}
+						ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
 					}
-					ModLoader.NETWORK.sendTo(new FreezePacket(true),playerev);
 				}
 			}
 		}
-	}
 
 	@SubscribeEvent
 	public void onLeaveServer(PlayerLoggedOutEvent ev) {
@@ -118,28 +125,17 @@ public class FreezeEvents {
 						FreezeHandler.entity.remove(o);
 					}
 				}
-				for(int i=0; i<playerMP.size();i++) {
-					if(FreezeHandler.playerMP.get(i).getName().equals(playerEV.getName())) {
-						FreezeHandler.entity.remove(i);
-					}
-				}
 				playerEV.setEntityInvulnerable(false);
 				playerEV.setNoGravity(false);
 				ModLoader.NETWORK.sendTo(new FreezePacket(false), playerEV);
 			}
 		}else{
 			if(playerMP.size()>1) {
-				FreezeHandler.entity= new ArrayList<EntityDataStuff>();
 				if (FreezeHandler.isServerFrozen()) {
 					
 					for (int o=0; o<FreezeHandler.entity.size();o++) {
 						if(FreezeHandler.entity.get(o).getPlayername().equals(playerEV.getName())) {
 							FreezeHandler.entity.remove(o);
-						}
-					}
-					for(int i=0; i<playerMP.size();i++) {
-						if(FreezeHandler.playerMP.get(i).getName().equals(playerEV.getName())) {
-							FreezeHandler.entity.remove(i);
 						}
 					}
 					playerEV.setEntityInvulnerable(false);

@@ -47,7 +47,7 @@ public class CommonProxy {
 		if(ev.getSide()==Side.SERVER) {
 			serverconfig=new Configuration(new File(ev.getModConfigurationDirectory()+File.separator+"tastoolsSERVER.cfg"));
 			enableServerDuping=serverconfig.get("Duping","Enable",false,"Enables duping on the Server").getBoolean();
-			ModLoader.freezeenabledMP=serverconfig.get("Freeze","Enabled", false, "Freezes the game when joining the Server").getBoolean();
+			ModLoader.freezeenabledMP=serverconfig.get("Freeze","Enabled", false, "Freezes the game when starting the Server").getBoolean();
 			VelocityEvents.velocityenabledServer=serverconfig.get("Velocity","Enabled",true,"Saves and applies Velocity when joining/leaving the server").getBoolean();
 			serverconfig.save();
 		}

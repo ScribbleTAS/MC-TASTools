@@ -81,8 +81,5 @@ public class VelocityEvents {
 
 	}
 
-	@SubscribeEvent
-	public void onOpenServer(PlayerEvent.PlayerLoggedInEvent ev) {
 
-	}
 }

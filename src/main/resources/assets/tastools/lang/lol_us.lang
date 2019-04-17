@@ -13,7 +13,13 @@ msg.duping.enabled=§aI See Double™ enabled
 msg.duping.dupemoderr=§cI See Double™ is here, so dis commandz is dizabled
 
 #Freeze
-msg.freezeServer.disabled=§cStiffz as a poker™ at servur start dizabled
-msg.freezeServer.enabled=§aStiffz as a poker™ at servur start enabled
 msg.freezeClient.disabled=§cDizabled Stiffz as a poker™ when cat enters the wurld
 msg.freezeClient.enabled=§aEnabled Stiffz as a poker™ when cat enters the wurld
+msg.freezeServer.disabled=§cStiffz as a poker™ at servur start dizabled
+msg.freezeServer.enabled=§aStiffz as a poker™ at servur start enabled
+
+#velocity
+msg.velocityClient.disabled=§cDizabled Yeeting when cat enters the wurld
+msg.velocityClient.enabled=§aEnabled Yeeting when cat enters the wurld
+msg.velocityServer.disabled=§cDizabled Yeeting when wooding into the servur
+msg.velocityServer.enabled=§aEnabled Yeeting when wooding into the servur

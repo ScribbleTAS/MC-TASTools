@@ -4,7 +4,7 @@
 #Keystrokes
 msg.keystrokes.disabled=§cKeystrokes ausgeschaltet
 msg.keystrokes.enabled=§aKeystrokes eingeschaltet
-msg.keystrokes.tasmoderr=§cKeystrokes sind ausgeschaltet da die TASmod ebenfalls keystrokes benutzt. Bitte benutze /tasmod gui um die Einstellungen zu ändern
+msg.keystrokes.tasmoderr=§cKeystrokes sind ausgeschaltet da die TASmod ebenfalls Keystrokes benutzt. Bitte benutze /tasmod gui um die Einstellungen zu ändern
 msg.keystroke.multiplayerchange=Keystroke Einstellungen von %s verändert
 
 #Duping
@@ -13,7 +13,13 @@ msg.duping.enabled=§aDuping eingeschaltet
 msg.duping.dupemoderr=§cDupeMod ist geladen, weswegen dieser Befehl ausgeschaltet ist
 
 #Freeze
-msg.freezeServer.disabled=§cFreezing, wenn der Server startet, ausgestellt
-msg.freezeServer.enabled=§aFreezing, wenn der Server startet, eingeschaltet
 msg.freezeClient.disabled=§cFreezing, beim Betreten der Welt, ausgeschaltet
 msg.freezeClient.enabled=§aFreezing, beim Betreten der Welt, eingeschaltet
+msg.freezeServer.disabled=§cFreezing, wenn der Server startet, ausgestellt
+msg.freezeServer.enabled=§aFreezing, wenn der Server startet, eingeschaltet
+
+#velocity
+msg.velocityClient.disabled=§cVelocity, beim Betreten der Welt, ausgeschaltet
+msg.velocityClient.enabled=§aVelocity, beim Betreten der Welt, eingeschaltet
+msg.velocityServer.disabled=§cVelocity, beim Betreten des Servers, ausgeschaltet
+msg.velocityServer.enabled=§aVelocity, beim Betreten des Servers, eingeschaltet
