@@ -9,6 +9,7 @@ import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
+import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.proxy.CommonProxy;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
@@ -43,6 +44,8 @@ public class ModLoader {
 	public static boolean freezeenabledSP;
 	public static boolean freezeenabledMP;
 	
+	public static String levelname;
+	
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent ev) {
@@ -60,7 +63,9 @@ public class ModLoader {
 	}
 	@EventHandler
 	public void serverStart(FMLServerStartingEvent ev) {
-		//TODO Get correct level name for folders!
+		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
+			levelname=new Util().getLevelNamefromServer();
+		}
 		if(!CommonProxy.isDupeModLoaded()) {
 			ev.registerServerCommand(new DupeCommandc());
 		}

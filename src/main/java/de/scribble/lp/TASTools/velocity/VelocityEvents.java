@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.swing.text.html.parser.Entity;
 
+import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.duping.RecordingDupe;
 import de.scribble.lp.TASTools.duping.RefillingDupe;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
@@ -45,6 +46,7 @@ public class VelocityEvents {
 						new SavingVelocity().saveVelocity(ev.player, file);
 					}
 				}
+			//LAN-Server
 			}else {	
 				if (velocityenabledClient) {
 					File file = new File(Minecraft.getMinecraft().mcDataDir,
@@ -62,7 +64,7 @@ public class VelocityEvents {
 		//Dedicated Multiplayer
 		}else {
 			if(velocityenabledServer) {
-				File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath() + File.separator + ev.player.getEntityWorld().getWorldInfo().getWorldName()+File.separator
+				File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath() + File.separator + ModLoader.levelname +File.separator
 						+ ev.player.getName() + "_velocity.txt");
 				List<EntityPlayerMP> players= FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
 				CommonProxy.logger.info("Saving velocity of "+ev.player.getName());
