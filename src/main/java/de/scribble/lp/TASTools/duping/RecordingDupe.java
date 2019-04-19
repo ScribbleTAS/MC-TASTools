@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.google.common.io.Files;
 
-import de.scribble.lp.TASTools.proxy.CommonProxy;
+import de.scribble.lp.TASTools.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;

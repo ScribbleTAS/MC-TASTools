@@ -2,13 +2,11 @@ package de.scribble.lp.TASTools.duping;
 
 import java.io.File;
 
+import de.scribble.lp.TASTools.ClientProxy;
+import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
-import de.scribble.lp.TASTools.proxy.ClientProxy;
-import de.scribble.lp.TASTools.proxy.CommonProxy;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -38,10 +36,9 @@ public class DupeEvents {
 	
 	@SubscribeEvent
 	public void pressKeybinding(InputEvent.KeyInputEvent ev){
-		if (dupingenabled&&!mc.world.isRemote){
+		if (dupingenabled&&!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()){
 			if(ClientProxy.DupeKey.isPressed()){
-				File file= new File(mc.mcDataDir, "saves" + File.separator +mc.getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
-				mc.player.sendChatMessage("/dupe"); //I'm lazy
+				ModLoader.NETWORK.sendToServer(new DupePacket());
 			}
 		}
 	}

@@ -1,29 +1,32 @@
-package de.scribble.lp.TASTools.proxy;
+package de.scribble.lp.TASTools;
+
+import java.io.File;
 
 import org.lwjgl.input.Keyboard;
 
-import de.scribble.lp.TASTools.ModLoader;
-import de.scribble.lp.TASTools.commands.DupeCommandc;
-import de.scribble.lp.TASTools.commands.TastoolsCommandc;
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;	
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;	
 
 public class ClientProxy extends CommonProxy{
 	
 	public static KeyBinding DupeKey = new KeyBinding("Load Chests/Items", Keyboard.KEY_I, "DupeMod");
+	public static KeyBinding FreezeKey = new KeyBinding("Freeze/Unfreeze Players", Keyboard.KEY_Y, "TASTools");
+	
 	public static Configuration config;
+	
 	public void preInit(FMLPreInitializationEvent ev) {
 		super.preInit(ev);
 		ClientRegistry.registerKeyBinding(DupeKey);
+		ClientRegistry.registerKeyBinding(FreezeKey);
 		config = new Configuration(ev.getSuggestedConfigurationFile());
 		config.load();
 		GuiKeystrokes.guienabled=config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").getBoolean();
@@ -45,6 +48,7 @@ public class ClientProxy extends CommonProxy{
 		else if (position.equals("upLeft")) {
 			GuiKeystrokes.changeCorner(3);
 		}
+		new File (Minecraft.getMinecraft().mcDataDir,"saves"+File.separator+"savestates").mkdir();
 	}
 	
 	public void init(FMLInitializationEvent ev) {

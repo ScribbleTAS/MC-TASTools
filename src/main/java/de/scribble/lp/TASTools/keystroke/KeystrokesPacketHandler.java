@@ -1,6 +1,6 @@
 package de.scribble.lp.TASTools.keystroke;
 
-import de.scribble.lp.TASTools.proxy.ClientProxy;
+import de.scribble.lp.TASTools.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.config.Configuration;

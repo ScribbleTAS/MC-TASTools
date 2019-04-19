@@ -5,8 +5,7 @@ import java.io.IOException;
 
 import com.google.common.io.Files;
 
-import de.scribble.lp.TASTools.proxy.CommonProxy;
-import net.minecraft.client.Minecraft;
+import de.scribble.lp.TASTools.CommonProxy;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class SavingVelocity {

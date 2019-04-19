@@ -1,10 +1,11 @@
-package de.scribble.lp.TASTools.proxy;
+package de.scribble.lp.TASTools;
 
 import java.io.File;
 
 import org.apache.logging.log4j.Logger;
 
-import de.scribble.lp.TASTools.ModLoader;
+import de.scribble.lp.TASTools.duping.DupePacket;
+import de.scribble.lp.TASTools.duping.DupePacketHandler;
 import de.scribble.lp.TASTools.freeze.FreezeEvents;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
@@ -13,7 +14,6 @@ import de.scribble.lp.TASTools.keystroke.KeystrokesPacketHandler;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -43,6 +43,7 @@ public class CommonProxy {
 		ModLoader.NETWORK.registerMessage(FreezePacketHandler.class, FreezePacket.class, 0, Side.SERVER);
 		ModLoader.NETWORK.registerMessage(FreezePacketHandler.class, FreezePacket.class, 1, Side.CLIENT);
 		ModLoader.NETWORK.registerMessage(KeystrokesPacketHandler.class, KeystrokesPacket.class, 2, Side.CLIENT);
+		ModLoader.NETWORK.registerMessage(DupePacketHandler.class, DupePacket.class, 3, Side.SERVER);
 		
 		if(ev.getSide()==Side.SERVER) {
 			serverconfig=new Configuration(new File(ev.getModConfigurationDirectory()+File.separator+"tastoolsSERVER.cfg"));

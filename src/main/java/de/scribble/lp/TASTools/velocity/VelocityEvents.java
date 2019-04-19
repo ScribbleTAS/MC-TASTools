@@ -3,21 +3,14 @@ package de.scribble.lp.TASTools.velocity;
 import java.io.File;
 import java.util.List;
 
-import javax.swing.text.html.parser.Entity;
-
+import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
-import de.scribble.lp.TASTools.duping.RecordingDupe;
-import de.scribble.lp.TASTools.duping.RefillingDupe;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
-import de.scribble.lp.TASTools.proxy.CommonProxy;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class VelocityEvents {
 	public static boolean velocityenabledClient;
@@ -25,7 +18,7 @@ public class VelocityEvents {
 
 	@SubscribeEvent
 	public void onCloseServer(PlayerEvent.PlayerLoggedOutEvent ev) {
-		//Singleplayer
+		//LAN-Server
 		if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			List<EntityPlayerMP> players= FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
 			if (players.size()>1) {
@@ -46,7 +39,7 @@ public class VelocityEvents {
 						new SavingVelocity().saveVelocity(ev.player, file);
 					}
 				}
-			//LAN-Server
+			//Singleplayer
 			}else {	
 				if (velocityenabledClient) {
 					File file = new File(Minecraft.getMinecraft().mcDataDir,

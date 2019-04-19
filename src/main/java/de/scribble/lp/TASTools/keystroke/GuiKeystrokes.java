@@ -1,6 +1,6 @@
 package de.scribble.lp.TASTools.keystroke;
 
-import de.scribble.lp.TASTools.proxy.CommonProxy;
+import de.scribble.lp.TASTools.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;

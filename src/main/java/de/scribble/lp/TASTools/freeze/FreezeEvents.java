@@ -1,21 +1,17 @@
 package de.scribble.lp.TASTools.freeze;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.graph.Network;
-
+import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.ModLoader;
-import de.scribble.lp.TASTools.proxy.ClientProxy;
 import de.scribble.lp.TASTools.velocity.ReapplyingVelocity;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 
@@ -147,6 +143,18 @@ public class FreezeEvents {
 				ModLoader.NETWORK.sendTo(new FreezePacket(false),playerEV);
 			}
 
+		}
+	}
+	@SubscribeEvent
+	public void pressKeybinding(InputEvent.KeyInputEvent ev) {
+		if (ClientProxy.FreezeKey.isPressed()&&Minecraft.getMinecraft().player.canUseCommand(2, "dupe")) {
+			if (!FreezeHandler.isServerFrozen()) {
+				ModLoader.NETWORK.sendToServer(new FreezePacket(true));
+				FreezeHandler.startFreezeClient();
+			} else if (FreezeHandler.isServerFrozen()) {
+				ModLoader.NETWORK.sendToServer(new FreezePacket(false));
+				FreezeHandler.stopFreezeClient();
+			}
 		}
 	}
 }

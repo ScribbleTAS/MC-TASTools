@@ -1,13 +1,10 @@
-package de.scribble.lp.TASTools.commands;
+package de.scribble.lp.TASTools;
 
 import java.util.List;
 
-import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
-import de.scribble.lp.TASTools.proxy.ClientProxy;
-import de.scribble.lp.TASTools.proxy.CommonProxy;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

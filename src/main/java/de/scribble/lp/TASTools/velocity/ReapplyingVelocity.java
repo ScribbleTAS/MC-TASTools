@@ -5,12 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import de.scribble.lp.TASTools.ModLoader;
-import de.scribble.lp.TASTools.freeze.FreezePacket;
-import de.scribble.lp.TASTools.proxy.CommonProxy;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
-
 public class ReapplyingVelocity {
 	
 	private double [] motion= {0,0,0};

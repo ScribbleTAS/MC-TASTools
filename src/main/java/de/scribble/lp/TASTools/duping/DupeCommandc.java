@@ -1,12 +1,7 @@
-package de.scribble.lp.TASTools.commands;
+package de.scribble.lp.TASTools.duping;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-import de.scribble.lp.TASTools.duping.DupeEvents;
-import de.scribble.lp.TASTools.duping.RefillingDupe;
-import de.scribble.lp.TASTools.proxy.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
