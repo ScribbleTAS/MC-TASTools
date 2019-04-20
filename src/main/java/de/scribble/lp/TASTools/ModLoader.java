@@ -4,6 +4,7 @@ import de.scribble.lp.TASTools.duping.DupeCommandc;
 import de.scribble.lp.TASTools.freeze.FreezeCommandc;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.misc.Util;
+import de.scribble.lp.TASTools.savestates.SavestateCommandc;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -23,7 +24,7 @@ public class ModLoader {
 	@Instance
 	public static ModLoader instance = new ModLoader();
 	
-	@SidedProxy(serverSide = "de.scribble.lp.TASTools.proxy.CommonProxy", clientSide = "de.scribble.lp.TASTools.proxy.ClientProxy")
+	@SidedProxy(serverSide = "de.scribble.lp.TASTools.CommonProxy", clientSide = "de.scribble.lp.TASTools.ClientProxy")
 	public static CommonProxy proxy;
 	
 	public static SimpleNetworkWrapper NETWORK;
@@ -58,6 +59,7 @@ public class ModLoader {
 		}
 		ev.registerServerCommand(new TastoolsCommandc());
 		ev.registerServerCommand(new FreezeCommandc());
+		ev.registerServerCommand(new SavestateCommandc());
 	}
 	
 	@EventHandler
