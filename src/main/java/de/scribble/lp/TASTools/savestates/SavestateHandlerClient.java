@@ -9,8 +9,12 @@ import java.io.OutputStream;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraft.world.WorldSettings;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 /**
  * This code is heavily copied from <br> bspkrs on github <br> https://github.com/bspkrs/WorldStateCheckpoints/blob/master/src/main/java/bspkrs/worldstatecheckpoints/CheckpointManager.java
  *
@@ -18,6 +22,9 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
 	public boolean isSaving=false;
+	protected static boolean check=true;
+	static protected File currentworldfolder;
+	static protected WorldSettings settings;
 	
 	public void saveState() {
 		File currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName());
@@ -36,19 +43,14 @@ public class SavestateHandlerClient {
 	public void loadLastSavestate() {
 
 		if(!isSaving) {
-			File currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName());
+			currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName());
 			File targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+"Savestate");
-			String worldname= mc.world.getWorldInfo().getWorldName();
-			
-			//deleteDirAndContents(currentworldfolder);
-			FMLCommonHandler.instance().getMinecraftServerInstance().stopServer();
-			//FMLCommonHandler.instance().getMinecraftServerInstance().loadAllWorlds(targetsavefolder.getPath(), worldname, 0, null, null);
-			//unloadWorldSilent();
-			/*try {
-				copyDirectory(targetsavefolder, currentworldfolder, new String[] {" "});
-			}catch(IOException e) {
-				e.printStackTrace();
-			}*/
+			settings= new WorldSettings(mc.world.getWorldInfo());
+			SavestateEvents Events=new SavestateEvents();
+            this.mc.world.sendQuittingDisconnectingPacket();
+            this.mc.loadWorld((WorldClient)null);
+           // MinecraftForge.EVENT_BUS.register(Events);
+            
 			
 			
 		}
@@ -170,4 +172,21 @@ public class SavestateHandlerClient {
     }
 
 
+}
+class SavestateEvents extends SavestateHandlerClient{
+	int i=0;
+	@SubscribeEvent
+	public void onClientTick(TickEvent.ClientTickEvent ev) {
+		if(ev.phase==Phase.START) {
+			if (!Minecraft.getMinecraft().isIntegratedServerRunning()) {
+				if(i>=200) {
+					check=true;
+		            FMLClientHandler.instance().getClient().launchIntegratedServer(currentworldfolder.getPath(), "Test", settings);
+		            MinecraftForge.EVENT_BUS.unregister(this);
+		            i=0;
+				}
+				i++;
+			}
+		}
+	}
 }
