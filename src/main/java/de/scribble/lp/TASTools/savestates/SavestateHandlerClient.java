@@ -47,9 +47,10 @@ public class SavestateHandlerClient {
 			File targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+"Savestate");
 			settings= new WorldSettings(mc.world.getWorldInfo());
 			SavestateEvents Events=new SavestateEvents();
+			MinecraftForge.EVENT_BUS.register(Events);
             this.mc.world.sendQuittingDisconnectingPacket();
             this.mc.loadWorld((WorldClient)null);
-           // MinecraftForge.EVENT_BUS.register(Events);
+            
             
 			
 			
@@ -180,8 +181,7 @@ class SavestateEvents extends SavestateHandlerClient{
 		if(ev.phase==Phase.START) {
 			if (!Minecraft.getMinecraft().isIntegratedServerRunning()) {
 				if(i>=200) {
-					check=true;
-		            FMLClientHandler.instance().getClient().launchIntegratedServer(currentworldfolder.getPath(), "Test", settings);
+		            FMLClientHandler.instance().getClient().launchIntegratedServer("Test", "Test", settings);
 		            MinecraftForge.EVENT_BUS.unregister(this);
 		            i=0;
 				}

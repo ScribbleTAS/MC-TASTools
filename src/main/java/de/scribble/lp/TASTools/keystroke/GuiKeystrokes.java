@@ -20,6 +20,7 @@ public class GuiKeystrokes extends Gui {
 	 * 1=downRight
 	 * 2=upRight
 	 * 3=upLeft
+	 * 4=not changed
 	 * @param cornernumber
 	 */
 	public static void changeCorner(int cornernumber) {
