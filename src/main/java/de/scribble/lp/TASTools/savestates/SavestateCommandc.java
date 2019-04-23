@@ -2,6 +2,8 @@ package de.scribble.lp.TASTools.savestates;
 
 import java.util.List;
 
+import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -30,6 +32,9 @@ public class SavestateCommandc extends CommandBase{
 			else if(args.length==1&&args[0].equalsIgnoreCase("load")) {
 				new SavestateHandlerClient().loadLastSavestate();
 			}
+			else if(args.length==1&&args[0].equalsIgnoreCase("gui")) {
+				Minecraft.getMinecraft().displayGuiScreen(new GuiSavestateLoadingScreen());
+			}
 		}
 		
 	}
@@ -37,7 +42,7 @@ public class SavestateCommandc extends CommandBase{
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
 		if(args.length==1) {
-			return getListOfStringsMatchingLastWord(args, new String[] {"save","load"});
+			return getListOfStringsMatchingLastWord(args, new String[] {"save","load","gui"});
 		}else {
 			return super.getTabCompletions(server, sender, args, targetPos);
 		}
