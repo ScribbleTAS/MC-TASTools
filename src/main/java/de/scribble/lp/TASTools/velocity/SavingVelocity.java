@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import com.google.common.io.Files;
 
-import de.scribble.lp.TASTools.CommonProxy;
+import de.scribble.lp.TASTools.ModLoader;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class SavingVelocity {
@@ -19,7 +19,7 @@ public class SavingVelocity {
 		output.append("END");
 		
 		try {
-			CommonProxy.logger.info("Saving velocity");
+			ModLoader.logger.info("Saving velocity");
 			Files.write(output.toString().getBytes(), file);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -35,7 +35,7 @@ public class SavingVelocity {
 		output.append("END");
 		
 		try {
-			CommonProxy.logger.info("Saving velocity "+ motionX+" "+motionY+" "+motionZ);
+			ModLoader.logger.info("Saving velocity "+ motionX+" "+motionY+" "+motionZ);
 			Files.write(output.toString().getBytes(), file);
 		} catch (IOException e) {
 			e.printStackTrace();

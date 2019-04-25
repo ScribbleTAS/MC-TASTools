@@ -7,25 +7,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import de.scribble.lp.TASTools.CommonProxy;
-import de.scribble.lp.TASTools.savestates.gui.GuiSavestatePause;
+import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateSavingScreen;
-import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiDisconnected;
-import net.minecraft.client.gui.GuiIngame;
-import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.stats.StatisticsManagerServer;
 import net.minecraft.world.WorldSettings;
-import net.minecraft.world.storage.IPlayerFileData;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -36,7 +26,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
 	public boolean isSaving=false;
-	private IPlayerFileData playerdatamanager;
 	
 	public static boolean copying=false;
 	public static boolean deleting=false;
@@ -46,20 +35,22 @@ public class SavestateHandlerClient {
 	protected static WorldSettings settings;
 	protected static String foldername;
 	protected static String worldname;
+	protected static int timer;
+	protected static final int endtimer=20;
 	
 	
 	public void saveState() {
-		File currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName());
-		File targetsavefolder=null;
+		currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName());
+		targetsavefolder=null;
 		int i=1;
 		while (i<=256) {
 			if (i==256) {
-				CommonProxy.logger.error("Couldn't make a savestate, there are too many savestates in the target directory");
+				ModLoader.logger.error("Couldn't make a savestate, there are too many savestates in the target directory");
 				mc.displayGuiScreen(null);
 				return;
 			}
 			if (i>256) {
-				CommonProxy.logger.error("Aborting saving due to savestate count being greater than 256 for safety reasons");
+				ModLoader.logger.error("Aborting saving due to savestate count being greater than 256 for safety reasons");
 				mc.displayGuiScreen(null);
 				return;
 			}
@@ -72,31 +63,12 @@ public class SavestateHandlerClient {
 		if(!isSaving) {
 			isSaving=true;
 			copying=true;
-			mc.displayGuiScreen(new GuiSavestateSavingScreen());
-			try {
-				Thread.sleep(400);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 			boolean flag =mc.getIntegratedServer().getWorld(mc.player.dimension).disableLevelSaving;
-			mc.getIntegratedServer().getWorld(mc.player.dimension).disableLevelSaving=false;
-			mc.getIntegratedServer().saveAllWorlds(false);
-			mc.getIntegratedServer().getPlayerList().saveAllPlayerData();
-			mc.getIntegratedServer().getWorld(mc.player.dimension).disableLevelSaving=flag;
 			
-			try {
-				copyDirectory(currentworldfolder, targetsavefolder, new String[] {" "});
-			} catch (IOException e) {
-				CommonProxy.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate save)");
-				e.printStackTrace();
-			}
-			try {
-				Thread.sleep(300);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			mc.displayGuiScreen(null);
-			isSaving=false;
+			mc.displayGuiScreen(new GuiSavestateSavingScreen());
+			SavestateEvents2 lol=new SavestateEvents2();
+			MinecraftForge.EVENT_BUS.register(lol);
+
 		}
 	}
 	
@@ -112,11 +84,11 @@ public class SavestateHandlerClient {
 				targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+Minecraft.getMinecraft().getIntegratedServer().getFolderName()+"-Savestate"+Integer.toString(i));
 				if (!targetsavefolder.exists()) {
 					if(i-1==0) {
-						CommonProxy.logger.info("Couldn't find a valid savestate, abort loading the savestate!");
+						ModLoader.logger.info("Couldn't find a valid savestate, abort loading the savestate!");
 						return;
 					}
 					if(i>256) {
-						CommonProxy.logger.error("Too many savestates found. Aborting loading for safety reasons");
+						ModLoader.logger.error("Too many savestates found. Aborting loading for safety reasons");
 					}
 					targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+Minecraft.getMinecraft().getIntegratedServer().getFolderName()+"-Savestate"+Integer.toString(i-1));
 					break;
@@ -237,23 +209,42 @@ class SavestateEvents extends SavestateHandlerClient{
 	@SubscribeEvent
 	public void onGuiScreenOpen(GuiOpenEvent ev) {
 		if (ev.getGui() instanceof GuiDisconnected) {
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
+			
 			
 			deleteDirContents(currentworldfolder,  new String[] {" "});
 			try {
 				copyDirectory(targetsavefolder, currentworldfolder, new String[] {" "});
 			} catch (IOException e) {
-				CommonProxy.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate load)");
+				ModLoader.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate load)");
 				e.printStackTrace();
 				MinecraftForge.EVENT_BUS.unregister(this);
 				return;
 			}
 			FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
 			MinecraftForge.EVENT_BUS.unregister(this);
+		}
+	}
+}
+class SavestateEvents2 extends SavestateHandlerClient{
+	int tickspassed=0;
+	@SubscribeEvent
+	public void onTick(TickEvent ev) {
+		if (ev.phase==Phase.START) {
+			if (tickspassed>=endtimer) {
+				mc.getIntegratedServer().saveAllWorlds(false);
+				try {
+					copyDirectory(currentworldfolder, targetsavefolder, new String[] {" "});
+					copying=false;
+				} catch (IOException e) {
+					ModLoader.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate save)");
+					e.printStackTrace();
+				}
+				mc.displayGuiScreen(null);
+				isSaving=false;
+				MinecraftForge.EVENT_BUS.unregister(this);
+				return;
+			}
+			tickspassed++;
 		}
 	}
 }

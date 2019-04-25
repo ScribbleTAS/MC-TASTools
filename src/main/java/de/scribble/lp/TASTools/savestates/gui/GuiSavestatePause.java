@@ -1,24 +1,19 @@
 package de.scribble.lp.TASTools.savestates.gui;
 
-import de.scribble.lp.TASTools.savestates.SavestateHandlerClient;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
 
 public class GuiSavestatePause extends GuiScreen{
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		new GuiButton(1, 10, 10, "Make Savestate");
-	}
-	
+    public void initGui()
+    {
+		buttonList.clear();
+        buttonList.add(new GuiButton(4, 10, 200, "Hallo"));
+    }
 	@Override
-	public boolean doesGuiPauseGame() {
-		return false;
-	}
-	@Override
-	public void updateScreen() {
-		super.updateScreen();
-	}
+    public void drawScreen(int mouseX, int mouseY, float partialTicks)
+    {
+        super.drawScreen(mouseX, mouseY, partialTicks);
+    }
 }

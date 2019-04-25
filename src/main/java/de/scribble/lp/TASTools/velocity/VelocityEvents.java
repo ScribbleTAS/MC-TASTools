@@ -3,7 +3,6 @@ package de.scribble.lp.TASTools.velocity;
 import java.io.File;
 import java.util.List;
 
-import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import net.minecraft.client.Minecraft;
@@ -27,7 +26,7 @@ public class VelocityEvents {
 					File file = new File(Minecraft.getMinecraft().mcDataDir,
 							"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
 									+ File.separator + ev.player.getName()+"_velocity.txt");
-					CommonProxy.logger.info("Start saving velocity for "+ev.player.getName()+" (Singleplayer)");
+					ModLoader.logger.info("Start saving velocity for "+ev.player.getName()+" (Singleplayer)");
 					if(FreezeHandler.isServerFrozen()) {
 						for(int i=0;i<players.size();i++) {
 							if(FreezeHandler.entity.get(i).getPlayername().equals(ev.player.getName())) {
@@ -45,7 +44,7 @@ public class VelocityEvents {
 					File file = new File(Minecraft.getMinecraft().mcDataDir,
 							"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
 									+ File.separator + "latest_velocity.txt");
-					CommonProxy.logger.info("Start saving velocity...");
+					ModLoader.logger.info("Start saving velocity...");
 					if(FreezeHandler.isServerFrozen()) {
 						new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(0).getMotionX(), FreezeHandler.entity.get(0).getMotionY(), FreezeHandler.entity.get(0).getMotionZ(), file);
 					}
@@ -60,7 +59,7 @@ public class VelocityEvents {
 				File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath() + File.separator + ModLoader.levelname +File.separator
 						+ ev.player.getName() + "_velocity.txt");
 				List<EntityPlayerMP> players= FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
-				CommonProxy.logger.info("Saving velocity of "+ev.player.getName());
+				ModLoader.logger.info("Saving velocity of "+ev.player.getName());
 				if(FreezeHandler.isServerFrozen()) {
 					for(int i=0;i<players.size();i++) {
 						if(FreezeHandler.entity.get(i).getPlayername().equals(ev.player.getName())) {

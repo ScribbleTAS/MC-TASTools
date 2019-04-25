@@ -29,6 +29,7 @@ public class GuiSavestateSavingScreen extends GuiScreen{
 	public boolean doesGuiPauseGame() {
 		return true;
 	}
+	
 	@Override
 	public void updateScreen() {
 		super.updateScreen();

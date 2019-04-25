@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;	
 
-public class ClientProxy extends CommonProxy{
+public class ClientProxy extends ModLoader{
 	
 	public static KeyBinding DupeKey = new KeyBinding("Load Chests/Items", Keyboard.KEY_I, "DupeMod");
 	public static KeyBinding FreezeKey = new KeyBinding("Freeze/Unfreeze Players", Keyboard.KEY_Y, "TASTools");
@@ -54,14 +54,14 @@ public class ClientProxy extends CommonProxy{
 	public void init(FMLInitializationEvent ev) {
 		super.init(ev);
 		//disable dupemod in this mod
-		if(!CommonProxy.isDupeModLoaded()){
+		if(!isDupeModLoaded()){
 			MinecraftForge.EVENT_BUS.register(new DupeEvents());
 		}
 		else {
-			CommonProxy.logger.warn("Found the DupeMod to be installed! DupeMod is integrated in TAStools, so no need to load that!");
+			ModLoader.logger.warn("Found the DupeMod to be installed! DupeMod is integrated in TAStools, so no need to load that!");
 		}
 		//disable keystrokes from this mod
-		if(!CommonProxy.isTASModLoaded()) {
+		if(!isTASModLoaded()) {
 			MinecraftForge.EVENT_BUS.register(new GuiKeystrokes());
 		}
 		
