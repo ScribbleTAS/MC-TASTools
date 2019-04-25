@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import de.scribble.lp.TASTools.CommonProxy;
-import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
+import de.scribble.lp.TASTools.savestates.gui.GuiSavestatePause;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateSavingScreen;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.client.Minecraft;
@@ -21,6 +21,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.stats.StatisticsManagerServer;
 import net.minecraft.world.WorldSettings;
+import net.minecraft.world.storage.IPlayerFileData;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -35,6 +36,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
 	public boolean isSaving=false;
+	private IPlayerFileData playerdatamanager;
 	
 	public static boolean copying=false;
 	public static boolean deleting=false;
@@ -71,16 +73,17 @@ public class SavestateHandlerClient {
 			isSaving=true;
 			copying=true;
 			mc.displayGuiScreen(new GuiSavestateSavingScreen());
+			try {
+				Thread.sleep(400);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			boolean flag =mc.getIntegratedServer().getWorld(mc.player.dimension).disableLevelSaving;
 			mc.getIntegratedServer().getWorld(mc.player.dimension).disableLevelSaving=false;
 			mc.getIntegratedServer().saveAllWorlds(false);
 			mc.getIntegratedServer().getPlayerList().saveAllPlayerData();
 			mc.getIntegratedServer().getWorld(mc.player.dimension).disableLevelSaving=flag;
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			
 			try {
 				copyDirectory(currentworldfolder, targetsavefolder, new String[] {" "});
 			} catch (IOException e) {
@@ -239,7 +242,6 @@ class SavestateEvents extends SavestateHandlerClient{
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
-			Minecraft.getMinecraft().displayGuiScreen(new GuiSavestateLoadingScreen());
 			
 			deleteDirContents(currentworldfolder,  new String[] {" "});
 			try {
