@@ -19,6 +19,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.relauncher.Side;
 /**
  * This code is heavily copied from <br> bspkrs on github <br> https://github.com/bspkrs/WorldStateCheckpoints/blob/master/src/main/java/bspkrs/worldstatecheckpoints/CheckpointManager.java
  *
@@ -26,9 +27,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
 	public boolean isSaving=false;
-	
-	public static boolean copying=false;
-	public static boolean deleting=false;
 	
 	protected static File currentworldfolder;
 	protected static File targetsavefolder=null;
@@ -62,7 +60,7 @@ public class SavestateHandlerClient {
 		}
 		if(!isSaving) {
 			isSaving=true;
-			copying=true;
+			GuiSavestateSavingScreen.copying=true;
 			boolean flag =mc.getIntegratedServer().getWorld(mc.player.dimension).disableLevelSaving;
 			
 			mc.displayGuiScreen(new GuiSavestateSavingScreen());
@@ -115,7 +113,7 @@ public class SavestateHandlerClient {
      */
     public void copyDirectory(File sourceLocation, File targetLocation, String[] ignore) throws IOException
     {
-    	copying=true;
+    	GuiSavestateSavingScreen.copying=true;
         if (sourceLocation.isDirectory())
         {
             if (!targetLocation.exists())
@@ -161,7 +159,7 @@ public class SavestateHandlerClient {
                 out.close();
             }
         }
-        copying=false;
+        GuiSavestateSavingScreen.copying=false;
     }
 
     /**
@@ -173,7 +171,7 @@ public class SavestateHandlerClient {
      */
     public boolean deleteDirContents(File dir, String[] ignore){
     	
-    	deleting=true;
+    	GuiSavestateSavingScreen.deleting=true;
         if (dir.isDirectory())
         {
             String[] children = dir.list();
@@ -199,29 +197,33 @@ public class SavestateHandlerClient {
         {
             dir.delete();
         }
-        deleting=false;
+        GuiSavestateSavingScreen.deleting=false;
         return true; 
     }
 
 }
 class SavestateEvents extends SavestateHandlerClient{
-	private boolean launch=false;
+	int tickspassed=0;
 	@SubscribeEvent
-	public void onGuiScreenOpen(GuiOpenEvent ev) {
-		if (ev.getGui() instanceof GuiDisconnected) {
-			
-			
-			deleteDirContents(currentworldfolder,  new String[] {" "});
-			try {
-				copyDirectory(targetsavefolder, currentworldfolder, new String[] {" "});
-			} catch (IOException e) {
-				ModLoader.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate load)");
-				e.printStackTrace();
+	public void onGuiScreenOpen(TickEvent ev) {
+		if (ev.phase == Phase.START) {
+			if (!mc.isIntegratedServerRunning()) {
+				if (mc.currentScreen instanceof GuiDisconnected) {
+					mc.displayGuiScreen(new GuiSavestateSavingScreen());
+				}
+				deleteDirContents(currentworldfolder, new String[] { " " });
+				try {
+					copyDirectory(targetsavefolder, currentworldfolder, new String[] { " " });
+				} catch (IOException e) {
+					ModLoader.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
+							+ targetsavefolder.getPath() + " for some reason (Savestate load)");
+					e.printStackTrace();
+					MinecraftForge.EVENT_BUS.unregister(this);
+					return;
+				}
+				FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
 				MinecraftForge.EVENT_BUS.unregister(this);
-				return;
 			}
-			FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
-			MinecraftForge.EVENT_BUS.unregister(this);
 		}
 	}
 }
@@ -234,7 +236,7 @@ class SavestateEvents2 extends SavestateHandlerClient{
 				mc.getIntegratedServer().saveAllWorlds(false);
 				try {
 					copyDirectory(currentworldfolder, targetsavefolder, new String[] {" "});
-					copying=false;
+					GuiSavestateSavingScreen.copying=false;
 				} catch (IOException e) {
 					ModLoader.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate save)");
 					e.printStackTrace();
