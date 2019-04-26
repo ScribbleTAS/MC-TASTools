@@ -16,17 +16,21 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;	
 
-public class ClientProxy extends ModLoader{
+public class ClientProxy extends CommonProxy{
 	
 	public static KeyBinding DupeKey = new KeyBinding("Load Chests/Items", Keyboard.KEY_I, "DupeMod");
 	public static KeyBinding FreezeKey = new KeyBinding("Freeze/Unfreeze Players", Keyboard.KEY_Y, "TASTools");
+	public static KeyBinding SavestateSaveKey = new KeyBinding("Create a savestate", Keyboard.KEY_J, "TASTools");
+	public static KeyBinding SavestateLoadKey = new KeyBinding("Load latest savestate", Keyboard.KEY_K, "TASTools");
 	
 	public static Configuration config;
 	
 	public void preInit(FMLPreInitializationEvent ev) {
-		super.preInit(ev);
+		
 		ClientRegistry.registerKeyBinding(DupeKey);
 		ClientRegistry.registerKeyBinding(FreezeKey);
+		ClientRegistry.registerKeyBinding(SavestateSaveKey);
+		ClientRegistry.registerKeyBinding(SavestateLoadKey);
 		config = new Configuration(ev.getSuggestedConfigurationFile());
 		config.load();
 		GuiKeystrokes.guienabled=config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").getBoolean();
@@ -49,19 +53,20 @@ public class ClientProxy extends ModLoader{
 			GuiKeystrokes.changeCorner(3);
 		}
 		new File (Minecraft.getMinecraft().mcDataDir,"saves"+File.separator+"savestates").mkdir();
+		super.preInit(ev);
 	}
 	
 	public void init(FMLInitializationEvent ev) {
-		super.init(ev);
+		
 		//disable dupemod in this mod
-		if(!isDupeModLoaded()){
+		if(!ModLoader.isDupeModLoaded()){
 			MinecraftForge.EVENT_BUS.register(new DupeEvents());
 		}
 		else {
 			ModLoader.logger.warn("Found the DupeMod to be installed! DupeMod is integrated in TAStools, so no need to load that!");
 		}
 		//disable keystrokes from this mod
-		if(!isTASModLoaded()) {
+		if(!ModLoader.isTASModLoaded()) {
 			MinecraftForge.EVENT_BUS.register(new GuiKeystrokes());
 		}
 		

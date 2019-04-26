@@ -6,8 +6,6 @@ import net.minecraft.client.gui.ScaledResolution;
 
 public class GuiSavestateSavingScreen extends GuiScreen{
 
-	public static boolean copying;
-	public static boolean deleting;
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -17,25 +15,14 @@ public class GuiSavestateSavingScreen extends GuiScreen{
 		int width = scaled.getScaledWidth();
 		int height = scaled.getScaledHeight();
 		
-		fontRenderer.drawStringWithShadow("Making a savestate, please wait!", width / 2 -77, height / 4 + 34 + -16, 0xFFFFFF);
+		fontRenderer.drawStringWithShadow("Making a savestate, please wait!", width / 2 -75, height / 4 + 34 + -16, 0xFFFFFF);
 		fontRenderer.drawStringWithShadow("Idea and code from MightyPork and bspkrs' WorldStateCheckpoints!", width / 2-165, height / 4 + 165 -16, 0xFFB238);
-		if(copying==true&&deleting==false) {
-			fontRenderer.drawStringWithShadow("Copying files...", width / 2-35, height / 4 + 50 + -16, 0xFFFFFF);
-		}else if(copying==false&&deleting==false) {
-			fontRenderer.drawStringWithShadow("Done!", width / 2-13, height / 4 + 50 + -16, 0xFFFFFF);
-		}else if (copying==false&&deleting==true) {
-			fontRenderer.drawStringWithShadow("Cleaning up...", width / 2-35, height / 4 + 50 + -16, 0xFFFFFF);
-		}
+
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 	
 	@Override
 	public boolean doesGuiPauseGame() {
 		return true;
-	}
-	
-	@Override
-	public void updateScreen() {
-		super.updateScreen();
 	}
 }

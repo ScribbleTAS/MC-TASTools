@@ -16,6 +16,7 @@ import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
 import de.scribble.lp.TASTools.keystroke.KeystrokesPacketHandler;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateCommandc;
+import de.scribble.lp.TASTools.savestates.SavestateEvents;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -41,8 +42,9 @@ public class ModLoader {
 	@Instance
 	public static ModLoader instance = new ModLoader();
 	
-	@SidedProxy(clientSide = "de.scribble.lp.TASTools.ClientProxy")
-	private static ClientProxy proxy;
+	@SidedProxy(clientSide = "de.scribble.lp.TASTools.ClientProxy",serverSide= "de.scribble.lp.TASTools.CommonProxy")
+	public static CommonProxy proxy;
+	
 	public static SimpleNetworkWrapper NETWORK;
 
 	public static boolean freezeenabledSP;
@@ -58,6 +60,7 @@ public class ModLoader {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent ev) {
+		proxy.preInit(ev);
 		logger=ev.getModLog();
 		logger.info("TAStools initialized");
 		istasmodloaded=Loader.isModLoaded("tasmod");
@@ -82,11 +85,14 @@ public class ModLoader {
 	
 	@EventHandler
 	public void init(FMLInitializationEvent ev) {
+		proxy.Init(ev);
 		MinecraftForge.EVENT_BUS.register(new FreezeEvents());
+		MinecraftForge.EVENT_BUS.register(new SavestateEvents());
 	}
 	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent ev) {
+		proxy.postInit(ev);
 	}
 	
 	
