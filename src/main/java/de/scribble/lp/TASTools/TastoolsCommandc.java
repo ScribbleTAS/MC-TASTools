@@ -5,6 +5,7 @@ import java.util.List;
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
+import de.scribble.lp.TASTools.savestates.SavestateEvents;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -41,7 +42,16 @@ public class TastoolsCommandc extends CommandBase{
 		boolean isdedicated=server.isDedicatedServer();
 		if(sender instanceof EntityPlayer) {
 			if (args.length==0) {
-				sender.sendMessage(new TextComponentString(TextFormatting.GREEN+"TASTools v1.0"));
+				if(!server.isDedicatedServer()) {
+					ClientProxy.config.load();
+					GuiKeystrokes.guienabled=ClientProxy.config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").getBoolean();
+					String position=ClientProxy.config.get("Keystrokes","CornerPos", "downLeft", "Sets the Keystroke to that specific corner. Options: downLeft,downRight,upRight,upLeft").getString();
+					DupeEvents.dupingenabled=ClientProxy.config.get("Duping","Enabled", false, "Activates the duping on startup").getBoolean();
+					VelocityEvents.velocityenabledClient=ClientProxy.config.get("Velocity", "Enabled", true, "Activates velocity saving on startup").getBoolean();
+					ModLoader.freezeenabledSP=ClientProxy.config.get("Freeze","Enabled", false, "Freezes the game when joining singleplayer").getBoolean();
+					SavestateEvents.savestatepauseenabled=ClientProxy.config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu").getBoolean();
+					sender.sendMessage(new TextComponentString("Realoaded config!"));
+				}
 			}
 			if(!ModLoader.isTASModLoaded()) {
 				//disable/enable keystrokes command

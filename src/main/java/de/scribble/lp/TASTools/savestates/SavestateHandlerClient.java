@@ -11,6 +11,8 @@ import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateSavingScreen;
+import de.scribble.lp.TASTools.velocity.SavingVelocity;
+import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiDisconnected;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -18,12 +20,13 @@ import net.minecraft.world.WorldSettings;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 /**
- * This code is heavily copied from <br> bspkrs on github <br> https://github.com/bspkrs/WorldStateCheckpoints/blob/master/src/main/java/bspkrs/worldstatecheckpoints/CheckpointManager.java
- *
+ * This code is heavily 'inspired' from <br> bspkrs on github <br> https://github.com/bspkrs/WorldStateCheckpoints/blob/master/src/main/java/bspkrs/worldstatecheckpoints/CheckpointManager.java <br>
+ * but it's more fitted to quickly load and save the savestates and removes extra gui overview. Oh, and no multithreadding, I have no idea how that works...
  */
 public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
@@ -39,66 +42,76 @@ public class SavestateHandlerClient {
 	
 	
 	public void saveState() {
-		currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName());
-		targetsavefolder=null;
-		int i=1;
-		while (i<=256) {
-			if (i==256) {
-				ModLoader.logger.error("Couldn't make a savestate, there are too many savestates in the target directory");
-				mc.displayGuiScreen(null);
-				return;
+		if(!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
+			currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName());
+			targetsavefolder=null;
+			int i=1;
+			while (i<=256) {
+				if (i==256) {
+					ModLoader.logger.error("Couldn't make a savestate, there are too many savestates in the target directory");
+					mc.displayGuiScreen(null);
+					return;
+				}
+				if (i>256) {
+					ModLoader.logger.error("Aborting saving due to savestate count being greater than 256 for safety reasons");
+					mc.displayGuiScreen(null);
+					return;
+				}
+				targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+Minecraft.getMinecraft().getIntegratedServer().getFolderName()+"-Savestate"+Integer.toString(i));
+				if (!targetsavefolder.exists()) {
+					break;
+				}
+				i++;
 			}
-			if (i>256) {
-				ModLoader.logger.error("Aborting saving due to savestate count being greater than 256 for safety reasons");
-				mc.displayGuiScreen(null);
-				return;
+			if(!isSaving) {
+				isSaving=true;
+				boolean flag =mc.getIntegratedServer().getWorld(mc.player.dimension).disableLevelSaving;
+				
+				mc.displayGuiScreen(new GuiSavestateSavingScreen());
+				if(VelocityEvents.velocityenabledClient) {
+					File file = new File(Minecraft.getMinecraft().mcDataDir,
+							"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
+									+ File.separator + "latest_velocity.txt");
+					new SavingVelocity().saveVelocity(mc.player, file);
+				}
+				SavestateSaveEvents lol=new SavestateSaveEvents();
+				MinecraftForge.EVENT_BUS.register(lol);
+				
 			}
-			targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+Minecraft.getMinecraft().getIntegratedServer().getFolderName()+"-Savestate"+Integer.toString(i));
-			if (!targetsavefolder.exists()) {
-				break;
-			}
-			i++;
-		}
-		if(!isSaving) {
-			isSaving=true;
-			boolean flag =mc.getIntegratedServer().getWorld(mc.player.dimension).disableLevelSaving;
-			
-			mc.displayGuiScreen(new GuiSavestateSavingScreen());
-			SavestateSaveEvents lol=new SavestateSaveEvents();
-			MinecraftForge.EVENT_BUS.register(lol);
-
 		}
 	}
 	
 	public void loadLastSavestate() {
-
-		if(!isSaving) {
-			currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + mc.getIntegratedServer().getFolderName());
-			foldername=mc.getIntegratedServer().getFolderName();
-			worldname=mc.getIntegratedServer().getWorldName();
-			//getting latest savestate
-			int i=1;
-			while(i<=256) {
-				targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+Minecraft.getMinecraft().getIntegratedServer().getFolderName()+"-Savestate"+Integer.toString(i));
-				if (!targetsavefolder.exists()) {
-					if(i-1==0) {
-						ModLoader.logger.info("Couldn't find a valid savestate, abort loading the savestate!");
-						return;
+		if(!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
+			if(!isSaving) {
+				currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + mc.getIntegratedServer().getFolderName());
+				foldername=mc.getIntegratedServer().getFolderName();
+				worldname=mc.getIntegratedServer().getWorldName();
+				//getting latest savestate
+				int i=1;
+				while(i<=256) {
+					targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+Minecraft.getMinecraft().getIntegratedServer().getFolderName()+"-Savestate"+Integer.toString(i));
+					if (!targetsavefolder.exists()) {
+						if(i-1==0) {
+							ModLoader.logger.info("Couldn't find a valid savestate, abort loading the savestate!");
+							return;
+						}
+						if(i>256) {
+							ModLoader.logger.error("Too many savestates found. Aborting loading for safety reasons");
+						}
+						targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+Minecraft.getMinecraft().getIntegratedServer().getFolderName()+"-Savestate"+Integer.toString(i-1));
+						break;
 					}
-					if(i>256) {
-						ModLoader.logger.error("Too many savestates found. Aborting loading for safety reasons");
-					}
-					targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+Minecraft.getMinecraft().getIntegratedServer().getFolderName()+"-Savestate"+Integer.toString(i-1));
-					break;
+					i++;
+					
 				}
-				i++;
-				
-			}
 			
-			SavestateLoadEvents Events=new SavestateLoadEvents();
-			MinecraftForge.EVENT_BUS.register(Events);
-			this.mc.world.sendQuittingDisconnectingPacket();
-            this.mc.loadWorld((WorldClient)null);
+				
+				SavestateLoadEvents Events=new SavestateLoadEvents();
+				MinecraftForge.EVENT_BUS.register(Events);
+				this.mc.world.sendQuittingDisconnectingPacket();
+	            this.mc.loadWorld((WorldClient)null);
+			}
 		}
 	}
 	
@@ -111,7 +124,7 @@ public class SavestateHandlerClient {
      * @param ignore array of ignored names (strings)
      * @throws IOException
      */
-    public void copyDirectory(File sourceLocation, File targetLocation, String[] ignore) throws IOException
+    protected void copyDirectory(File sourceLocation, File targetLocation, String[] ignore) throws IOException
     {
         if (sourceLocation.isDirectory())
         {
@@ -167,7 +180,7 @@ public class SavestateHandlerClient {
      * @param ignore ignored files
      * @return true on success
      */
-    public boolean deleteDirContents(File dir, String[] ignore){
+    protected boolean deleteDirContents(File dir, String[] ignore){
     	
         if (dir.isDirectory())
         {

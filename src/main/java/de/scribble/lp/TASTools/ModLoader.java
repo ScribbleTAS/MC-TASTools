@@ -17,6 +17,8 @@ import de.scribble.lp.TASTools.keystroke.KeystrokesPacketHandler;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateCommandc;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
+import de.scribble.lp.TASTools.savestates.SavestatePacket;
+import de.scribble.lp.TASTools.savestates.SavestatePacketHandler;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -73,6 +75,7 @@ public class ModLoader {
 		NETWORK.registerMessage(FreezePacketHandler.class, FreezePacket.class, 1, Side.CLIENT);
 		NETWORK.registerMessage(KeystrokesPacketHandler.class, KeystrokesPacket.class, 2, Side.CLIENT);
 		NETWORK.registerMessage(DupePacketHandler.class, DupePacket.class, 3, Side.SERVER);
+		NETWORK.registerMessage(SavestatePacketHandler.class, SavestatePacket.class, 4, Side.SERVER);
 		
 		if(ev.getSide()==Side.SERVER) {
 			serverconfig=new Configuration(new File(ev.getModConfigurationDirectory()+File.separator+"tastoolsSERVER.cfg"));

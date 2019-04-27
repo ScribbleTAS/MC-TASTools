@@ -11,15 +11,16 @@ public class FreezePacketHandler implements IMessageHandler<FreezePacket, IMessa
 	@Override
 	public FreezePacket onMessage(FreezePacket msg, MessageContext ctx) {
 		if (ctx.side == Side.SERVER) {
-			if (msg.startstop()) {
-				FreezeHandler.startFreezeServer();
-			}
-
-			else if (!msg.startstop()) {
-				FreezeHandler.stopFreezeServer();
-			}
-			
-			
+			ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
+				if (msg.startstop()) {
+					FreezeHandler.startFreezeServer();
+				}
+	
+				else if (!msg.startstop()) {
+					FreezeHandler.stopFreezeServer();
+				}
+				
+			});
 		} else if (ctx.side == Side.CLIENT) {
 			if (msg.startstop()) {
 				FreezeHandler.startFreezeClient();
@@ -29,6 +30,7 @@ public class FreezePacketHandler implements IMessageHandler<FreezePacket, IMessa
 				FreezeHandler.stopFreezeClient();
 			}
 		}
+		
 		return null;
 	}
 }
