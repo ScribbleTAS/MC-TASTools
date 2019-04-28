@@ -8,19 +8,24 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class GuiOverlayLogo extends Gui{
-	ResourceLocation potion = new ResourceLocation("tastools:textures/Potion.png");
+	ResourceLocation potion = new ResourceLocation("tastools:textures/potion_small.png");
+	public static boolean potionenabled;
 	@SubscribeEvent
 	public void drawStuff2(RenderGameOverlayEvent.Post event){
 		Minecraft mc = Minecraft.getMinecraft();
-		if (!mc.player.capabilities.isCreativeMode) {
-			if (event.isCancelable() || event.getType() != ElementType.HOTBAR) {
-				return;
+		if (event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
+			return;
+		}
+		int posX = event.getResolution().getScaledWidth() / 2;
+		int posY = event.getResolution().getScaledHeight();
+		if(!mc.player.isCreative()&&!mc.player.isSpectator()) {
+		mc.renderEngine.bindTexture(potion);
+			if (potionenabled) {
+				drawTexturedModalRect(posX - 6, posY - 50, 0, 0, 13, 20);
+			} else {
+				drawTexturedModalRect(posX + 89, posY - 29, 13, 0, 2, 2);
+				drawTexturedModalRect(posX + 89, posY - 25, 13, 0, 2, 2);
 			}
-			int posX = event.getResolution().getScaledWidth() / 2 + 10;
-			int posY = event.getResolution().getScaledHeight()-200;
-
-			mc.renderEngine.bindTexture(potion);
-			drawTexturedModalRect(posX, posY, 10, 10, 20,20);
 		}
 	}
 }

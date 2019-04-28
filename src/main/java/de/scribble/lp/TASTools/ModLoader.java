@@ -49,6 +49,7 @@ public class ModLoader {
 	public void postInit(FMLPostInitializationEvent ev) {
 		proxy.postInit(ev);
 	}
+	
 	@EventHandler
 	public void serverStart(FMLServerStartingEvent ev) {
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {

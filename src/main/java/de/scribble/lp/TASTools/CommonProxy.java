@@ -11,6 +11,9 @@ import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
 import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
 import de.scribble.lp.TASTools.keystroke.KeystrokesPacketHandler;
+import de.scribble.lp.TASTools.savestates.SavestateEvents;
+import de.scribble.lp.TASTools.savestates.SavestatePacket;
+import de.scribble.lp.TASTools.savestates.SavestatePacketHandler;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -44,6 +47,7 @@ public class CommonProxy {
 		ModLoader.NETWORK.registerMessage(FreezePacketHandler.class, FreezePacket.class, 1, Side.CLIENT);
 		ModLoader.NETWORK.registerMessage(KeystrokesPacketHandler.class, KeystrokesPacket.class, 2, Side.CLIENT);
 		ModLoader.NETWORK.registerMessage(DupePacketHandler.class, DupePacket.class, 3, Side.SERVER);
+		ModLoader.NETWORK.registerMessage(SavestatePacketHandler.class, SavestatePacket.class, 4, Side.SERVER);
 		
 		if(ev.getSide()==Side.SERVER) {
 			serverconfig=new Configuration(new File(ev.getModConfigurationDirectory()+File.separator+"tastoolsSERVER.cfg"));
@@ -57,6 +61,7 @@ public class CommonProxy {
 	
 	public void init(FMLInitializationEvent ev) {
 		MinecraftForge.EVENT_BUS.register(new FreezeEvents());
+		MinecraftForge.EVENT_BUS.register(new SavestateEvents());
 
 	}
 	

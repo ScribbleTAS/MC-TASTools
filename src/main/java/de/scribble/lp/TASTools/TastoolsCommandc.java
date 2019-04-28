@@ -5,6 +5,7 @@ import java.util.List;
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
+import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.command.CommandBase;
@@ -50,7 +51,8 @@ public class TastoolsCommandc extends CommandBase{
 					VelocityEvents.velocityenabledClient=ClientProxy.config.get("Velocity", "Enabled", true, "Activates velocity saving on startup").getBoolean();
 					ModLoader.freezeenabledSP=ClientProxy.config.get("Freeze","Enabled", false, "Freezes the game when joining singleplayer").getBoolean();
 					SavestateEvents.savestatepauseenabled=ClientProxy.config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu").getBoolean();
-					sender.sendMessage(new TextComponentString("Realoaded config!"));
+					GuiOverlayLogo.potionenabled=ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui to indicate that this is modded").getBoolean();
+					sender.sendMessage(new TextComponentString("Config Reloaded!"));
 				}
 			}
 			if(!CommonProxy.isTASModLoaded()) {
@@ -260,7 +262,7 @@ public class TastoolsCommandc extends CommandBase{
 			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity"});
 		}
 		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
-			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft"});
+			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft","guiPotion"});
 			if(server.getPlayerList().getPlayers().size()>1) {
 				tabs.addAll(getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames()));
 			}

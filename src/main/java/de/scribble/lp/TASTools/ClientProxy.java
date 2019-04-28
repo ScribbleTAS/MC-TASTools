@@ -6,6 +6,7 @@ import org.lwjgl.input.Keyboard;
 
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
+import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
@@ -40,6 +41,7 @@ public class ClientProxy extends CommonProxy{
 		VelocityEvents.velocityenabledClient=config.get("Velocity", "Enabled", true, "Activates velocity saving on startup").getBoolean();
 		ModLoader.freezeenabledSP=config.get("Freeze","Enabled", false, "Freezes the game when joining singleplayer").getBoolean();
 		SavestateEvents.savestatepauseenabled=config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu").getBoolean();
+		GuiOverlayLogo.potionenabled=config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui to indicate that this is modded").getBoolean();
 		config.save();
 		
 		if (position.equals("downLeft")) {
@@ -71,7 +73,7 @@ public class ClientProxy extends CommonProxy{
 		if(!CommonProxy.isTASModLoaded()) {
 			MinecraftForge.EVENT_BUS.register(new GuiKeystrokes());
 		}
-		
+		MinecraftForge.EVENT_BUS.register(new GuiOverlayLogo());
 	}
 	
 	public void postInit(FMLPostInitializationEvent ev) {
