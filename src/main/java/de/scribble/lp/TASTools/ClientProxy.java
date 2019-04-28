@@ -61,14 +61,14 @@ public class ClientProxy extends CommonProxy{
 	public void init(FMLInitializationEvent ev) {
 		
 		//disable dupemod in this mod
-		if(!ModLoader.isDupeModLoaded()){
+		if(!CommonProxy.isDupeModLoaded()){
 			MinecraftForge.EVENT_BUS.register(new DupeEvents());
 		}
 		else {
-			ModLoader.logger.warn("Found the DupeMod to be installed! DupeMod is integrated in TAStools, so no need to load that!");
+			CommonProxy.logger.warn("Found the DupeMod to be installed! DupeMod is integrated in TAStools, so no need to load that!");
 		}
 		//disable keystrokes from this mod
-		if(!ModLoader.isTASModLoaded()) {
+		if(!CommonProxy.isTASModLoaded()) {
 			MinecraftForge.EVENT_BUS.register(new GuiKeystrokes());
 		}
 		

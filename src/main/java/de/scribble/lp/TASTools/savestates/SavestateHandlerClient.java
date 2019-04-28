@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import de.scribble.lp.TASTools.ModLoader;
+import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateSavingScreen;
@@ -31,14 +31,13 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
 	public boolean isSaving=false;
+	protected static int endtimer=20;
 	
 	protected static File currentworldfolder;
 	protected static File targetsavefolder=null;
 	protected static WorldSettings settings;
 	protected static String foldername;
 	protected static String worldname;
-	protected static int timer;
-	protected static final int endtimer=20;
 	
 	
 	public void saveState() {
@@ -48,12 +47,12 @@ public class SavestateHandlerClient {
 			int i=1;
 			while (i<=256) {
 				if (i==256) {
-					ModLoader.logger.error("Couldn't make a savestate, there are too many savestates in the target directory");
+					CommonProxy.logger.error("Couldn't make a savestate, there are too many savestates in the target directory");
 					mc.displayGuiScreen(null);
 					return;
 				}
 				if (i>256) {
-					ModLoader.logger.error("Aborting saving due to savestate count being greater than 256 for safety reasons");
+					CommonProxy.logger.error("Aborting saving due to savestate count being greater than 256 for safety reasons");
 					mc.displayGuiScreen(null);
 					return;
 				}
@@ -93,11 +92,11 @@ public class SavestateHandlerClient {
 					targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+Minecraft.getMinecraft().getIntegratedServer().getFolderName()+"-Savestate"+Integer.toString(i));
 					if (!targetsavefolder.exists()) {
 						if(i-1==0) {
-							ModLoader.logger.info("Couldn't find a valid savestate, abort loading the savestate!");
+							CommonProxy.logger.info("Couldn't find a valid savestate, abort loading the savestate!");
 							return;
 						}
 						if(i>256) {
-							ModLoader.logger.error("Too many savestates found. Aborting loading for safety reasons");
+							CommonProxy.logger.error("Too many savestates found. Aborting loading for safety reasons");
 						}
 						targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+Minecraft.getMinecraft().getIntegratedServer().getFolderName()+"-Savestate"+Integer.toString(i-1));
 						break;
@@ -222,7 +221,7 @@ class SavestateSaveEvents extends SavestateHandlerClient{
 					copyDirectory(currentworldfolder, targetsavefolder, new String[] {" "});
 					
 				} catch (IOException e) {
-					ModLoader.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate save)");
+					CommonProxy.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate save)");
 					e.printStackTrace();
 				}
 				mc.displayGuiScreen(new GuiSavestateIngameMenu());
@@ -246,7 +245,7 @@ class SavestateLoadEvents extends SavestateHandlerClient{
 					try {
 						copyDirectory(targetsavefolder, currentworldfolder, new String[] { " " });
 					} catch (IOException e) {
-						ModLoader.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
+						CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
 								+ targetsavefolder.getPath() + " for some reason (Savestate load)");
 						e.printStackTrace();
 						MinecraftForge.EVENT_BUS.unregister(this);

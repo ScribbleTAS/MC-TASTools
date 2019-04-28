@@ -3,6 +3,7 @@ package de.scribble.lp.TASTools.duping;
 import java.io.File;
 
 import de.scribble.lp.TASTools.ClientProxy;
+import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -17,7 +18,7 @@ public class DupeEvents {
 	@SubscribeEvent
 	public void onCloseServer(PlayerEvent.PlayerLoggedOutEvent ev){
 		if(dupingenabled&&!ev.player.world.isRemote) {
-			ModLoader.logger.info("Start saving...");
+			CommonProxy.logger.info("Start saving...");
 			new RecordingDupe().saveFile(ev.player);
 		}
 	}
@@ -27,7 +28,7 @@ public class DupeEvents {
 		if (dupingenabled&&!ev.player.world.isRemote) {
 			File file= new File(mc.mcDataDir, "saves" + File.separator +mc.getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
 			if (file.exists()){
-				ModLoader.logger.info("Start refilling...");
+				CommonProxy.logger.info("Start refilling...");
 				new RefillingDupe().refill(file, ev.player);
 			}
 		}

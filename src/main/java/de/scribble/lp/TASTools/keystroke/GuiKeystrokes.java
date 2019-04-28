@@ -1,6 +1,6 @@
 package de.scribble.lp.TASTools.keystroke;
 
-import de.scribble.lp.TASTools.ModLoader;
+import de.scribble.lp.TASTools.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -26,12 +26,12 @@ public class GuiKeystrokes extends Gui {
 	public static void changeCorner(int cornernumber) {
 		if(cornernumber<=4&&cornernumber>=0) {
 			if (cornernumber==4) {
-				ModLoader.logger.info("Didn't change the corner");
+				CommonProxy.logger.info("Didn't change the corner");
 				return;
 			}
 			corner=cornernumber;
 		}else {
-			ModLoader.logger.error("Error in changeCorner. The number has to be 0-4. Number entered: "+cornernumber);
+			CommonProxy.logger.error("Error in changeCorner. The number has to be 0-4. Number entered: "+cornernumber);
 		}
 	}
 	

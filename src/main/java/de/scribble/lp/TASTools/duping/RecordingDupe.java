@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.google.common.io.Files;
 
-import de.scribble.lp.TASTools.ModLoader;
+import de.scribble.lp.TASTools.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -104,7 +104,7 @@ public class RecordingDupe {
 		
 		output.append("END");
 		try {
-			ModLoader.logger.info("Saving "+chestcounter+" chest(s) and "+ itemcounter+ " item(s).");
+			CommonProxy.logger.info("Saving "+chestcounter+" chest(s) and "+ itemcounter+ " item(s).");
 			Files.write(output.toString().getBytes(), file);
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -53,7 +53,7 @@ public class TastoolsCommandc extends CommandBase{
 					sender.sendMessage(new TextComponentString("Realoaded config!"));
 				}
 			}
-			if(!ModLoader.isTASModLoaded()) {
+			if(!CommonProxy.isTASModLoaded()) {
 				//disable/enable keystrokes command
 				if (args.length==1&&args[0].equalsIgnoreCase("keystrokes")) {
 					
@@ -146,20 +146,20 @@ public class TastoolsCommandc extends CommandBase{
 					if(ModLoader.freezeenabledMP) {
 						sender.sendMessage(new TextComponentTranslation("msg.freezeServer.disabled")); //§cDisabled Freezing when starting the server
 						ModLoader.freezeenabledMP=false;
-						ModLoader.serverconfig.get("Freeze","Enabled", false, "Freezes the game when starting the Server").set(false);
-						ModLoader.serverconfig.save();
+						CommonProxy.serverconfig.get("Freeze","Enabled", false, "Freezes the game when starting the Server").set(false);
+						CommonProxy.serverconfig.save();
 					}else if (!ModLoader.freezeenabledMP) {
 						sender.sendMessage(new TextComponentTranslation("msg.freezeServer.enabled")); //§aEnabled Freezing when starting the server
 						ModLoader.freezeenabledMP=true;
-						ModLoader.serverconfig.get("Freeze","Enabled", false, "Freezes the game when starting the Server").set(true);
-						ModLoader.serverconfig.save();
+						CommonProxy.serverconfig.get("Freeze","Enabled", false, "Freezes the game when starting the Server").set(true);
+						CommonProxy.serverconfig.save();
 					}
 				}
 			}
 			//duping command
 			if (args.length==1&&args[0].equalsIgnoreCase("duping")) {
 				if(!isdedicated) {
-					if(!ModLoader.isDupeModLoaded()) {
+					if(!CommonProxy.isDupeModLoaded()) {
 						Configuration config=ClientProxy.config;
 						if (DupeEvents.dupingenabled) {
 							sender.sendMessage(new TextComponentTranslation("msg.duping.disabled")); //§cDuping disabled
@@ -197,15 +197,15 @@ public class TastoolsCommandc extends CommandBase{
 				if (VelocityEvents.velocityenabledServer) {
 					sender.sendMessage(new TextComponentTranslation("msg.velocityServer.disabled"));
 					VelocityEvents.velocityenabledServer = false;
-					ModLoader.serverconfig.get("Velocity", "Enabled", true,
+					CommonProxy.serverconfig.get("Velocity", "Enabled", true,
 							"Saves and applies Velocity when joining/leaving the server").set(false);
-					ModLoader.serverconfig.save();
+					CommonProxy.serverconfig.save();
 				} else if (!VelocityEvents.velocityenabledServer) {
 					sender.sendMessage(new TextComponentTranslation("msg.velocityServer.enabled"));
 					VelocityEvents.velocityenabledServer = true;
-					ModLoader.serverconfig.get("Velocity", "Enabled", true,
+					CommonProxy.serverconfig.get("Velocity", "Enabled", true,
 							"Saves and applies Velocity when joining/leaving the server").set(true);
-					ModLoader.serverconfig.save();
+					CommonProxy.serverconfig.save();
 				}
 			}
 			// Other than sender=Player starts here
@@ -213,41 +213,41 @@ public class TastoolsCommandc extends CommandBase{
 
 			if (args.length == 1 && args[0].equalsIgnoreCase("freeze")) {
 				if (ModLoader.freezeenabledMP) {
-					ModLoader.logger.info("Disabled Serverside settings for 'freeze'");
+					CommonProxy.logger.info("Disabled Serverside settings for 'freeze'");
 					ModLoader.freezeenabledMP = false;
-					ModLoader.serverconfig.get("Freeze", "Enabled", false, "Freezes the game when joining the Server")
+					CommonProxy.serverconfig.get("Freeze", "Enabled", false, "Freezes the game when joining the Server")
 							.set(true);
-					ModLoader.serverconfig.save();
+					CommonProxy.serverconfig.save();
 				} else if (!ModLoader.freezeenabledMP) {
-					ModLoader.logger.info("Enabled Serverside settings for 'freeze'");
+					CommonProxy.logger.info("Enabled Serverside settings for 'freeze'");
 					ModLoader.freezeenabledMP = true;
-					ModLoader.serverconfig.get("Freeze", "Enabled", false, "Freezes the game when joining the Server")
+					CommonProxy.serverconfig.get("Freeze", "Enabled", false, "Freezes the game when joining the Server")
 							.set(true);
-					ModLoader.serverconfig.save();
+					CommonProxy.serverconfig.save();
 				}
 
 				// velocity multiplayer
 
 			} else if (args.length == 1 && args[0].equalsIgnoreCase("velocity")) {
 				if (VelocityEvents.velocityenabledServer) {
-					ModLoader.logger.info("Disabled Serverside settings for 'velocity'");
+					CommonProxy.logger.info("Disabled Serverside settings for 'velocity'");
 					VelocityEvents.velocityenabledServer = false;
-					ModLoader.serverconfig.get("Velocity", "Enabled", true,
+					CommonProxy.serverconfig.get("Velocity", "Enabled", true,
 							"Saves and applies Velocity when joining/leaving the server").set(false);
-					ModLoader.serverconfig.save();
+					CommonProxy.serverconfig.save();
 				} else if (!VelocityEvents.velocityenabledServer) {
-					ModLoader.logger.info("Enabled Serverside settings for 'velocity'");
+					CommonProxy.logger.info("Enabled Serverside settings for 'velocity'");
 					VelocityEvents.velocityenabledServer = true;
-					ModLoader.serverconfig.get("Velocity", "Enabled", true,
+					CommonProxy.serverconfig.get("Velocity", "Enabled", true,
 							"Saves and applies Velocity when joining/leaving the server").set(true);
-					ModLoader.serverconfig.save();
+					CommonProxy.serverconfig.save();
 				}
 
 			} else if (args.length == 1 && args[0].equalsIgnoreCase("keystrokes")) {
-				ModLoader.logger.warn("Cannot enable keystrokes");
+				CommonProxy.logger.warn("Cannot enable keystrokes");
 			} else if (args.length == 2 && args[0].equalsIgnoreCase("keystrokes") && server.getPlayerList().getPlayers()
 					.contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
-				ModLoader.logger.info("Changed Keystroke-Settings for " + args[1]);
+				CommonProxy.logger.info("Changed Keystroke-Settings for " + args[1]);
 				ModLoader.NETWORK.sendTo(new KeystrokesPacket(), server.getPlayerList().getPlayerByUsername(args[1]));
 			}
 		}
@@ -259,7 +259,7 @@ public class TastoolsCommandc extends CommandBase{
 		if (args.length==1){
 			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity"});
 		}
-		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!ModLoader.isTASModLoaded()) {
+		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
 			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft"});
 			if(server.getPlayerList().getPlayers().size()>1) {
 				tabs.addAll(getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames()));
