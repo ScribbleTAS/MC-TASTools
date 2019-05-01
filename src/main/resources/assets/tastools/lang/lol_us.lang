@@ -23,3 +23,14 @@ msg.velocityClient.disabled=§cDizabled Yeeting when cat enters the wurld
 msg.velocityClient.enabled=§aEnabled Yeeting when cat enters the wurld
 msg.velocityServer.disabled=§cDizabled Yeeting when wooding into the servur
 msg.velocityServer.enabled=§aEnabled Yeeting when wooding into the servur
+
+#gui
+gui.savestate.ingamemenu=Mayk a Déjà-vu-point
+gui.savestate.savingscreen.msg=Mayking a Déjà-vu-point, plis hold ur butts!
+gui.savestate.savingscreen.credit=Idea n code stolen frum MightyPork and bspkrs' WurldStaytDéjà-vu-pointz!
+gui.savestate.loadingscreen.msg=Rofl-ing a Déjà-vu-point!
+
+#misc
+msg.logo.disabled=§cDizabled Bottle in Kitteh-Paws
+msg.logo.enabled=§aEnabled Bottle in Kitteh-Paws
+msg.misc.reload=Cat reloaded!

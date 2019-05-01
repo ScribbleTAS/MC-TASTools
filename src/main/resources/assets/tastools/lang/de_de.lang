@@ -23,3 +23,14 @@ msg.velocityClient.disabled=§cVelocity, beim Betreten der Welt, ausgeschaltet
 msg.velocityClient.enabled=§aVelocity, beim Betreten der Welt, eingeschaltet
 msg.velocityServer.disabled=§cVelocity, beim Betreten des Servers, ausgeschaltet
 msg.velocityServer.enabled=§aVelocity, beim Betreten des Servers, eingeschaltet
+
+#gui
+gui.savestate.ingamemenu=Erstelle einen Sicherungspunkt
+gui.savestate.savingscreen.msg=Erstelle gerade einen Sicherungspunkt, bitte warten!
+gui.savestate.savingscreen.credit=Idee und Code von MightyPork und bspkrs' WorldStateCheckpoints!
+gui.savestate.loadingscreen.msg=Lädt einen Sicherungspunkt!
+
+#misc
+msg.logo.disabled=§cLogo im HUD ausgeschaltet
+msg.logo.enabled=§aLogo im HUD eingeschaltet
+msg.misc.reload=Konfigurationsdateien erneut geladen!

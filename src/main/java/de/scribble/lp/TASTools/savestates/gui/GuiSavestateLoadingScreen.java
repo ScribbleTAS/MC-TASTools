@@ -3,6 +3,7 @@ package de.scribble.lp.TASTools.savestates.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.resources.I18n;
 
 public class GuiSavestateLoadingScreen extends GuiScreen{
 
@@ -17,7 +18,7 @@ public class GuiSavestateLoadingScreen extends GuiScreen{
 		int width = scaled.getScaledWidth();
 		int height = scaled.getScaledHeight();
 		
-		fontRenderer.drawStringWithShadow("Loading a savestate!", width / 2 -50, height / 4 + 50 + -16, 0xFFFFFF);
+		drawCenteredString(fontRenderer,I18n.format("gui.savestate.loadingscreen.msg"), width / 2, height / 4 + 50 + -16, 0xFFFFFF);	//Loading a savestate!
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}

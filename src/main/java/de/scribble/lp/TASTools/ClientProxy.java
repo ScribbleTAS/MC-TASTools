@@ -41,7 +41,7 @@ public class ClientProxy extends CommonProxy{
 		VelocityEvents.velocityenabledClient=config.get("Velocity", "Enabled", true, "Activates velocity saving on startup").getBoolean();
 		ModLoader.freezeenabledSP=config.get("Freeze","Enabled", false, "Freezes the game when joining singleplayer").getBoolean();
 		SavestateEvents.savestatepauseenabled=config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu").getBoolean();
-		GuiOverlayLogo.potionenabled=config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui to indicate that this is modded").getBoolean();
+		GuiOverlayLogo.potionenabled=config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").getBoolean();
 		config.save();
 		
 		if (position.equals("downLeft")) {
@@ -61,7 +61,7 @@ public class ClientProxy extends CommonProxy{
 	}
 	
 	public void init(FMLInitializationEvent ev) {
-		
+		super.init(ev);
 		//disable dupemod in this mod
 		if(!CommonProxy.isDupeModLoaded()){
 			MinecraftForge.EVENT_BUS.register(new DupeEvents());

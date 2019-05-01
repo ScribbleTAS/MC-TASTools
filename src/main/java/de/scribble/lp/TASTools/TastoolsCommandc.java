@@ -8,6 +8,7 @@ import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
 import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -51,8 +52,8 @@ public class TastoolsCommandc extends CommandBase{
 					VelocityEvents.velocityenabledClient=ClientProxy.config.get("Velocity", "Enabled", true, "Activates velocity saving on startup").getBoolean();
 					ModLoader.freezeenabledSP=ClientProxy.config.get("Freeze","Enabled", false, "Freezes the game when joining singleplayer").getBoolean();
 					SavestateEvents.savestatepauseenabled=ClientProxy.config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu").getBoolean();
-					GuiOverlayLogo.potionenabled=ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui to indicate that this is modded").getBoolean();
-					sender.sendMessage(new TextComponentString("Config Reloaded!"));
+					GuiOverlayLogo.potionenabled=ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").getBoolean();
+					sender.sendMessage(new TextComponentTranslation("msg.misc.reload")); //Config reloaded!
 				}
 			}
 			if(!CommonProxy.isTASModLoaded()) {
@@ -182,13 +183,13 @@ public class TastoolsCommandc extends CommandBase{
 			// velocity singleplayer
 			if (args.length == 1 && args[0].equalsIgnoreCase("velocity")&&!isdedicated) {
 				if (VelocityEvents.velocityenabledClient) {
-					sender.sendMessage(new TextComponentTranslation("msg.velocityClient.disabled"));
+					sender.sendMessage(new TextComponentTranslation("msg.velocityClient.disabled"));	//§cDisabled Velocity when joining the world
 					VelocityEvents.velocityenabledClient = false;
 					ClientProxy.config.get("Velocity", "Enabled", true, "Activates velocity saving on startup")
 							.set(false);
 					ClientProxy.config.save();
 				} else if (!VelocityEvents.velocityenabledClient) {
-					sender.sendMessage(new TextComponentTranslation("msg.velocityClient.enabled"));
+					sender.sendMessage(new TextComponentTranslation("msg.velocityClient.enabled"));		//§aEnabled Velocity when joining the world
 					VelocityEvents.velocityenabledClient = true;
 					ClientProxy.config.get("Velocity", "Enabled", true, "Activates velocity saving on startup")
 							.set(true);
@@ -197,17 +198,29 @@ public class TastoolsCommandc extends CommandBase{
 
 			} else if (args.length == 1 && args[0].equalsIgnoreCase("velocity")) {
 				if (VelocityEvents.velocityenabledServer) {
-					sender.sendMessage(new TextComponentTranslation("msg.velocityServer.disabled"));
+					sender.sendMessage(new TextComponentTranslation("msg.velocityServer.disabled"));	//§cDisabled Velocity when logging into the server
 					VelocityEvents.velocityenabledServer = false;
 					CommonProxy.serverconfig.get("Velocity", "Enabled", true,
 							"Saves and applies Velocity when joining/leaving the server").set(false);
 					CommonProxy.serverconfig.save();
 				} else if (!VelocityEvents.velocityenabledServer) {
-					sender.sendMessage(new TextComponentTranslation("msg.velocityServer.enabled"));
+					sender.sendMessage(new TextComponentTranslation("msg.velocityServer.enabled"));		//§aEnabled Velocity when logging into the server
 					VelocityEvents.velocityenabledServer = true;
 					CommonProxy.serverconfig.get("Velocity", "Enabled", true,
 							"Saves and applies Velocity when joining/leaving the server").set(true);
 					CommonProxy.serverconfig.save();
+				}
+			} else if(args.length == 1 && args[0].equalsIgnoreCase("logo")) {
+				if(GuiOverlayLogo.potionenabled) {
+					sender.sendMessage(new TextComponentTranslation("msg.logo.disabled")); //§cDisabled Logo in HUD
+					GuiOverlayLogo.potionenabled=false;
+					ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").set(false);
+					ClientProxy.config.save();
+				}else if(!GuiOverlayLogo.potionenabled) {
+					sender.sendMessage(new TextComponentTranslation("msg.logo.enabled"));	//§aEnabled Logo in HUD
+					GuiOverlayLogo.potionenabled=true;
+					ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").set(true);
+					ClientProxy.config.save();
 				}
 			}
 			// Other than sender=Player starts here
@@ -259,7 +272,7 @@ public class TastoolsCommandc extends CommandBase{
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
 		if (args.length==1){
-			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity"});
+			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","logo"});
 		}
 		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
 			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft","guiPotion"});

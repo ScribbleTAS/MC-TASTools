@@ -3,6 +3,7 @@ package de.scribble.lp.TASTools.savestates.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.resources.I18n;
 
 public class GuiSavestateSavingScreen extends GuiScreen{
 
@@ -15,9 +16,8 @@ public class GuiSavestateSavingScreen extends GuiScreen{
 		int width = scaled.getScaledWidth();
 		int height = scaled.getScaledHeight();
 		
-		fontRenderer.drawStringWithShadow("Making a savestate, please wait!", width / 2 -75, height / 4 + 34 + -16, 0xFFFFFF);
-		fontRenderer.drawStringWithShadow("Idea and code from MightyPork and bspkrs' WorldStateCheckpoints!", width / 2-165, height / 4 + 165 -16, 0xFFB238);
-
+		drawCenteredString(fontRenderer,I18n.format("gui.savestate.savingscreen.msg"),width / 2,height / 4 + 34 + -16, 0xFFFFFF); //Making a savestate, please wait!
+		drawCenteredString(fontRenderer, I18n.format("gui.savestate.savingscreen.credit"), width / 2, height / 4 + 165 -16, 0xFFB238);	//Idea and code from MightyPork and bspkrs' WorldStateCheckpoints!
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 	
