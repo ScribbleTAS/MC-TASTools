@@ -74,6 +74,7 @@ public class ClientProxy extends CommonProxy{
 			MinecraftForge.EVENT_BUS.register(new GuiKeystrokes());
 		}
 		MinecraftForge.EVENT_BUS.register(new GuiOverlayLogo());
+		MinecraftForge.EVENT_BUS.register(new SavestateEvents());
 	}
 	
 	public void postInit(FMLPostInitializationEvent ev) {

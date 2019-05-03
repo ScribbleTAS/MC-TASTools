@@ -95,7 +95,7 @@ public class SavestateHandlerClient {
 					e.printStackTrace();
 				}
 				
-				SavestateSaveEvents lol=new SavestateSaveEvents();
+				SavestateSaveEventsClient lol=new SavestateSaveEventsClient();
 				MinecraftForge.EVENT_BUS.register(lol);
 				
 			}
@@ -134,7 +134,7 @@ public class SavestateHandlerClient {
 					e.printStackTrace();
 				}
 				
-				SavestateLoadEvents Events=new SavestateLoadEvents();
+				SavestateLoadEventsClient Events=new SavestateLoadEventsClient();
 				MinecraftForge.EVENT_BUS.register(Events);
 				this.mc.world.sendQuittingDisconnectingPacket();
 	            this.mc.loadWorld((WorldClient)null);
@@ -286,9 +286,15 @@ public class SavestateHandlerClient {
 			e.printStackTrace();
     	}
     }
-
+    public void displayLoadingScreen() {
+    	if (Minecraft.getMinecraft().currentScreen instanceof GuiSavestateSavingScreen) {
+			Minecraft.getMinecraft().displayGuiScreen(null);
+		} else {
+			Minecraft.getMinecraft().displayGuiScreen(new GuiSavestateSavingScreen());
+		}
+    }
 }
-class SavestateSaveEvents extends SavestateHandlerClient{
+class SavestateSaveEventsClient extends SavestateHandlerClient{
 	int tickspassed=0;
 	@SubscribeEvent
 	public void onTick(TickEvent ev) {
@@ -311,7 +317,7 @@ class SavestateSaveEvents extends SavestateHandlerClient{
 		}
 	}
 }
-class SavestateLoadEvents extends SavestateHandlerClient{
+class SavestateLoadEventsClient extends SavestateHandlerClient{
 	int tickspassed=0;
 	@SubscribeEvent
 	public void onTick(TickEvent ev) {

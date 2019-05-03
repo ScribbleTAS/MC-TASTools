@@ -27,14 +27,16 @@ public class SavestateCommandc extends CommandBase{
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (sender instanceof EntityPlayer) {
-			if(args.length==1&&args[0].equalsIgnoreCase("save")) {
-				new SavestateHandlerClient().saveState();
-			}
-			else if(args.length==1&&args[0].equalsIgnoreCase("load")) {
-				new SavestateHandlerClient().loadLastSavestate();
-			}
-			else if(args.length==1&&args[0].equalsIgnoreCase("gui")) {
-				Minecraft.getMinecraft().displayGuiScreen(new GuiSavestateSavingScreen());
+			if (!server.isDedicatedServer()) {
+				if (args.length == 1 && args[0].equalsIgnoreCase("save")) {
+					new SavestateHandlerClient().saveState();
+				} else if (args.length == 1 && args[0].equalsIgnoreCase("load")) {
+					new SavestateHandlerClient().loadLastSavestate();
+				}
+			}else {
+				if (args.length == 1 && args[0].equalsIgnoreCase("save")) {
+					new SavestateHandlerServer().saveState();
+				}
 			}
 		}
 		
@@ -43,7 +45,9 @@ public class SavestateCommandc extends CommandBase{
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
 		if(args.length==1) {
-			return getListOfStringsMatchingLastWord(args, new String[] {"save","load","gui"});
+			if(!server.isDedicatedServer()) {
+				return getListOfStringsMatchingLastWord(args, new String[] {"save","load"});
+			}else return getListOfStringsMatchingLastWord(args, new String[] {"save"});
 		}else {
 			return super.getTabCompletions(server, sender, args, targetPos);
 		}

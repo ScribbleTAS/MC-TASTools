@@ -72,4 +72,7 @@ public class ModLoader {
 			}
 		}
 	}
+	public static String getLevelname() {
+		return levelname;
+	}
 }

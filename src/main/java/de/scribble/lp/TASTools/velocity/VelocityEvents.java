@@ -57,7 +57,7 @@ public class VelocityEvents {
 		//Dedicated Multiplayer
 		}else {
 			if(velocityenabledServer) {
-				File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath() + File.separator + ModLoader.levelname +File.separator
+				File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath() + File.separator + ModLoader.getLevelname() +File.separator
 						+ ev.player.getName() + "_velocity.txt");
 				List<EntityPlayerMP> players= FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
 				CommonProxy.logger.info("Saving velocity of "+ev.player.getName());

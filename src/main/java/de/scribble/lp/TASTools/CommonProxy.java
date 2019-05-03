@@ -17,6 +17,7 @@ import de.scribble.lp.TASTools.savestates.SavestatePacketHandler;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -48,6 +49,7 @@ public class CommonProxy {
 		ModLoader.NETWORK.registerMessage(KeystrokesPacketHandler.class, KeystrokesPacket.class, 2, Side.CLIENT);
 		ModLoader.NETWORK.registerMessage(DupePacketHandler.class, DupePacket.class, 3, Side.SERVER);
 		ModLoader.NETWORK.registerMessage(SavestatePacketHandler.class, SavestatePacket.class, 4, Side.SERVER);
+		ModLoader.NETWORK.registerMessage(SavestatePacketHandler.class, SavestatePacket.class, 5, Side.CLIENT);
 		
 		if(ev.getSide()==Side.SERVER) {
 			serverconfig=new Configuration(new File(ev.getModConfigurationDirectory()+File.separator+"tastoolsSERVER.cfg"));
@@ -55,13 +57,14 @@ public class CommonProxy {
 			ModLoader.freezeenabledMP=serverconfig.get("Freeze","Enabled", false, "Freezes the game when starting the Server").getBoolean();
 			VelocityEvents.velocityenabledServer=serverconfig.get("Velocity","Enabled",true,"Saves and applies Velocity when joining/leaving the server").getBoolean();
 			serverconfig.save();
+			new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath()+File.separator+"savestates").mkdir();
 		}
 		
 	}
 	
 	public void init(FMLInitializationEvent ev) {
 		MinecraftForge.EVENT_BUS.register(new FreezeEvents());
-		MinecraftForge.EVENT_BUS.register(new SavestateEvents());
+		
 
 	}
 	
