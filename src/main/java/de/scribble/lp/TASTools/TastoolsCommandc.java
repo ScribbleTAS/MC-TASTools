@@ -6,6 +6,7 @@ import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
 import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
+import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.resources.I18n;
@@ -53,6 +54,9 @@ public class TastoolsCommandc extends CommandBase{
 					ModLoader.freezeenabledSP=ClientProxy.config.get("Freeze","Enabled", false, "Freezes the game when joining singleplayer").getBoolean();
 					SavestateEvents.savestatepauseenabled=ClientProxy.config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu").getBoolean();
 					GuiOverlayLogo.potionenabled=ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").getBoolean();
+					sender.sendMessage(new TextComponentTranslation("msg.misc.reload")); //Config reloaded!
+				}else {
+					new Util().reloadServerconfig();
 					sender.sendMessage(new TextComponentTranslation("msg.misc.reload")); //Config reloaded!
 				}
 			}
@@ -210,7 +214,7 @@ public class TastoolsCommandc extends CommandBase{
 							"Saves and applies Velocity when joining/leaving the server").set(true);
 					CommonProxy.serverconfig.save();
 				}
-			} else if(args.length == 1 && args[0].equalsIgnoreCase("logo")) {
+			} else if(args.length == 1 && args[0].equalsIgnoreCase("logo")&&!isdedicated) {
 				if(GuiOverlayLogo.potionenabled) {
 					sender.sendMessage(new TextComponentTranslation("msg.logo.disabled")); //§cDisabled Logo in HUD
 					GuiOverlayLogo.potionenabled=false;
@@ -271,7 +275,7 @@ public class TastoolsCommandc extends CommandBase{
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
-		if (args.length==1){
+		if (args.length==1) {
 			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","logo"});
 		}
 		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {

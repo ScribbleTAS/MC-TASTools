@@ -5,48 +5,33 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class FreezePacket implements IMessage{
 
-	private double posmotionX;
-	private double posmotionY;
-	private double posmotionZ;
+	private int mode;
 	private boolean enabled;
 	
 	public FreezePacket() {}
 	
-	public FreezePacket(boolean init, double X,double Y, double Z) {
-		posmotionX=X;
-		posmotionY=Y;
-		posmotionZ=Z;
+	public FreezePacket(boolean init, int mode) {
 		this.enabled=init;
+		this.mode=mode;
 	}
 	public FreezePacket(boolean enable) {
 		this.enabled=enable;
-		posmotionX=0;
-		posmotionY=0;
-		posmotionZ=0;
+		mode=0;
 	}
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		this.enabled=buf.readBoolean();
+		this.mode=buf.readInt();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeBoolean(enabled);
+		buf.writeInt(mode);
 	}
 	
-	public boolean isMotion() {
-		if (posmotionX==0&&posmotionY==0&&posmotionZ==0) {
-			return false;
-		}else return true;
-	}
-	public double getX() {
-		return posmotionX;
-	}
-	public double getY() {
-		return posmotionY;
-	}
-	public double getZ() {
-		return posmotionZ;
+	public int getMode() {
+		return mode;
 	}
 	public boolean startstop() {
 		return enabled;

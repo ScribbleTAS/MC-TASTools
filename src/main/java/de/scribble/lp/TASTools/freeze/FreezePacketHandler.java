@@ -12,14 +12,22 @@ public class FreezePacketHandler implements IMessageHandler<FreezePacket, IMessa
 	public FreezePacket onMessage(FreezePacket msg, MessageContext ctx) {
 		if (ctx.side == Side.SERVER) {
 			ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
-				if (msg.startstop()) {
-					FreezeHandler.startFreezeServer();
+				if (msg.getMode() == 0) {
+					if (msg.startstop()) {
+						FreezeHandler.startFreezeServer();
+					}
+
+					else if (!msg.startstop()) {
+						FreezeHandler.stopFreezeServer();
+					}
 				}
-	
-				else if (!msg.startstop()) {
-					FreezeHandler.stopFreezeServer();
+				else if(msg.getMode()==1) {
+					if(!FreezeHandler.isServerFrozen())
+						FreezeHandler.startFreezeServer();
+					else {
+						FreezeHandler.stopFreezeServer();
+					}
 				}
-				
 			});
 		} else if (ctx.side == Side.CLIENT) {
 			if (msg.startstop()) {

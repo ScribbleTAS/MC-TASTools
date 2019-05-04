@@ -11,12 +11,19 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 	@Override
 	public IMessage onMessage(SavestatePacket message, MessageContext ctx) {
 		if (ctx.side.isServer()) {
-			ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
-				new SavestateHandlerClient().loadLastSavestate();
-			});
+			if (!ctx.getServerHandler().player.getServer().isDedicatedServer()) {
+				ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
+					new SavestateHandlerClient().loadLastSavestate();
+				});
+			}else {
+				ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
+					new SavestateHandlerServer().saveState();
+				});
+			}
 		} else if (ctx.side.isClient()) {
 			new SavestateHandlerClient().displayLoadingScreen();
 		}
+
 		return null;
 	}
 

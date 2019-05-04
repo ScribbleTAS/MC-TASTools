@@ -52,12 +52,15 @@ public class CommonProxy {
 		ModLoader.NETWORK.registerMessage(SavestatePacketHandler.class, SavestatePacket.class, 5, Side.CLIENT);
 		
 		if(ev.getSide()==Side.SERVER) {
-			serverconfig=new Configuration(new File(ev.getModConfigurationDirectory()+File.separator+"tastoolsSERVER.cfg"));
+			//Make a Serverconfig
+			serverconfig=new Configuration(new File(ev.getModConfigurationDirectory().getPath()+File.separator+"tastoolsSERVER.cfg"));
+			serverconfig.load();
 			enableServerDuping=serverconfig.get("Duping","Enable",false,"Enables duping on the Server").getBoolean();
 			ModLoader.freezeenabledMP=serverconfig.get("Freeze","Enabled", false, "Freezes the game when starting the Server").getBoolean();
 			VelocityEvents.velocityenabledServer=serverconfig.get("Velocity","Enabled",true,"Saves and applies Velocity when joining/leaving the server").getBoolean();
 			serverconfig.save();
-			new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath()+File.separator+"savestates").mkdir();
+			//Generate a folder for the savestates
+			new File(FMLCommonHandler.instance().getSavesDirectory().getPath()+File.separator+"savestates").mkdir();
 		}
 		
 	}

@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import de.scribble.lp.TASTools.CommonProxy;
+import de.scribble.lp.TASTools.ModLoader;
+import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class Util {
@@ -29,5 +32,12 @@ public class Util {
 			}
 		}
 		return out;
+	}
+	public void reloadServerconfig() {
+		CommonProxy.serverconfig.load();
+		CommonProxy.enableServerDuping=CommonProxy.serverconfig.get("Duping","Enable",false,"Enables duping on the Server").getBoolean();
+		ModLoader.freezeenabledMP=CommonProxy.serverconfig.get("Freeze","Enabled", false, "Freezes the game when starting the Server").getBoolean();
+		VelocityEvents.velocityenabledServer=CommonProxy.serverconfig.get("Velocity","Enabled",true,"Saves and applies Velocity when joining/leaving the server").getBoolean();
+		CommonProxy.serverconfig.save();
 	}
 }

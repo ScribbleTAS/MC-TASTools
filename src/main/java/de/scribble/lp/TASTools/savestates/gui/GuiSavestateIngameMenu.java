@@ -2,8 +2,11 @@ package de.scribble.lp.TASTools.savestates.gui;
 
 import java.io.IOException;
 
+import de.scribble.lp.TASTools.CommonProxy;
+import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.savestates.SavestateHandlerClient;
 import de.scribble.lp.TASTools.savestates.SavestateHandlerServer;
+import de.scribble.lp.TASTools.savestates.SavestatePacket;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -104,8 +107,16 @@ public class GuiSavestateIngameMenu extends GuiScreen{
                 net.minecraftforge.fml.client.FMLClientHandler.instance().showInGameModOptions(new GuiIngameMenu());
                 break;
             case 13:
-            	if(!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer())new SavestateHandlerClient().saveState();
-            	else new SavestateHandlerServer().saveState();
+            	if(this.mc.isIntegratedServerRunning()) {
+            		new SavestateHandlerClient().saveState();
+            	}
+            	else {
+            		if(mc.player.canUseCommand(2, "savestate")) {
+            			ModLoader.NETWORK.sendToServer(new SavestatePacket());
+            		}else {
+            			CommonProxy.logger.info("You don't have the required permissions to use the savestate button!");
+            		}
+            	}
             	break;
         }
     }

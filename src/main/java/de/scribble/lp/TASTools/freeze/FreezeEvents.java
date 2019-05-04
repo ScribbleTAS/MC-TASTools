@@ -146,19 +146,16 @@ public class FreezeEvents {
 
 		}
 	}
-	//TODO Fix this, do some Networking, gogogo!
 	@SubscribeEvent
 	public void pressKeybinding(InputEvent.KeyInputEvent ev) {
-		if (ClientProxy.FreezeKey.isPressed()&&Minecraft.getMinecraft().player.canUseCommand(2, "dupe")) {
-			if (!isServerFrozen) {
-				isServerFrozen=true;
-				ModLoader.NETWORK.sendToServer(new FreezePacket(true));
+		if (ClientProxy.FreezeKey.isPressed() && Minecraft.getMinecraft().player.canUseCommand(2, "dupe")) {
+			isServerFrozen = true;
+			ModLoader.NETWORK.sendToServer(new FreezePacket(true,1));
+			if (!FreezeHandler.isClientFrozen()) {
 				FreezeHandler.startFreezeClient();
-			} else if (isServerFrozen) {
-				isServerFrozen=false;
-				ModLoader.NETWORK.sendToServer(new FreezePacket(false));
+			} else
 				FreezeHandler.stopFreezeClient();
-			}
+
 		}
 	}
 }

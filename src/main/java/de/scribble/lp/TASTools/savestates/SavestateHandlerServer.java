@@ -51,7 +51,11 @@ public class SavestateHandlerServer {
 			if(VelocityEvents.velocityenabledServer) {
 				List<EntityPlayerMP> players= FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
 				for(int o=0;o<players.size();o++) {
-					new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(o).getMotionX(), FreezeHandler.entity.get(o).getMotionY(), FreezeHandler.entity.get(o).getMotionZ(), new File(currentworldfolder.getPath()+File.separator+players.get(o).getName()+"_velocity.txt"));
+					for(int e=0;e<FreezeHandler.entity.size();e++) {
+						if(FreezeHandler.entity.get(e).getPlayername().equals(players.get(o).getName())){
+							new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(o).getMotionX(), FreezeHandler.entity.get(o).getMotionY(), FreezeHandler.entity.get(o).getMotionZ(), new File(currentworldfolder.getPath()+File.separator+players.get(o).getName()+"_velocity.txt"));
+						}
+					}
 				}
 			}
 			FMLCommonHandler.instance().getMinecraftServerInstance().saveAllWorlds(false);
@@ -113,7 +117,7 @@ public class SavestateHandlerServer {
 	            }
 	        }
 	    }
-
+//TODO Add Info File like in SavestateHandlerClient
 	    /**
 	     * Delete directory contents recursively. Leaves the specified starting directory empty. Ignores files / dirs listed in "ignore" array.
 	     * 

@@ -2,6 +2,7 @@ package de.scribble.lp.TASTools.savestates;
 
 import java.util.List;
 
+import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateSavingScreen;
 import net.minecraft.client.Minecraft;
@@ -37,6 +38,12 @@ public class SavestateCommandc extends CommandBase{
 				if (args.length == 1 && args[0].equalsIgnoreCase("save")) {
 					new SavestateHandlerServer().saveState();
 				}
+			}
+		}else {
+			if (args.length == 1 && args[0].equalsIgnoreCase("save")&&server.isDedicatedServer()) {
+				CommonProxy.logger.info("Making a Savestate! Hold on...");
+				new SavestateHandlerServer().saveState();
+				CommonProxy.logger.info("Done!");
 			}
 		}
 		
