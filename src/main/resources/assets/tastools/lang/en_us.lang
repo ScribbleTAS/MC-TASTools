@@ -33,4 +33,5 @@ gui.savestate.loadingscreen.msg=Loading a savestate!
 #misc
 msg.logo.disabled=§cDisabled Logo in HUD
 msg.logo.enabled=§aEnabled Logo in HUD
+msg.logo.multiplayerchange=Changed Logo-Settings for %s
 msg.misc.reload=Config reloaded!

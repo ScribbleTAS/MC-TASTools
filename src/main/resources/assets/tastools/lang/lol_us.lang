@@ -33,4 +33,5 @@ gui.savestate.loadingscreen.msg=Rofl-ing a Déjà-vu-point!
 #misc
 msg.logo.disabled=§cDizabled Bottle in Kitteh-Paws
 msg.logo.enabled=§aEnabled Bottle in Kitteh-Paws
+msg.logo.multiplayerchange=Hack'd new Bottle in Kitteh-Paws-Settingz to %s
 msg.misc.reload=Cat reloaded!

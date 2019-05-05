@@ -18,38 +18,39 @@ public class VelocityEvents {
 
 	@SubscribeEvent
 	public void onCloseServer(PlayerEvent.PlayerLoggedOutEvent ev) {
-		//LAN-Server
 		if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			List<EntityPlayerMP> players= FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
-			if (players.size()>1) {
-				
-				if (velocityenabledClient) {
-					File file = new File(Minecraft.getMinecraft().mcDataDir,
-							"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
-									+ File.separator + ev.player.getName()+"_velocity.txt");
-					CommonProxy.logger.info("Start saving velocity for "+ev.player.getName()+" (Singleplayer)");
-					if(FreezeHandler.isServerFrozen()) {
-						for(int i=0;i<players.size();i++) {
-							if(FreezeHandler.entity.get(i).getPlayername().equals(ev.player.getName())) {
-								new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(i).getMotionX(), FreezeHandler.entity.get(i).getMotionY(), FreezeHandler.entity.get(i).getMotionZ(), file);
-							}
-						}
-					}
-					else {
-						new SavingVelocity().saveVelocity(ev.player, file);
-					}
-				}
-			//Singleplayer
-			}else {	
+			// Singleplayer
+			if (players.size() == 1) {
 				if (velocityenabledClient) {
 					File file = new File(Minecraft.getMinecraft().mcDataDir,
 							"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
 									+ File.separator + "latest_velocity.txt");
 					CommonProxy.logger.info("Start saving velocity...");
-					if(FreezeHandler.isServerFrozen()) {
-						new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(0).getMotionX(), FreezeHandler.entity.get(0).getMotionY(), FreezeHandler.entity.get(0).getMotionZ(), file);
+					if (FreezeHandler.isServerFrozen()) {
+						new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(0).getMotionX(),
+								FreezeHandler.entity.get(0).getMotionY(), FreezeHandler.entity.get(0).getMotionZ(),
+								file);
+					} else {
+						new SavingVelocity().saveVelocity(ev.player, file);
 					}
-					else {
+				}
+			//LAN-Server
+			} else if (players.size() > 1) {
+				if (velocityenabledClient) {
+					File file = new File(Minecraft.getMinecraft().mcDataDir,
+							"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
+									+ File.separator + ev.player.getName() + "_velocity.txt");
+					CommonProxy.logger.info("Start saving velocity for " + ev.player.getName() + " (Singleplayer)");
+					if (FreezeHandler.isServerFrozen()) {
+						for (int i = 0; i < players.size(); i++) {
+							if (FreezeHandler.entity.get(i).getPlayername().equals(ev.player.getName())) {
+								new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(i).getMotionX(),
+										FreezeHandler.entity.get(i).getMotionY(),
+										FreezeHandler.entity.get(i).getMotionZ(), file);
+							}
+						}
+					} else {
 						new SavingVelocity().saveVelocity(ev.player, file);
 					}
 				}

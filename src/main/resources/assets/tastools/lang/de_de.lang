@@ -33,4 +33,5 @@ gui.savestate.loadingscreen.msg=Lädt einen Sicherungspunkt!
 #misc
 msg.logo.disabled=§cLogo im HUD ausgeschaltet
 msg.logo.enabled=§aLogo im HUD eingeschaltet
+msg.logo.multiplayerchange=Logo Einstellungen von %s verändert
 msg.misc.reload=Konfigurationsdateien erneut geladen!

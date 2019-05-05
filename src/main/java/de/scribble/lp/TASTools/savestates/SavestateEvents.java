@@ -27,12 +27,15 @@ public class SavestateEvents {
 				new SavestateHandlerClient().saveState();
 			}else {
 				if(Minecraft.getMinecraft().player.canUseCommand(2, "savestate"))
-				ModLoader.NETWORK.sendToServer(new SavestatePacket());
+				ModLoader.NETWORK.sendToServer(new SavestatePacket(true));
 			}
 		}
 		if (ClientProxy.SavestateLoadKey.isPressed()) {
 			if (Minecraft.getMinecraft().isIntegratedServerRunning()) {
 				ModLoader.NETWORK.sendToServer(new SavestatePacket());
+			}else {
+				if(Minecraft.getMinecraft().player.canUseCommand(2, "savestate"))
+				ModLoader.NETWORK.sendToServer(new SavestatePacket(false));
 			}
 		}
 	}

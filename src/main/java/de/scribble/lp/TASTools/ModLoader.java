@@ -1,10 +1,13 @@
 package de.scribble.lp.TASTools;
 
+import java.io.File;
+
 import de.scribble.lp.TASTools.duping.DupeCommandc;
 import de.scribble.lp.TASTools.freeze.FreezeCommandc;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateCommandc;
+import de.scribble.lp.TASTools.savestates.SavestateHandlerServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -13,8 +16,10 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 @Mod(modid = "tastools", name = "TAS-Tools")
@@ -33,6 +38,7 @@ public class ModLoader {
 	public static boolean freezeenabledMP;
 	
 	public static String levelname;
+	public static boolean stopit;
 	
 
 	@EventHandler
@@ -53,7 +59,7 @@ public class ModLoader {
 	@EventHandler
 	public void serverStart(FMLServerStartingEvent ev) {
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
-			levelname=new Util().getLevelNamefromServer();
+			
 		}
 		if(!CommonProxy.isDupeModLoaded()) {
 			ev.registerServerCommand(new DupeCommandc());
@@ -69,6 +75,18 @@ public class ModLoader {
 			if(freezeenabledMP) {
 				FreezeHandler.startFreezeServer();
 				FreezeHandler.startFreezeClient();
+			}
+		}
+	}
+	@EventHandler
+	public void serverAboutToStart(FMLServerAboutToStartEvent ev) {
+		if(FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
+			levelname=new Util().getLevelNamefromServer();
+			stopit=CommonProxy.serverconfig.get("Savestate","LoadSavestate", false, "This is used for loading a Savestate. When entering /savestate load, this will be set to true, and the server will delete the current world and copy the latest savestate when starting.").getBoolean();
+			if (stopit) {
+				new SavestateHandlerServer().loadSavestateOnServerStart();
+				CommonProxy.serverconfig.get("Savestate","LoadSavestate", false, "This is used for loading a Savestate. When entering /savestate load, this will be set to true, and the server will delete the current world and copy the latest savestate when starting.").set(false);
+				CommonProxy.serverconfig.save();
 			}
 		}
 	}

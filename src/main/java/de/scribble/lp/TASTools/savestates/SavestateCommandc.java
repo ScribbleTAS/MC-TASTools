@@ -37,6 +37,9 @@ public class SavestateCommandc extends CommandBase{
 			}else {
 				if (args.length == 1 && args[0].equalsIgnoreCase("save")) {
 					new SavestateHandlerServer().saveState();
+					
+				}else if(args.length == 1 && args[0].equalsIgnoreCase("load")) {
+					new SavestateHandlerServer().setFlagandShutdown();
 				}
 			}
 		}else {
@@ -44,6 +47,9 @@ public class SavestateCommandc extends CommandBase{
 				CommonProxy.logger.info("Making a Savestate! Hold on...");
 				new SavestateHandlerServer().saveState();
 				CommonProxy.logger.info("Done!");
+			}else if(args.length == 1 && args[0].equalsIgnoreCase("load")) {
+				new SavestateHandlerServer().setFlagandShutdown();
+				CommonProxy.logger.info("Loading a savestate");
 			}
 		}
 		

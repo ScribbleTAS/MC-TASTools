@@ -13,15 +13,25 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 		if (ctx.side.isServer()) {
 			if (!ctx.getServerHandler().player.getServer().isDedicatedServer()) {
 				ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
-					new SavestateHandlerClient().loadLastSavestate();
+					if(message.isLoadSave()) {
+						new SavestateHandlerClient().saveState();
+					}
+					else {
+						new SavestateHandlerClient().loadLastSavestate();;
+					}
 				});
 			}else {
 				ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
-					new SavestateHandlerServer().saveState();
+					if(message.isLoadSave())new SavestateHandlerServer().saveState();
+					else new SavestateHandlerServer().setFlagandShutdown();
 				});
 			}
 		} else if (ctx.side.isClient()) {
-			new SavestateHandlerClient().displayLoadingScreen();
+			if(!message.isLoadSave()) {
+				new SavestateHandlerClient().displayLoadingScreen();
+			}else {
+				new SavestateHandlerClient().displayIngameMenu();
+			}
 		}
 
 		return null;

@@ -6,6 +6,7 @@ import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
 import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
+import de.scribble.lp.TASTools.misc.MiscPacket;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
@@ -47,17 +48,11 @@ public class TastoolsCommandc extends CommandBase{
 			if (args.length==0) {
 				if(!server.isDedicatedServer()) {
 					ClientProxy.config.load();
-					GuiKeystrokes.guienabled=ClientProxy.config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").getBoolean();
-					String position=ClientProxy.config.get("Keystrokes","CornerPos", "downLeft", "Sets the Keystroke to that specific corner. Options: downLeft,downRight,upRight,upLeft").getString();
-					DupeEvents.dupingenabled=ClientProxy.config.get("Duping","Enabled", false, "Activates the duping on startup").getBoolean();
-					VelocityEvents.velocityenabledClient=ClientProxy.config.get("Velocity", "Enabled", true, "Activates velocity saving on startup").getBoolean();
-					ModLoader.freezeenabledSP=ClientProxy.config.get("Freeze","Enabled", false, "Freezes the game when joining singleplayer").getBoolean();
-					SavestateEvents.savestatepauseenabled=ClientProxy.config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu").getBoolean();
-					GuiOverlayLogo.potionenabled=ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").getBoolean();
+					new Util().reloadClientconfig();
 					sender.sendMessage(new TextComponentTranslation("msg.misc.reload")); //Config reloaded!
 				}else {
 					new Util().reloadServerconfig();
-					sender.sendMessage(new TextComponentTranslation("msg.misc.reload")); //Config reloaded!
+					ModLoader.NETWORK.sendToAll(new MiscPacket(0));
 				}
 			}
 			if(!CommonProxy.isTASModLoaded()) {
@@ -124,6 +119,7 @@ public class TastoolsCommandc extends CommandBase{
 						ModLoader.NETWORK.sendTo(new KeystrokesPacket(3), (EntityPlayerMP) sender);
 					}
 				}
+				//Change other peoples keystroke settings
 				else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&server.getPlayerList().getPlayers().contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
 					notifyCommandListener(sender, this, "msg.keystroke.multiplayerchange", new TextComponentString(args[1]));
 					ModLoader.NETWORK.sendTo(new KeystrokesPacket(), server.getPlayerList().getPlayerByUsername(args[1]));
@@ -199,7 +195,7 @@ public class TastoolsCommandc extends CommandBase{
 							.set(true);
 					ClientProxy.config.save();
 				}
-
+			//velocity multiplayer
 			} else if (args.length == 1 && args[0].equalsIgnoreCase("velocity")) {
 				if (VelocityEvents.velocityenabledServer) {
 					sender.sendMessage(new TextComponentTranslation("msg.velocityServer.disabled"));	//§cDisabled Velocity when logging into the server
@@ -214,18 +210,26 @@ public class TastoolsCommandc extends CommandBase{
 							"Saves and applies Velocity when joining/leaving the server").set(true);
 					CommonProxy.serverconfig.save();
 				}
-			} else if(args.length == 1 && args[0].equalsIgnoreCase("logo")&&!isdedicated) {
-				if(GuiOverlayLogo.potionenabled) {
-					sender.sendMessage(new TextComponentTranslation("msg.logo.disabled")); //§cDisabled Logo in HUD
-					GuiOverlayLogo.potionenabled=false;
-					ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").set(false);
-					ClientProxy.config.save();
-				}else if(!GuiOverlayLogo.potionenabled) {
-					sender.sendMessage(new TextComponentTranslation("msg.logo.enabled"));	//§aEnabled Logo in HUD
-					GuiOverlayLogo.potionenabled=true;
-					ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").set(true);
-					ClientProxy.config.save();
+			//gui logo singleplayer
+			} else if(args.length == 1 && args[0].equalsIgnoreCase("logo")) {
+				if(!isdedicated){
+					if(GuiOverlayLogo.potionenabled) {
+						sender.sendMessage(new TextComponentTranslation("msg.logo.disabled")); //§cDisabled Logo in HUD
+						GuiOverlayLogo.potionenabled=false;
+						ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").set(false);
+						ClientProxy.config.save();
+					}else if(!GuiOverlayLogo.potionenabled) {
+						sender.sendMessage(new TextComponentTranslation("msg.logo.enabled"));	//§aEnabled Logo in HUD
+						GuiOverlayLogo.potionenabled=true;
+						ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").set(true);
+						ClientProxy.config.save();
+					}
+				}else {
+					ModLoader.NETWORK.sendTo(new MiscPacket(1), (EntityPlayerMP)sender);
 				}
+			}else if (args.length==2&&args[0].equalsIgnoreCase("logo")&&server.getPlayerList().getPlayers().contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
+				notifyCommandListener(sender, this, "msg.logo.multiplayerchange", new TextComponentString(args[1]));
+				ModLoader.NETWORK.sendTo(new MiscPacket(1), server.getPlayerList().getPlayerByUsername(args[1]));
 			}
 			// Other than sender=Player starts here
 		} else {
@@ -268,6 +272,12 @@ public class TastoolsCommandc extends CommandBase{
 					.contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
 				CommonProxy.logger.info("Changed Keystroke-Settings for " + args[1]);
 				ModLoader.NETWORK.sendTo(new KeystrokesPacket(), server.getPlayerList().getPlayerByUsername(args[1]));
+				
+			} else if (args.length == 1 && args[0].equalsIgnoreCase("logo")) {
+				CommonProxy.logger.warn("Cannot enable the logo. Use /tastools logo <Playername>");
+			}else if(args.length == 2 && args[0].equalsIgnoreCase("logo")&& server.getPlayerList().getPlayers()
+					.contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
+				ModLoader.NETWORK.sendTo(new MiscPacket(1), server.getPlayerList().getPlayerByUsername(args[1]));
 			}
 		}
 	}
@@ -284,6 +294,9 @@ public class TastoolsCommandc extends CommandBase{
 				tabs.addAll(getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames()));
 			}
 			return tabs;
+		}
+		else if(args.length==2&&args[0].equalsIgnoreCase("logo")) {
+			return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 		}
 		return super.getTabCompletions(server, sender, args, targetPos);
 	}
