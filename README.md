@@ -7,9 +7,11 @@ Emulator TASing however uses a playback file to play the game frame perfect, so 
 Emulator TASing also uses *Savestates* so you can replay a section over and over again to get it perfect.  
 In an Emulator this happens automatically and it takes up to 1 second to reload these savestates...  
   
-Minecraft TASing however, doesn't have this luxury so we have to manually quit out of the game and manage your saves folder.
+Minecraft TASing however, doesn't have this luxury so we have to manually quit out of the game and manage our "saves" folder.
 
-This mod is here to simplify things a bit and is **NOT** a playback tool.
+So this mod adresses this issue and adds a savestate function and a "pause" function (even for multiplayer).  
+
+**!!!THIS MOD IS NOT A TOOL FOR PLAYING BACK YOUR INPUTS!!!**
 
 ## Features
 * Duping:
@@ -19,5 +21,5 @@ Minecraft has a duplication glitch which is heavily used by speedrunners to dupl
 Display your keypresses! [Wiki](https://github.com/ScribbleLP/MC-TASTools/wiki/Keystrokes)
   
 * Freezing and velocity:
-TASing makes heavy use of S+Q. But as you might know, when you reload the world, all of your momentum will be set to zero... Which is a bit annoying when you want to simulate a motion during a TAS and don't want to stop all the time... And to better react on where you going, the game will freeze you in place once you start the world. More details on the Wiki  
+TASing makes heavy use of S+Q. But as you might know, when you reload the world, all of your momentum will be set to zero... Which is a bit annoying when you want to simulate a motion during a TAS and don't want to stop all the time... And to better react on where you going, the game will freeze you in place once you start the world. More details on the [Wiki](https://github.com/ScribbleLP/MC-TASTools/wiki/Freeze)
 
