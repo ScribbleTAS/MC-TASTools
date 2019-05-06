@@ -5,12 +5,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, IMessage>{
 
 	@Override
 	public IMessage onMessage(SavestatePacket message, MessageContext ctx) {
-		if (ctx.side.isServer()) {
+		if (ctx.side== Side.SERVER) {
 			if (!ctx.getServerHandler().player.getServer().isDedicatedServer()) {
 				ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
 					if(message.isLoadSave()) {
@@ -26,7 +27,7 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 					else new SavestateHandlerServer().setFlagandShutdown();
 				});
 			}
-		} else if (ctx.side.isClient()) {
+		} else if (ctx.side == Side.CLIENT) {
 			if(!message.isLoadSave()) {
 				new SavestateHandlerClient().displayLoadingScreen();
 			}else {

@@ -13,8 +13,11 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import org.lwjgl.input.Mouse;
+
 import com.google.common.io.Files;
 
+import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
@@ -85,16 +88,21 @@ public class SavestateHandlerClient {
 				File file = new File(Minecraft.getMinecraft().mcDataDir,
 						"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
 								+ File.separator + "latest_velocity.txt");
+				//For LAN-Servers
+				if(players.size()>1) {
+					Minecraft.getMinecraft().getIntegratedServer().saveAllWorlds(false);
+					Minecraft.getMinecraft().getIntegratedServer().getPlayerList().saveAllPlayerData();
+					if (!FreezeHandler.isServerFrozen()) {
+						FreezeHandler.startFreezeServer();
+						ModLoader.NETWORK.sendToAll(new FreezePacket(true));
+					}
+					
+				}
+				//Save the velocity
 				if(VelocityEvents.velocityenabledClient) {
 					new SavingVelocity().saveVelocity(mc.player, file);
-				
-					//For LAN-Servers
+					//Save Velocity for other LAN-Players
 					if(players.size()>1) {
-						FMLCommonHandler.instance().getMinecraftServerInstance().saveAllWorlds(false);
-						if (!FreezeHandler.isServerFrozen()) {
-							FreezeHandler.startFreezeServer();
-							ModLoader.NETWORK.sendToAll(new FreezePacket(true));
-						}
 						if (FreezeHandler.isServerFrozen()) {
 							for (int i1 = 0; i1 < players.size(); i1++) {
 								for (int j = 0; j < FreezeHandler.entity.size(); j++) {
@@ -311,15 +319,19 @@ public class SavestateHandlerClient {
     	}
     }
     public void displayLoadingScreen() {
-    	if (Minecraft.getMinecraft().currentScreen instanceof GuiSavestateSavingScreen) {
-			Minecraft.getMinecraft().displayGuiScreen(null);
+    	if (mc.currentScreen instanceof GuiSavestateSavingScreen) {
+			mc.displayGuiScreen(null);
 		} else {
-			Minecraft.getMinecraft().displayGuiScreen(new GuiSavestateSavingScreen());
+			mc.displayGuiScreen(new GuiSavestateSavingScreen());
 		}
     }
 
 	public void displayIngameMenu() {
-		Minecraft.getMinecraft().displayGuiScreen(new GuiIngameMenu());
+		if (!SavestateEvents.savestatepauseenabled) {
+			mc.displayGuiScreen(new GuiIngameMenu());
+		} else {
+			mc.displayGuiScreen(new GuiSavestateIngameMenu());
+		}
 	}
 }
 class SavestateSaveEventsClient extends SavestateHandlerClient{

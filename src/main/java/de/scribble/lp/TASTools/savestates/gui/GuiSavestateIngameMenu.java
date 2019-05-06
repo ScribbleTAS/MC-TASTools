@@ -36,7 +36,7 @@ public class GuiSavestateIngameMenu extends GuiScreen{
         int i = -16;
         int j = 98;
         this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 144 + -16, I18n.format("menu.returnToMenu")));
-
+        this.setFocused(true);
         if (!this.mc.isIntegratedServerRunning())
         {
             (this.buttonList.get(0)).displayString = I18n.format("menu.disconnect");

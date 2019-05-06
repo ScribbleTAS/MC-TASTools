@@ -99,6 +99,7 @@ public class SavestateHandlerServer {
 					e.printStackTrace();
 				}
 				FMLCommonHandler.instance().getMinecraftServerInstance().saveAllWorlds(false);
+				FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().saveAllPlayerData();
 				SavestateSaveEventsServer lol=new SavestateSaveEventsServer();
 				MinecraftForge.EVENT_BUS.register(lol);
 			}
