@@ -11,7 +11,7 @@ Minecraft TASing however, doesn't have this luxury so we have to manually quit o
 
 So this mod adresses this issue and adds a savestate function and a "pause" function (even for multiplayer).  
 
-**THIS MOD IS NOT A TOOL FOR PLAYING YOUR INPUTS BACK**
+**!!!THIS MOD IS NOT A TOOL FOR PLAYING BACK YOUR INPUTS!!!**
 
 ## Features
 * Duping:
