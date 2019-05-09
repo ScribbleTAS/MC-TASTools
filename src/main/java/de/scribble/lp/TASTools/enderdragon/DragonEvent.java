@@ -1,4 +1,4 @@
-package de.scribble.lp.TASTools.endderdragon;
+package de.scribble.lp.TASTools.enderdragon;
 
 
 
@@ -6,7 +6,6 @@ import java.util.List;
 
 import de.scribble.lp.TASTools.CommonProxy;
 import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 

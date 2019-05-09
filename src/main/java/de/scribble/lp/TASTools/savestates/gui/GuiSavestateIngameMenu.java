@@ -4,8 +4,6 @@ import java.io.IOException;
 
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
-import de.scribble.lp.TASTools.savestates.SavestateHandlerClient;
-import de.scribble.lp.TASTools.savestates.SavestateHandlerServer;
 import de.scribble.lp.TASTools.savestates.SavestatePacket;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
@@ -19,7 +17,6 @@ import net.minecraft.client.gui.advancements.GuiScreenAdvancements;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.realms.RealmsBridge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class GuiSavestateIngameMenu extends GuiScreen{
     private int saveStep;

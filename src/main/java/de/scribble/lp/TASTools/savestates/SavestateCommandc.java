@@ -3,9 +3,6 @@ package de.scribble.lp.TASTools.savestates;
 import java.util.List;
 
 import de.scribble.lp.TASTools.CommonProxy;
-import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
-import de.scribble.lp.TASTools.savestates.gui.GuiSavestateSavingScreen;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

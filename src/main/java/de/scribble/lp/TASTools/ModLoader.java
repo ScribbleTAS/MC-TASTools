@@ -1,9 +1,7 @@
 package de.scribble.lp.TASTools;
 
-import java.io.File;
-
 import de.scribble.lp.TASTools.duping.DupeCommandc;
-import de.scribble.lp.TASTools.endderdragon.DragonCommandc;
+import de.scribble.lp.TASTools.enderdragon.DragonCommandc;
 import de.scribble.lp.TASTools.freeze.FreezeCommandc;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.misc.Util;
@@ -20,7 +18,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 @Mod(modid = "tastools", name = "TAS-Tools")
