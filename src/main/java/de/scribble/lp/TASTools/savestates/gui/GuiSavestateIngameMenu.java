@@ -12,15 +12,15 @@ import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiShareToLan;
+import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.gui.achievement.GuiStats;
-import net.minecraft.client.gui.advancements.GuiScreenAdvancements;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.realms.RealmsBridge;
 
 public class GuiSavestateIngameMenu extends GuiScreen{
-    private int saveStep;
-    private int visibleTime;
+    private int field_146445_a;
+    private int field_146444_f;
     
     /**
      * Adds the buttons (and other controls) to the screen in question. Called when the GUI is displayed and when the
@@ -28,28 +28,27 @@ public class GuiSavestateIngameMenu extends GuiScreen{
      */
     public void initGui()
     {
-        this.saveStep = 0;
+        this.field_146445_a = 0;
         this.buttonList.clear();
         int i = -16;
         int j = 98;
-        this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 144 + -16, I18n.format("menu.returnToMenu")));
-        this.setFocused(true);
+        this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 120 + i, I18n.format("menu.returnToMenu", new Object[0])));
+
         if (!this.mc.isIntegratedServerRunning())
         {
-            (this.buttonList.get(0)).displayString = I18n.format("menu.disconnect");
+            ((GuiButton)this.buttonList.get(0)).displayString = I18n.format("menu.disconnect", new Object[0]);
         }
 
-        this.buttonList.add(new GuiButton(4, this.width / 2 - 100, this.height / 4 + 24 + -16, I18n.format("menu.returnToGame")));
-        this.buttonList.add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 120 + -16, 98, 20, I18n.format("menu.options")));
-        this.buttonList.add(new GuiButton(12, this.width / 2 + 2, this.height / 4 + 120 + i, 98, 20, I18n.format("fml.menu.modoptions")));
-        GuiButton guibutton = this.addButton(new GuiButton(7, this.width / 2 - 100, this.height / 4 + 72 + -16, 200, 20, I18n.format("menu.shareToLan", new Object[0])));
+        this.buttonList.add(new GuiButton(4, this.width / 2 - 100, this.height / 4 + 24 + i, I18n.format("menu.returnToGame", new Object[0])));
+        this.buttonList.add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 96 + i, 98, 20, I18n.format("menu.options", new Object[0])));
+        this.buttonList.add(new GuiButton(12, this.width / 2 + 2, this.height / 4 + 96 + i, 98, 20, I18n.format("fml.menu.modoptions")));
+        GuiButton guibutton;
+        this.buttonList.add(guibutton = new GuiButton(7, this.width / 2 - 100, this.height / 4 + 72 + i, 200, 20, I18n.format("menu.shareToLan", new Object[0])));
+        this.buttonList.add(new GuiButton(13, this.width / 2 - 100, this.height / 4 + 96 + -16, 200, 20, I18n.format("gui.savestate.ingamemenu")));
+        this.buttonList.add(new GuiButton(5, this.width / 2 - 100, this.height / 4 + 48 + i, 98, 20, I18n.format("gui.achievements", new Object[0])));
+        this.buttonList.add(new GuiButton(6, this.width / 2 + 2, this.height / 4 + 48 + i, 98, 20, I18n.format("gui.stats", new Object[0])));
         guibutton.enabled = this.mc.isSingleplayer() && !this.mc.getIntegratedServer().getPublic();
-        this.addButton(new GuiButton(13, this.width / 2 - 100, this.height / 4 + 96 + -16, 200, 20, I18n.format("gui.savestate.ingamemenu")));
-        this.buttonList.add(new GuiButton(5, this.width / 2 - 100, this.height / 4 + 48 + -16, 98, 20, I18n.format("gui.advancements")));
-        this.buttonList.add(new GuiButton(6, this.width / 2 + 2, this.height / 4 + 48 + -16, 98, 20, I18n.format("gui.stats")));
-        
     }
-
     /**
      * Called by the controls from the buttonList when activated. (Mouse pressed for buttons)
      */
@@ -62,9 +61,9 @@ public class GuiSavestateIngameMenu extends GuiScreen{
                 break;
             case 1:
                 boolean flag = this.mc.isIntegratedServerRunning();
-                boolean flag1 = this.mc.isConnectedToRealms();
+                boolean flag1 = this.mc.func_181540_al();
                 button.enabled = false;
-                this.mc.world.sendQuittingDisconnectingPacket();
+                this.mc.theWorld.sendQuittingDisconnectingPacket();
                 this.mc.loadWorld((WorldClient)null);
 
                 if (flag)
@@ -90,12 +89,12 @@ public class GuiSavestateIngameMenu extends GuiScreen{
                 this.mc.setIngameFocus();
                 break;
             case 5:
-                if (this.mc.player != null)
-                this.mc.displayGuiScreen(new GuiScreenAdvancements(this.mc.player.connection.getAdvancementManager()));
+                if (this.mc.thePlayer != null)
+                this.mc.displayGuiScreen(new GuiAchievements(this, this.mc.thePlayer.getStatFileWriter()));
                 break;
             case 6:
-                if (this.mc.player != null)
-                this.mc.displayGuiScreen(new GuiStats(this, this.mc.player.getStatFileWriter()));
+                if (this.mc.thePlayer != null)
+                this.mc.displayGuiScreen(new GuiStats(this, this.mc.thePlayer.getStatFileWriter()));
                 break;
             case 7:
                 this.mc.displayGuiScreen(new GuiShareToLan(this));
@@ -104,7 +103,7 @@ public class GuiSavestateIngameMenu extends GuiScreen{
                 net.minecraftforge.fml.client.FMLClientHandler.instance().showInGameModOptions(new GuiIngameMenu());
                 break;
             case 13:
-				if (mc.player.canUseCommand(2, "savestate")) {
+				if (mc.thePlayer.canCommandSenderUseCommand(2, "savestate")) {
 					ModLoader.NETWORK.sendToServer(new SavestatePacket(true));
 				} else {
 					CommonProxy.logger.info("You don't have the required permissions to use the savestate button!");
@@ -119,16 +118,16 @@ public class GuiSavestateIngameMenu extends GuiScreen{
     public void updateScreen()
     {
         super.updateScreen();
-        ++this.visibleTime;
+        ++this.field_146444_f;
     }
 
     /**
-     * Draws the screen and all the components in it.
+     * Draws the screen and all the components in it. Args : mouseX, mouseY, renderPartialTicks
      */
     public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
         this.drawDefaultBackground();
-        this.drawCenteredString(this.fontRenderer, I18n.format("menu.game"), this.width / 2, 40, 16777215);
+        this.drawCenteredString(this.fontRendererObj, I18n.format("menu.game", new Object[0]), this.width / 2, 40, 16777215);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

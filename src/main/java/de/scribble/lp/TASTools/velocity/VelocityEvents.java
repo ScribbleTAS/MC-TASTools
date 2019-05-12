@@ -19,7 +19,7 @@ public class VelocityEvents {
 	@SubscribeEvent
 	public void onCloseServer(PlayerEvent.PlayerLoggedOutEvent ev) {
 		if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
-			List<EntityPlayerMP> players= FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
+			List<EntityPlayerMP> players= FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
 			// Singleplayer
 			if (players.size() == 1) {
 				if (velocityenabledClient) {
@@ -60,7 +60,7 @@ public class VelocityEvents {
 			if(velocityenabledServer) {
 				File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath() + File.separator + ModLoader.getLevelname() +File.separator
 						+ ev.player.getName() + "_velocity.txt");
-				List<EntityPlayerMP> players= FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
+				List<EntityPlayerMP> players= FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
 				CommonProxy.logger.info("Saving velocity of "+ev.player.getName());
 				if(FreezeHandler.isServerFrozen()) {
 					for(int i=0;i<players.size();i++) {

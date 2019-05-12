@@ -16,8 +16,8 @@ public class GuiSavestateSavingScreen extends GuiScreen{
 		int width = scaled.getScaledWidth();
 		int height = scaled.getScaledHeight();
 		
-		drawCenteredString(fontRenderer,I18n.format("gui.savestate.savingscreen.msg"),width / 2,height / 4 + 34 + -16, 0xFFFFFF); //Making a savestate, please wait!
-		drawCenteredString(fontRenderer, I18n.format("gui.savestate.savingscreen.credit"), width / 2, height / 4 + 165 -16, 0xFFB238);	//Idea and code from MightyPork and bspkrs' WorldStateCheckpoints!
+		drawCenteredString(fontRendererObj,I18n.format("gui.savestate.savingscreen.msg"),width / 2,height / 4 + 34 + -16, 0xFFFFFF); //Making a savestate, please wait!
+		drawCenteredString(fontRendererObj, I18n.format("gui.savestate.savingscreen.credit"), width / 2, height / 4 + 165 -16, 0xFFB238);	//Idea and code from MightyPork and bspkrs' WorldStateCheckpoints!
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 	

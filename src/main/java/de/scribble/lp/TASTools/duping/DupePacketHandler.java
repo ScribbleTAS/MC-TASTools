@@ -15,7 +15,7 @@ public class DupePacketHandler implements IMessageHandler<DupePacket, IMessage>{
 	public IMessage onMessage(DupePacket message, MessageContext ctx) {
 		if (ctx.side==Side.SERVER) {
 			File file= new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator +Minecraft.getMinecraft().getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
-			EntityPlayerMP player =ctx.getServerHandler().player;
+			EntityPlayerMP player =ctx.getServerHandler().playerEntity;
 			new RefillingDupe().refill(file, player);
 		}
 		return null;

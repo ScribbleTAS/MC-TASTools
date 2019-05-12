@@ -39,14 +39,14 @@ public class FreezeEvents {
 								playerev.posZ, playerev.rotationPitch, playerev.rotationYaw, playerev.motionX,
 								playerev.motionY, playerev.motionZ));
 					}
-					playerev.setEntityInvulnerable(true);
-					playerev.setNoGravity(true);
+					playerev.capabilities.disableDamage=true;
+					playerev.capabilities.isFlying=true;
 				} else { // if velocityserver is disabled
 					FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX, playerev.posY,
 							playerev.posZ, playerev.rotationPitch, playerev.rotationYaw, 0, 0, 0));
 
-					playerev.setEntityInvulnerable(true);
-					playerev.setNoGravity(true);
+					playerev.capabilities.disableDamage=true;
+					playerev.capabilities.isFlying=true;
 				}
 				ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
 
@@ -54,7 +54,7 @@ public class FreezeEvents {
 		}else { // Open to LAN
 				if (ModLoader.freezeenabledSP) {
 					List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance()
-							.getPlayerList().getPlayers();
+							.getConfigurationManager().getPlayerList();
 					if (playerMP.size() > 1) {
 						if (FreezeHandler.isServerFrozen()) {
 							if (VelocityEvents.velocityenabledClient) {
@@ -73,8 +73,8 @@ public class FreezeEvents {
 											playerev.posY, playerev.posZ, playerev.rotationPitch, playerev.rotationYaw,
 											0, 0, 0));
 								}
-								playerev.setEntityInvulnerable(true);
-								playerev.setNoGravity(true);
+								playerev.capabilities.disableDamage=true;
+								playerev.capabilities.isFlying=true;
 								ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
 
 							} else { // if velocityclient is disabled
@@ -83,8 +83,8 @@ public class FreezeEvents {
 										playerev.posY, playerev.posZ, playerev.rotationPitch, playerev.rotationYaw,
 										playerev.motionX, playerev.motionY, playerev.motionZ));
 
-								playerev.setEntityInvulnerable(true);
-								playerev.setNoGravity(true);
+								playerev.capabilities.disableDamage=true;
+								playerev.capabilities.isFlying=true;
 								ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
 							}
 						}
@@ -112,7 +112,7 @@ public class FreezeEvents {
 	public void onLeaveServer(PlayerLoggedOutEvent ev) {
 		EntityPlayerMP playerEV = (EntityPlayerMP) ev.player;
 		
-		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
+		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
 		
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			if (FreezeHandler.isServerFrozen()) {
@@ -122,8 +122,8 @@ public class FreezeEvents {
 						FreezeHandler.entity.remove(o);
 					}
 				}
-				playerEV.setEntityInvulnerable(false);
-				playerEV.setNoGravity(false);
+				playerEV.capabilities.disableDamage=false;
+				playerEV.capabilities.isFlying=false;
 				ModLoader.NETWORK.sendTo(new FreezePacket(false), playerEV);
 			}
 		}else{
@@ -135,8 +135,8 @@ public class FreezeEvents {
 							FreezeHandler.entity.remove(o);
 						}
 					}
-					playerEV.setEntityInvulnerable(false);
-					playerEV.setNoGravity(false);
+					playerEV.capabilities.disableDamage=false;
+					playerEV.capabilities.isFlying=false;
 					ModLoader.NETWORK.sendTo(new FreezePacket(false), playerEV);
 				}
 			}else {
@@ -148,7 +148,7 @@ public class FreezeEvents {
 	}
 	@SubscribeEvent
 	public void pressKeybinding(InputEvent.KeyInputEvent ev) {
-		if (ClientProxy.FreezeKey.isPressed() && Minecraft.getMinecraft().player.canUseCommand(2, "dupe")) {
+		if (ClientProxy.FreezeKey.isPressed() && Minecraft.getMinecraft().thePlayer.canCommandSenderUseCommand(2, "dupe")) {
 			isServerFrozen = true;
 			ModLoader.NETWORK.sendToServer(new FreezePacket(true,1));
 			if (!FreezeHandler.isClientFrozen()) {

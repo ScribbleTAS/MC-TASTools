@@ -58,7 +58,7 @@ public class SavestateHandlerClient {
 			currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName());
 			targetsavefolder=null;
 			worldname=Minecraft.getMinecraft().getIntegratedServer().getFolderName();
-			List<EntityPlayerMP> players=FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
+			List<EntityPlayerMP> players=FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
 			//Check for worlds in the savestate folder
 			int i=1;
 			while (i<=256) {
@@ -85,8 +85,7 @@ public class SavestateHandlerClient {
 								+ File.separator + "latest_velocity.txt");
 				//For LAN-Servers
 				if(players.size()>1) {
-					Minecraft.getMinecraft().getIntegratedServer().saveAllWorlds(false);
-					Minecraft.getMinecraft().getIntegratedServer().getPlayerList().saveAllPlayerData();
+					Minecraft.getMinecraft().getIntegratedServer().getConfigurationManager().saveAllPlayerData();
 					if (!FreezeHandler.isServerFrozen()) {
 						FreezeHandler.startFreezeServer();
 						ModLoader.NETWORK.sendToAll(new FreezePacket(true));
@@ -95,7 +94,7 @@ public class SavestateHandlerClient {
 				}
 				//Save the velocity
 				if(VelocityEvents.velocityenabledClient) {
-					new SavingVelocity().saveVelocity(mc.player, file);
+					new SavingVelocity().saveVelocity(mc.thePlayer, file);
 					//Save Velocity for other LAN-Players
 					if(players.size()>1) {
 						if (FreezeHandler.isServerFrozen()) {
@@ -164,7 +163,7 @@ public class SavestateHandlerClient {
 				
 				SavestateLoadEventsClient Events=new SavestateLoadEventsClient();
 				MinecraftForge.EVENT_BUS.register(Events);
-				this.mc.world.sendQuittingDisconnectingPacket();
+				this.mc.theWorld.sendQuittingDisconnectingPacket();
 	            this.mc.loadWorld((WorldClient)null);
 			}
 		}
@@ -335,7 +334,6 @@ class SavestateSaveEventsClient extends SavestateHandlerClient{
 	public void onTick(TickEvent ev) {
 		if (ev.phase==Phase.START) {
 			if (tickspassed>=endtimer) {
-				mc.getIntegratedServer().saveAllWorlds(false);
 				try {
 					copyDirectory(currentworldfolder, targetsavefolder, new String[] {" "});
 					
@@ -380,7 +378,7 @@ class SavestateLoadEventsClient extends SavestateHandlerClient{
 	}
 	@SubscribeEvent
 	public void onGuiOpen(GuiOpenEvent ev) {
-		if(ev.getGui() instanceof GuiDisconnected) {
+		if(ev.gui instanceof GuiDisconnected) {
 			ev.setCanceled(true);
 			mc.displayGuiScreen(new GuiSavestateLoadingScreen());
 		}

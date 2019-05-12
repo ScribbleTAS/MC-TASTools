@@ -1,7 +1,6 @@
 package de.scribble.lp.TASTools;
 
 import de.scribble.lp.TASTools.duping.DupeCommandc;
-import de.scribble.lp.TASTools.enderdragon.DragonCommandc;
 import de.scribble.lp.TASTools.freeze.FreezeCommandc;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.misc.Util;
@@ -65,7 +64,6 @@ public class ModLoader {
 		ev.registerServerCommand(new TastoolsCommandc());
 		ev.registerServerCommand(new FreezeCommandc());
 		ev.registerServerCommand(new SavestateCommandc());
-		ev.registerServerCommand(new DragonCommandc());
 	}
 	
 	@EventHandler

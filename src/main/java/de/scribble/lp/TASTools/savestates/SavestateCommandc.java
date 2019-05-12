@@ -8,22 +8,24 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.BlockPos;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class SavestateCommandc extends CommandBase{
 
 	@Override
-	public String getName() {
+	public String getCommandName() {
 		return "savestate";
 	}
 
 	@Override
-	public String getUsage(ICommandSender sender) {
+	public String getCommandUsage(ICommandSender sender) {
 		return "/savestate <save|load>";
 	}
 
 	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
+		MinecraftServer server=FMLCommonHandler.instance().getMinecraftServerInstance();
 		if (sender instanceof EntityPlayer) {
 			if (!server.isDedicatedServer()) {
 				if (args.length == 1 && args[0].equalsIgnoreCase("save")) {
@@ -52,14 +54,14 @@ public class SavestateCommandc extends CommandBase{
 		
 	}
 	@Override
-	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
-			BlockPos targetPos) {
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+		MinecraftServer server=FMLCommonHandler.instance().getMinecraftServerInstance();
 		if(args.length==1) {
 			if(!server.isDedicatedServer()) {
 				return getListOfStringsMatchingLastWord(args, new String[] {"save","load"});
 			}else return getListOfStringsMatchingLastWord(args, new String[] {"save"});
 		}else {
-			return super.getTabCompletions(server, sender, args, targetPos);
+			return super.addTabCompletionOptions(sender, args, pos);
 		}
 	}
 }

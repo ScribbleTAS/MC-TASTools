@@ -69,8 +69,8 @@ public class SavestateHandlerServer {
 					i++;
 				}
 				if (VelocityEvents.velocityenabledServer) {
-					List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance()
-							.getPlayerList().getPlayers();
+					List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager()
+							.getPlayerList();
 					for (int o = 0; o < players.size(); o++) {
 						for (int e = 0; e < FreezeHandler.entity.size(); e++) {
 							if (FreezeHandler.entity.get(e).getPlayername().equals(players.get(o).getName())) {
@@ -93,8 +93,7 @@ public class SavestateHandlerServer {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				FMLCommonHandler.instance().getMinecraftServerInstance().saveAllWorlds(false);
-				FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().saveAllPlayerData();
+				FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().saveAllPlayerData();
 				SavestateSaveEventsServer lol=new SavestateSaveEventsServer();
 				MinecraftForge.EVENT_BUS.register(lol);
 			}

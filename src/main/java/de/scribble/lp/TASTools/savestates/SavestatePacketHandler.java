@@ -10,8 +10,8 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 	@Override
 	public IMessage onMessage(SavestatePacket message, MessageContext ctx) {
 		if (ctx.side== Side.SERVER) {
-			if (!ctx.getServerHandler().player.getServer().isDedicatedServer()) {
-				ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
+			if (!ctx.getServerHandler().playerEntity.mcServer.isDedicatedServer()) {
+				ctx.getServerHandler().playerEntity.getServerForPlayer().addScheduledTask(() -> {
 					if(message.isLoadSave()) {
 						new SavestateHandlerClient().saveState();
 					}
@@ -20,7 +20,7 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 					}
 				});
 			}else {
-				ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
+				ctx.getServerHandler().playerEntity.getServerForPlayer().addScheduledTask(() -> {
 					if(message.isLoadSave())new SavestateHandlerServer().saveState();
 					else new SavestateHandlerServer().setFlagandShutdown();
 				});
