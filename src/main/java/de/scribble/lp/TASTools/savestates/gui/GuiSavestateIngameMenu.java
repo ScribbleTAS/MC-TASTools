@@ -32,7 +32,7 @@ public class GuiSavestateIngameMenu extends GuiScreen{
         this.buttonList.clear();
         int i = -16;
         int j = 98;
-        this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 120 + i, I18n.format("menu.returnToMenu", new Object[0])));
+        this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 144 + i, I18n.format("menu.returnToMenu", new Object[0])));
 
         if (!this.mc.isIntegratedServerRunning())
         {
@@ -40,8 +40,8 @@ public class GuiSavestateIngameMenu extends GuiScreen{
         }
 
         this.buttonList.add(new GuiButton(4, this.width / 2 - 100, this.height / 4 + 24 + i, I18n.format("menu.returnToGame", new Object[0])));
-        this.buttonList.add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 96 + i, 98, 20, I18n.format("menu.options", new Object[0])));
-        this.buttonList.add(new GuiButton(12, this.width / 2 + 2, this.height / 4 + 96 + i, 98, 20, I18n.format("fml.menu.modoptions")));
+        this.buttonList.add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 120 + i, 98, 20, I18n.format("menu.options", new Object[0])));
+        this.buttonList.add(new GuiButton(12, this.width / 2 + 2, this.height / 4 + 120 + i, 98, 20, I18n.format("fml.menu.modoptions")));
         GuiButton guibutton;
         this.buttonList.add(guibutton = new GuiButton(7, this.width / 2 - 100, this.height / 4 + 72 + i, 200, 20, I18n.format("menu.shareToLan", new Object[0])));
         this.buttonList.add(new GuiButton(13, this.width / 2 - 100, this.height / 4 + 96 + -16, 200, 20, I18n.format("gui.savestate.ingamemenu")));
@@ -103,11 +103,16 @@ public class GuiSavestateIngameMenu extends GuiScreen{
                 net.minecraftforge.fml.client.FMLClientHandler.instance().showInGameModOptions(new GuiIngameMenu());
                 break;
             case 13:
-				if (mc.thePlayer.canCommandSenderUseCommand(2, "savestate")) {
-					ModLoader.NETWORK.sendToServer(new SavestatePacket(true));
-				} else {
-					CommonProxy.logger.info("You don't have the required permissions to use the savestate button!");
-				}
+            	if(mc.isSingleplayer()) {
+            		ModLoader.NETWORK.sendToServer(new SavestatePacket(true));
+            	}
+            	else{
+	            	if (mc.thePlayer.canCommandSenderUseCommand(2, "")) {
+						ModLoader.NETWORK.sendToServer(new SavestatePacket(true));
+					} else {
+						CommonProxy.logger.info("You don't have the required permissions to use the savestate button!");
+					}
+            	}
 				break;
         }
     }

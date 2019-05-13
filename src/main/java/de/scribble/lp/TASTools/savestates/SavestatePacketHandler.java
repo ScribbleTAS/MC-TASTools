@@ -1,5 +1,6 @@
 package de.scribble.lp.TASTools.savestates;
 
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -36,11 +37,19 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 				});
 			}
 		} else if (ctx.side == Side.CLIENT) {
-			if(!message.isLoadSave()) {
-				new SavestateHandlerClient().displayLoadingScreen();
-			}else {
-				new SavestateHandlerClient().displayIngameMenu();
-			}
+			Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+
+				@Override
+				public void run() {
+					if(!message.isLoadSave()) {
+						new SavestateHandlerClient().displayLoadingScreen();
+					}else {
+						new SavestateHandlerClient().displayIngameMenu();
+					}
+					
+				}
+				
+			});
 		}
 
 		return null;

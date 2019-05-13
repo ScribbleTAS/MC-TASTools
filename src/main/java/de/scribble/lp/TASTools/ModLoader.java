@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
-@Mod(modid = "tastools", name = "TAS-Tools")
+@Mod(modid = "tastools", name = "TAS-Tools",version=ModLoader.VERSION)
 public class ModLoader {
 	 
 	
@@ -36,6 +36,9 @@ public class ModLoader {
 	
 	public static String levelname;
 	public static boolean stopit;
+	
+	public static final String VERSION="${version}";
+	public static final String MCVERSION="${mcversion}";
 	
 
 	@EventHandler
