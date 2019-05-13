@@ -9,25 +9,30 @@ public class FreezePacketHandler implements IMessageHandler<FreezePacket, IMessa
 
 
 	@Override
-	public FreezePacket onMessage(FreezePacket msg, MessageContext ctx) {
+	public FreezePacket onMessage(final FreezePacket msg, MessageContext ctx) {
 		if (ctx.side == Side.SERVER) {
-			ctx.getServerHandler().playerEntity.getServerForPlayer().addScheduledTask(() -> {
-				if (msg.getMode() == 0) {
-					if (msg.startstop()) {
-						FreezeHandler.startFreezeServer();
-					}
+			ctx.getServerHandler().playerEntity.getServerForPlayer().addScheduledTask(new Runnable(){
 
-					else if (!msg.startstop()) {
-						FreezeHandler.stopFreezeServer();
+				@Override
+				public void run() {
+					if (msg.getMode() == 0) {
+						if (msg.startstop()) {
+							FreezeHandler.startFreezeServer();
+						}
+
+						else if (!msg.startstop()) {
+							FreezeHandler.stopFreezeServer();
+						}
+					}
+					else if(msg.getMode()==1) {
+						if(!FreezeHandler.isServerFrozen())
+							FreezeHandler.startFreezeServer();
+						else {
+							FreezeHandler.stopFreezeServer();
+						}
 					}
 				}
-				else if(msg.getMode()==1) {
-					if(!FreezeHandler.isServerFrozen())
-						FreezeHandler.startFreezeServer();
-					else {
-						FreezeHandler.stopFreezeServer();
-					}
-				}
+				
 			});
 		} else if (ctx.side == Side.CLIENT) {
 			if (msg.startstop()) {

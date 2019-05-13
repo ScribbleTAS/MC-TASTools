@@ -8,21 +8,31 @@ import net.minecraftforge.fml.relauncher.Side;
 public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, IMessage>{
 
 	@Override
-	public IMessage onMessage(SavestatePacket message, MessageContext ctx) {
+	public IMessage onMessage(final SavestatePacket message, MessageContext ctx) {
 		if (ctx.side== Side.SERVER) {
 			if (!ctx.getServerHandler().playerEntity.mcServer.isDedicatedServer()) {
-				ctx.getServerHandler().playerEntity.getServerForPlayer().addScheduledTask(() -> {
-					if(message.isLoadSave()) {
-						new SavestateHandlerClient().saveState();
+				ctx.getServerHandler().playerEntity.getServerForPlayer().addScheduledTask(new Runnable() {
+
+					@Override
+					public void run() {
+						if(message.isLoadSave()) {
+							new SavestateHandlerClient().saveState();
+						}
+						else {
+							new SavestateHandlerClient().loadLastSavestate();;
+						}
 					}
-					else {
-						new SavestateHandlerClient().loadLastSavestate();;
-					}
+					
 				});
 			}else {
-				ctx.getServerHandler().playerEntity.getServerForPlayer().addScheduledTask(() -> {
-					if(message.isLoadSave())new SavestateHandlerServer().saveState();
-					else new SavestateHandlerServer().setFlagandShutdown();
+				ctx.getServerHandler().playerEntity.getServerForPlayer().addScheduledTask(new Runnable(){
+
+					@Override
+					public void run() {
+						if(message.isLoadSave())new SavestateHandlerServer().saveState();
+						else new SavestateHandlerServer().setFlagandShutdown();
+					}
+					
 				});
 			}
 		} else if (ctx.side == Side.CLIENT) {
