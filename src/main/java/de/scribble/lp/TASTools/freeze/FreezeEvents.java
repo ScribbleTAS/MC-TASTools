@@ -16,7 +16,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 
 public class FreezeEvents {
-	private boolean isServerFrozen;
 	@SubscribeEvent
 	public void onjoinServer(PlayerLoggedInEvent ev) {
 		EntityPlayerMP playerev = (EntityPlayerMP) ev.player;
@@ -149,7 +148,6 @@ public class FreezeEvents {
 	@SubscribeEvent
 	public void pressKeybinding(InputEvent.KeyInputEvent ev) {
 		if (ClientProxy.FreezeKey.isPressed() && Minecraft.getMinecraft().player.canUseCommand(2, "dupe")) {
-			isServerFrozen = true;
 			ModLoader.NETWORK.sendToServer(new FreezePacket(true,1));
 			if (!FreezeHandler.isClientFrozen()) {
 				FreezeHandler.startFreezeClient();
