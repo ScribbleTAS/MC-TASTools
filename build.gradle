@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 
-version = "Snapshot-4"
+version = "Snapshot-5"
 group = "de.scribble.lp.tastools" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "TASTools-1.12.2"
 
@@ -31,6 +31,7 @@ minecraft {
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = "snapshot_20170624"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    replace '${version}':project.version,'${version}','${mcversion}':project.minecraft.version
 }
 
 dependencies {
@@ -69,9 +70,9 @@ processResources {
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+    
 }
