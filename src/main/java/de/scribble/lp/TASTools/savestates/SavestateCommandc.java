@@ -3,6 +3,10 @@ package de.scribble.lp.TASTools.savestates;
 import java.util.List;
 
 import de.scribble.lp.TASTools.CommonProxy;
+import de.scribble.lp.TASTools.ModLoader;
+import de.scribble.lp.TASTools.misc.MiscPacket;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -57,9 +61,7 @@ public class SavestateCommandc extends CommandBase{
 	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
 		MinecraftServer server=FMLCommonHandler.instance().getMinecraftServerInstance();
 		if(args.length==1) {
-			if(!server.isDedicatedServer()) {
-				return getListOfStringsMatchingLastWord(args, new String[] {"save","load"});
-			}else return getListOfStringsMatchingLastWord(args, new String[] {"save"});
+			return getListOfStringsMatchingLastWord(args, new String[] {"save","load"});
 		}else {
 			return super.addTabCompletionOptions(sender, args, pos);
 		}

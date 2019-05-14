@@ -19,6 +19,7 @@ import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
+import de.scribble.lp.TASTools.misc.MiscPacket;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateSavingScreen;
@@ -27,6 +28,7 @@ import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiDisconnected;
 import net.minecraft.client.gui.GuiIngameMenu;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldSettings;
@@ -44,7 +46,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
 	public boolean isSaving=false;
-	protected static int endtimer=20;
+	protected static int endtimer=60;
 	
 	protected static File currentworldfolder;
 	protected static File targetsavefolder=null;
@@ -163,8 +165,9 @@ public class SavestateHandlerClient {
 				
 				SavestateLoadEventsClient Events=new SavestateLoadEventsClient();
 				MinecraftForge.EVENT_BUS.register(Events);
-				this.mc.theWorld.sendQuittingDisconnectingPacket();
-	            this.mc.loadWorld((WorldClient)null);
+				mc.theWorld.sendQuittingDisconnectingPacket();
+				mc.getMinecraft().loadWorld((WorldClient)null);
+				
 			}
 		}
 	}
@@ -333,7 +336,7 @@ class SavestateSaveEventsClient extends SavestateHandlerClient{
 	@SubscribeEvent
 	public void onTick(TickEvent ev) {
 		if (ev.phase==Phase.START) {
-			if (tickspassed>=endtimer) {
+			if (tickspassed>=20) {
 				try {
 					copyDirectory(currentworldfolder, targetsavefolder, new String[] {" "});
 					
