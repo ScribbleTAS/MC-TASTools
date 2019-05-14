@@ -23,3 +23,8 @@ Display your keypresses! [Wiki](https://github.com/ScribbleLP/MC-TASTools/wiki/K
 * Freezing and velocity:
 TASing makes heavy use of S+Q. But as you might know, when you reload the world, all of your momentum will be set to zero... Which is a bit annoying when you want to simulate a motion during a TAS and don't want to stop all the time... And to better react on where you going, the game will freeze you in place once you start the world. More details on the [Wiki](https://github.com/ScribbleLP/MC-TASTools/wiki/Freeze)
 
+* Savestates:
+But what if you don't need S+Q anymore? Well now you don't! With a click of a button, a copy of your world will be saved to a different directory, which can be reloaded at any time!  
+No more nasty file copying and deleting!
+(It even works for multiplayer servers!)
+More details on the [Wiki](https://github.com/ScribbleLP/MC-TASTools/wiki/Savestate)
