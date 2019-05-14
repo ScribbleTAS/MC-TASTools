@@ -23,20 +23,10 @@ public class SavestateEvents {
 	@SubscribeEvent
 	public void pressKeybinding(InputEvent.KeyInputEvent ev){
 		if (ClientProxy.SavestateSaveKey.isPressed()) {
-			if (Minecraft.getMinecraft().isIntegratedServerRunning()) {
-				ModLoader.NETWORK.sendToServer(new SavestatePacket(true));
-			}else {
-				if(Minecraft.getMinecraft().thePlayer.canCommandSenderUseCommand(2, "savestate"))
-				ModLoader.NETWORK.sendToServer(new SavestatePacket(true));
-			}
+			ModLoader.NETWORK.sendToServer(new SavestatePacket(true));
 		}
 		if (ClientProxy.SavestateLoadKey.isPressed()) {
-			if (Minecraft.getMinecraft().isIntegratedServerRunning()) {
-				ModLoader.NETWORK.sendToServer(new SavestatePacket(false));
-			}else {
-				if(Minecraft.getMinecraft().thePlayer.canCommandSenderUseCommand(2, "savestate"))
-				ModLoader.NETWORK.sendToServer(new SavestatePacket(false));
-			}
+			ModLoader.NETWORK.sendToServer(new SavestatePacket(false));
 		}
 	}
 }
