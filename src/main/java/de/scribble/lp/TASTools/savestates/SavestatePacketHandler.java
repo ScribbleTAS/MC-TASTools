@@ -1,8 +1,10 @@
 package de.scribble.lp.TASTools.savestates;
 
+import de.scribble.lp.TASTools.ModLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -14,6 +16,7 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 	public IMessage onMessage(final SavestatePacket message, MessageContext ctx) {
 
 		if (ctx.side== Side.SERVER) {
+			final MinecraftServer server = Minecraft.getMinecraft().getIntegratedServer();
 			final EntityPlayer player =ctx.getServerHandler().playerEntity;
 				if (!ctx.getServerHandler().playerEntity.mcServer.isDedicatedServer()) {
 					ctx.getServerHandler().playerEntity.getServerForPlayer().addScheduledTask(new Runnable() {
@@ -24,7 +27,7 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 								if (message.isLoadSave()) {
 									new SavestateHandlerClient().saveState();
 								} else {
-									new SavestateHandlerClient().loadLastSavestate();
+									ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), server.getConfigurationManager().getPlayerByUsername(server.getHostname()));
 								}
 							}
 						}
@@ -49,15 +52,24 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 
 				@Override
 				public void run() {
-					if(!message.isLoadSave()) {
-						new SavestateHandlerClient().displayLoadingScreen();
-					}else {
-						new SavestateHandlerClient().displayIngameMenu();
+					if (message.getMode()==0) {
+						if(!message.isLoadSave()) {
+							new SavestateHandlerClient().displayLoadingScreen();
+						}else {
+							new SavestateHandlerClient().displayIngameMenu();
+						}
+					//If the savestate should be loaded
 					}
-					
 				}
 				
 			});
+			if (message.getMode()==1) {
+				if (message.isLoadSave()) {
+					//I'll just keep this here just in case
+				} else {
+					new SavestateHandlerClient().loadLastSavestate();
+				}
+			}
 		}
 
 		return null;

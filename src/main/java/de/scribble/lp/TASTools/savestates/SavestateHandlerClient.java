@@ -165,9 +165,6 @@ public class SavestateHandlerClient {
 				
 				SavestateLoadEventsClient Events=new SavestateLoadEventsClient();
 				MinecraftForge.EVENT_BUS.register(Events);
-				mc.theWorld.sendQuittingDisconnectingPacket();
-				mc.getMinecraft().loadWorld((WorldClient)null);
-				
 			}
 		}
 	}
@@ -343,6 +340,7 @@ class SavestateSaveEventsClient extends SavestateHandlerClient{
 				} catch (IOException e) {
 					CommonProxy.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate save)");
 					e.printStackTrace();
+					MinecraftForge.EVENT_BUS.unregister(this);
 				}
 				
 				ModLoader.NETWORK.sendToAll(new SavestatePacket(true));
@@ -359,7 +357,10 @@ class SavestateLoadEventsClient extends SavestateHandlerClient{
 	@SubscribeEvent
 	public void onTick(TickEvent ev) {
 		if (ev.phase == Phase.START) {
-			if (!mc.isIntegratedServerRunning()) {
+				if (tickspassed==10) {
+					mc.theWorld.sendQuittingDisconnectingPacket();
+					mc.loadWorld((WorldClient)null);
+				}
 				if (tickspassed >= endtimer) {
 					
 					deleteDirContents(currentworldfolder, new String[] { " " });
@@ -372,11 +373,10 @@ class SavestateLoadEventsClient extends SavestateHandlerClient{
 						MinecraftForge.EVENT_BUS.unregister(this);
 						return;
 					}
-					FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
+					//mc.launchIntegratedServer(foldername, worldname, null);
 					MinecraftForge.EVENT_BUS.unregister(this);
 				}
 				tickspassed++;
-			}
 		}
 	}
 	@SubscribeEvent

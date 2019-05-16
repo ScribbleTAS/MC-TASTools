@@ -11,6 +11,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -35,7 +36,7 @@ public class SavestateCommandc extends CommandBase{
 				if (args.length == 1 && args[0].equalsIgnoreCase("save")) {
 					new SavestateHandlerClient().saveState();
 				} else if (args.length == 1 && args[0].equalsIgnoreCase("load")) {
-					new SavestateHandlerClient().loadLastSavestate();
+					ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) sender);
 				}
 			}else {
 				if (args.length == 1 && args[0].equalsIgnoreCase("save")) {
