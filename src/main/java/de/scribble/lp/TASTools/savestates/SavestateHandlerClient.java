@@ -46,7 +46,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
 	public boolean isSaving=false;
-	protected static int endtimer=60;
+	protected static int endtimer=20;
 	
 	protected static File currentworldfolder;
 	protected static File targetsavefolder=null;
@@ -162,9 +162,11 @@ public class SavestateHandlerClient {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
+				Minecraft.getMinecraft().loadWorld((WorldClient)null);
+				mc.displayGuiScreen(new GuiSavestateLoadingScreen());
 				SavestateLoadEventsClient Events=new SavestateLoadEventsClient();
 				MinecraftForge.EVENT_BUS.register(Events);
+
 			}
 		}
 	}
@@ -357,12 +359,9 @@ class SavestateLoadEventsClient extends SavestateHandlerClient{
 	@SubscribeEvent
 	public void onTick(TickEvent ev) {
 		if (ev.phase == Phase.START) {
-				if (tickspassed==10) {
-					mc.theWorld.sendQuittingDisconnectingPacket();
-					mc.loadWorld((WorldClient)null);
-				}
+			if (!mc.isIntegratedServerRunning()) {
 				if (tickspassed >= endtimer) {
-					
+					MinecraftForge.EVENT_BUS.unregister(this);
 					deleteDirContents(currentworldfolder, new String[] { " " });
 					try {
 						copyDirectory(targetsavefolder, currentworldfolder, new String[] { " " });
@@ -373,17 +372,10 @@ class SavestateLoadEventsClient extends SavestateHandlerClient{
 						MinecraftForge.EVENT_BUS.unregister(this);
 						return;
 					}
-					//mc.launchIntegratedServer(foldername, worldname, null);
-					MinecraftForge.EVENT_BUS.unregister(this);
+					FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
 				}
 				tickspassed++;
-		}
-	}
-	@SubscribeEvent
-	public void onGuiOpen(GuiOpenEvent ev) {
-		if(ev.gui instanceof GuiDisconnected) {
-			ev.setCanceled(true);
-			mc.displayGuiScreen(new GuiSavestateLoadingScreen());
+			}
 		}
 	}
 }

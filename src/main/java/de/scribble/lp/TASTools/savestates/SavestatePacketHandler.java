@@ -2,6 +2,7 @@ package de.scribble.lp.TASTools.savestates;
 
 import de.scribble.lp.TASTools.ModLoader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -58,7 +59,9 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 						}else {
 							new SavestateHandlerClient().displayIngameMenu();
 						}
-					//If the savestate should be loaded
+					}
+					else if(message.getMode()==1) {
+						new SavestateHandlerClient().loadLastSavestate();
 					}
 				}
 				
@@ -67,7 +70,7 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 				if (message.isLoadSave()) {
 					//I'll just keep this here just in case
 				} else {
-					new SavestateHandlerClient().loadLastSavestate();
+					
 				}
 			}
 		}
