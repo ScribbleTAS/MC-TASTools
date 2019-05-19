@@ -31,6 +31,7 @@ gui.savestate.savingscreen.credit=Idea and code from MightyPork and bspkrs' Worl
 gui.savestate.loadingscreen.msg=Loading a savestate!
 
 #misc
+msg.misc.info=TASTools version %s for Minecraft version %s
 msg.logo.disabled=§cDisabled Logo in HUD
 msg.logo.enabled=§aEnabled Logo in HUD
 msg.logo.multiplayerchange=Changed Logo-Settings for %s

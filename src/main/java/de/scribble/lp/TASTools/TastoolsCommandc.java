@@ -43,20 +43,14 @@ public class TastoolsCommandc extends CommandBase{
 		boolean isdedicated=server.isDedicatedServer();
 		if(sender instanceof EntityPlayer) {
 			if (args.length==0) {
-				if(!server.isDedicatedServer()) {
-					ClientProxy.config.load();
-					new Util().reloadClientconfig();
-					sender.sendMessage(new TextComponentTranslation("msg.misc.reload")); //Config reloaded!
-				}else {
-					new Util().reloadServerconfig();
-					ModLoader.NETWORK.sendToAll(new MiscPacket(0));
-				}
+				sender.sendMessage(new TextComponentTranslation("msg.misc.info", ModLoader.VERSION.toString(), ModLoader.MCVERSION.toString()));
 			}
+			//Checks if the TASMod is loaded. This mod has a keystroke system on it's own so TASTools will disable it's keypresses...
 			if(!CommonProxy.isTASModLoaded()) {
 				//disable/enable keystrokes command
 				if (args.length==1&&args[0].equalsIgnoreCase("keystrokes")) {
 					
-					if(!isdedicated) {
+					if(!isdedicated&&server.getCurrentPlayerCount()==1) {
 						Configuration config=ClientProxy.config;
 						if (GuiKeystrokes.guienabled) {
 							sender.sendMessage(new TextComponentTranslation("msg.keystrokes.disabled"));	//§cKeystrokes disabled
@@ -121,6 +115,7 @@ public class TastoolsCommandc extends CommandBase{
 					notifyCommandListener(sender, this, "msg.keystroke.multiplayerchange", new TextComponentString(args[1]));
 					ModLoader.NETWORK.sendTo(new KeystrokesPacket(), server.getPlayerList().getPlayerByUsername(args[1]));
 				}
+			//If the TASMod is loaded
 			}else {
 				if (args[0].equalsIgnoreCase("keystrokes")) {
 					sender.sendMessage(new TextComponentTranslation("msg.keystrokes.tasmoderr")); //Keystrokes are disabled due to the TASmod keystrokes. Please refer to /tasmod gui to change the settings
@@ -177,7 +172,7 @@ public class TastoolsCommandc extends CommandBase{
 					}
 				}
 			}
-			// velocity singleplayer
+			//velocity singleplayer
 			if (args.length == 1 && args[0].equalsIgnoreCase("velocity")&&!isdedicated) {
 				if (VelocityEvents.velocityenabledClient) {
 					sender.sendMessage(new TextComponentTranslation("msg.velocityClient.disabled"));	//§cDisabled Velocity when joining the world
@@ -207,6 +202,18 @@ public class TastoolsCommandc extends CommandBase{
 							"Saves and applies Velocity when joining/leaving the server").set(true);
 					CommonProxy.serverconfig.save();
 				}
+			//reload config
+			} else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
+				if (!server.isDedicatedServer() && server.getCurrentPlayerCount() == 1) {
+					ClientProxy.config.load();
+					new Util().reloadClientconfig();
+					notifyCommandListener(sender, this, "msg.misc.reload", new Object()); // Config reloaded!
+				} else {
+					new Util().reloadServerconfig();
+					ModLoader.NETWORK.sendToAll(new MiscPacket(0));
+					notifyCommandListener(sender, this, "msg.misc.reload", new Object()); // Config reloaded!
+				}
+
 			//gui logo singleplayer
 			} else if(args.length == 1 && args[0].equalsIgnoreCase("logo")) {
 				if(!isdedicated){
@@ -283,7 +290,7 @@ public class TastoolsCommandc extends CommandBase{
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
 		if (args.length==1) {
-			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","logo"});
+			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","logo","reload"});
 		}
 		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
 			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft","guiPotion"});
