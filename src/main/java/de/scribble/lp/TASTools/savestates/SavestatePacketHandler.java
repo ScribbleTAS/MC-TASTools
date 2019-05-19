@@ -4,6 +4,7 @@ import de.scribble.lp.TASTools.ModLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -17,7 +18,7 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 	public IMessage onMessage(final SavestatePacket message, MessageContext ctx) {
 
 		if (ctx.side== Side.SERVER) {
-			final MinecraftServer server = Minecraft.getMinecraft().getIntegratedServer();
+			final MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 			final EntityPlayer player =ctx.getServerHandler().playerEntity;
 				if (!ctx.getServerHandler().playerEntity.mcServer.isDedicatedServer()) {
 					ctx.getServerHandler().playerEntity.getServerForPlayer().addScheduledTask(new Runnable() {
@@ -28,7 +29,12 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 								if (message.isLoadSave()) {
 									new SavestateHandlerClient().saveState();
 								} else {
-									ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), server.getConfigurationManager().getPlayerByUsername(server.getHostname()));
+									if(server.getConfigurationManager().getCurrentPlayerCount()==1) {
+										ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) player);
+									}
+									else {
+										ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), server.getConfigurationManager().getPlayerByUsername(server.getHostname()));
+									}
 								}
 							}
 						}
@@ -40,8 +46,10 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 						@Override
 						public void run() {
 							if(MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile())){
-								if(message.isLoadSave())new SavestateHandlerServer().saveState();
-								else new SavestateHandlerServer().setFlagandShutdown();
+								if (message.getMode()==0) {
+									if(message.isLoadSave())new SavestateHandlerServer().saveState();
+									else new SavestateHandlerServer().setFlagandShutdown();
+								}
 							}
 						}
 						
@@ -66,13 +74,6 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 				}
 				
 			});
-			if (message.getMode()==1) {
-				if (message.isLoadSave()) {
-					//I'll just keep this here just in case
-				} else {
-					
-				}
-			}
 		}
 
 		return null;

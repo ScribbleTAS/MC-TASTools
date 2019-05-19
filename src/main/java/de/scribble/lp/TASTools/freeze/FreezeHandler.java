@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -36,15 +37,14 @@ public class FreezeHandler {
 			for (int i = 0; i < (playerTemp.size()); i++) {
 				entity.add(i, new EntityDataStuff(playerTemp.get(i).getName(), playerTemp.get(i).posX, playerTemp.get(i).posY, playerTemp.get(i).posZ,
 								playerTemp.get(i).rotationPitch, playerTemp.get(i).rotationYaw,
-								playerTemp.get(i).motionX, playerTemp.get(i).motionY, playerTemp.get(i).motionZ));
+								playerTemp.get(i).motionX, playerTemp.get(i).motionY, playerTemp.get(i).motionZ, playerTemp.get(i).fallDistance));
 				playerTemp.get(i).capabilities.disableDamage=true;
-				playerTemp.get(i).capabilities.isFlying=true;
 			}
 		}
 		playerMP = playerTemp;
 		MinecraftForge.EVENT_BUS.register(FreezerSE);
 	}
-	public static void startFreezeSetMotionServer(double X, double Y, double Z) {
+	public static void startFreezeSetMotionServer(double X, double Y, double Z, float falldistance) {
 		serverfrozen=true;
 		List<EntityPlayerMP> playerTemp2 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
 
@@ -53,7 +53,7 @@ public class FreezeHandler {
 			for (int i = 0; i < (playerTemp2.size()); i++) {
 				entity.add(i, new EntityDataStuff(playerTemp2.get(i).getName(), playerTemp2.get(i).posX, playerTemp2.get(i).posY, playerTemp2.get(i).posZ,
 								playerTemp2.get(i).rotationPitch, playerTemp2.get(i).rotationYaw,
-								X, Y, Z));
+								X, Y, Z, falldistance));
 				playerTemp2.get(i).capabilities.disableDamage=true;
 				playerTemp2.get(i).capabilities.isFlying=true;
 			}
@@ -76,11 +76,11 @@ public class FreezeHandler {
 						playerMP.get(i).rotationPitch = entity.get(o).getPitch();
 						playerMP.get(i).rotationYaw = entity.get(o).getYaw();
 						playerMP.get(i).capabilities.disableDamage=false;
-						playerMP.get(i).capabilities.isFlying=false;
 						playerMP.get(i).motionX = entity.get(o).getMotionX();
 						playerMP.get(i).motionY = entity.get(o).getMotionY();
 						playerMP.get(i).motionZ = entity.get(o).getMotionZ();
 						playerMP.get(i).velocityChanged = true;
+						playerMP.get(i).fallDistance= entity.get(o).getFalldistance();
 						entity.remove(o);
 					}
 				}
@@ -125,6 +125,12 @@ class ApplyFreezeServer extends FreezeHandler{
 						playerMP.get(i).prevRotationYaw = FreezeHandler.entity.get(i).getYaw();
 				}
 			}
+		}
+	}
+	@SubscribeEvent
+	public void disableFalldamage(LivingFallEvent ev) {
+		if (ev.entityLiving instanceof EntityPlayerMP) {
+			ev.setCanceled(true);
 		}
 	}
 }

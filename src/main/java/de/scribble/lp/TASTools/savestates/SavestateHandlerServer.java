@@ -76,7 +76,7 @@ public class SavestateHandlerServer {
 							if (FreezeHandler.entity.get(e).getPlayername().equals(players.get(o).getName())) {
 								new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(o).getMotionX(),
 										FreezeHandler.entity.get(o).getMotionY(),
-										FreezeHandler.entity.get(o).getMotionZ(), new File(currentworldfolder.getPath()
+										FreezeHandler.entity.get(o).getMotionZ(), FreezeHandler.entity.get(o).getFalldistance(), new File(currentworldfolder.getPath()
 												+ File.separator + players.get(o).getName() + "_velocity.txt"));
 							}
 						}
@@ -286,18 +286,19 @@ public class SavestateHandlerServer {
 	class SavestateSaveEventsServer extends SavestateHandlerServer{
 		int tickspassed=0;
 		@SubscribeEvent
-		public void onTick(TickEvent ev) {
+		public void onTick(TickEvent.ClientTickEvent ev) {
 			if (ev.phase==Phase.START) {
 				if (tickspassed>=20) {
+					MinecraftForge.EVENT_BUS.unregister(this);
 					try {
 						copyDirectory(currentworldfolder, targetsavefolder, new String[] {" "});
 						
 					} catch (IOException e) {
 						CommonProxy.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate save)");
 						e.printStackTrace();
+						return;
 					}
 					isSaving=false;
-					MinecraftForge.EVENT_BUS.unregister(this);
 					ModLoader.NETWORK.sendToAll(new SavestatePacket());
 					return;
 				}

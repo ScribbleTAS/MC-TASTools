@@ -7,9 +7,8 @@ import java.io.IOException;
 
 public class ReapplyingVelocity {
 	
-	private double [] motion= {0,0,0};
-
 	public double[] getVelocity(File file){
+		double [] motion= {0,0,0};
 		try{
 			
 			BufferedReader Buff = new BufferedReader(new FileReader(file));
@@ -35,5 +34,31 @@ public class ReapplyingVelocity {
 				e.printStackTrace();
 		}
 		return motion;
+	}
+	public float getFalldistance(File file) {
+		float falldistance=0F;
+		try {
+			BufferedReader Buff = new BufferedReader(new FileReader(file));
+			String s;
+			while (true){
+				if((s=Buff.readLine()).equalsIgnoreCase("END")){
+					break;
+				}
+				else if(s.startsWith("#")){				//comments
+					continue;
+				}
+				else if(s.startsWith("Falldistance;")) {
+					String[] fal=s.split(";");
+					
+					falldistance=Float.parseFloat(fal[1]);
+					
+
+				}
+			}			
+			Buff.close();
+		}catch (IOException e) {
+				e.printStackTrace();
+		}
+		return falldistance;
 	}
 }
