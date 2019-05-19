@@ -31,6 +31,7 @@ gui.savestate.savingscreen.credit=Idee und Code von MightyPork und bspkrs' World
 gui.savestate.loadingscreen.msg=Lädt einen Sicherungspunkt!
 
 #misc
+msg.misc.info=TASTools Version %s für Minecraft Version %s
 msg.logo.disabled=§cLogo im HUD ausgeschaltet
 msg.logo.enabled=§aLogo im HUD eingeschaltet
 msg.logo.multiplayerchange=Logo Einstellungen von %s verändert

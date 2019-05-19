@@ -362,6 +362,9 @@ class SavestateLoadEventsClient extends SavestateHandlerClient{
 		if (ev.phase == Phase.START) {
 			if (!mc.isIntegratedServerRunning()) {
 				if (tickspassed >= endtimer) {
+					if (!(mc.currentScreen instanceof GuiSavestateLoadingScreen)) {
+						return;
+					}
 					MinecraftForge.EVENT_BUS.unregister(this);
 					deleteDirContents(currentworldfolder, new String[] { " " });
 					try {
@@ -370,7 +373,7 @@ class SavestateLoadEventsClient extends SavestateHandlerClient{
 						CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
 								+ targetsavefolder.getPath() + " for some reason (Savestate load)");
 						e.printStackTrace();
-						MinecraftForge.EVENT_BUS.unregister(this);
+						mc.displayGuiScreen(new GuiMainMenu());
 						return;
 					}
 					FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);

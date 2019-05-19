@@ -1,9 +1,0 @@
-{ 
-        "homepage": "https://github.com/ScribbleLP/MC-TASTools", 
-        "1.12.2": {
-                "0.1": "nothing",
-        }, 
-        "1.8.9": {
-                "0.2": "New Stuff",
-        } 
-} 

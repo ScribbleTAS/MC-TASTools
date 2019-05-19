@@ -94,8 +94,16 @@ public class SavestateHandlerServer {
 					e.printStackTrace();
 				}
 				FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().saveAllPlayerData();
-				SavestateSaveEventsServer lol=new SavestateSaveEventsServer();
-				MinecraftForge.EVENT_BUS.register(lol);
+				try {
+					copyDirectory(currentworldfolder, targetsavefolder, new String[] {" "});
+					
+				} catch (IOException e) {
+					CommonProxy.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate save)");
+					e.printStackTrace();
+					return;
+				}
+				isSaving=false;
+				ModLoader.NETWORK.sendToAll(new SavestatePacket());
 			}
 		}
 	}
@@ -282,28 +290,5 @@ public class SavestateHandlerServer {
 			e.printStackTrace();
 		}
 		CommonProxy.logger.info("Done");
-	}
-	class SavestateSaveEventsServer extends SavestateHandlerServer{
-		int tickspassed=0;
-		@SubscribeEvent
-		public void onTick(TickEvent.ClientTickEvent ev) {
-			if (ev.phase==Phase.START) {
-				if (tickspassed>=20) {
-					MinecraftForge.EVENT_BUS.unregister(this);
-					try {
-						copyDirectory(currentworldfolder, targetsavefolder, new String[] {" "});
-						
-					} catch (IOException e) {
-						CommonProxy.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate save)");
-						e.printStackTrace();
-						return;
-					}
-					isSaving=false;
-					ModLoader.NETWORK.sendToAll(new SavestatePacket());
-					return;
-				}
-				tickspassed++;
-			}
-		}
 	}
 }

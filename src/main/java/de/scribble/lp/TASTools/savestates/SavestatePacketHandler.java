@@ -33,7 +33,7 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 										ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) player);
 									}
 									else {
-										ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), server.getConfigurationManager().getPlayerByUsername(server.getHostname()));
+										ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), server.getConfigurationManager().getPlayerList().get(0));
 									}
 								}
 							}

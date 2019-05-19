@@ -20,6 +20,11 @@ import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
+/**
+ * 
+ * @author ScribbleLP
+ *
+ */
 @Mod(modid = "tastools", name = "TAS-Tools",version=ModLoader.VERSION)
 public class ModLoader {
 	 
@@ -38,7 +43,7 @@ public class ModLoader {
 	public static String levelname;
 	public static boolean stopit;
 	
-	public static final String VERSION="${version}";
+	public static final String VERSION="${version}";		//If you want to know how I did this, check the build.gradle file under minceraft and "replace"
 	public static final String MCVERSION="${mcversion}";
 	
 

@@ -45,20 +45,16 @@ public class TastoolsCommandc extends CommandBase{
 		boolean isdedicated=server.isDedicatedServer();
 		if(sender instanceof EntityPlayer) {
 			if (args.length==0) {
-				if(!server.isDedicatedServer()) {
-					ClientProxy.config.load();
-					new Util().reloadClientconfig();
-					sender.addChatMessage(new ChatComponentTranslation("msg.misc.reload")); //Config reloaded!
-				}else {
-					new Util().reloadServerconfig();
-					ModLoader.NETWORK.sendToAll(new MiscPacket(0));
-				}
+				sender.addChatMessage(new ChatComponentTranslation("msg.misc.info", ModLoader.VERSION.toString(), ModLoader.MCVERSION.toString()));
+				
+				
 			}
+			//Checks if the TASMod is loaded. This mod has a keystroke system on it's own so TASTools will disable it's keypresses...
 			if(!CommonProxy.isTASModLoaded()) {
 				//disable/enable keystrokes command
 				if (args.length==1&&args[0].equalsIgnoreCase("keystrokes")) {
 					
-					if(!isdedicated) {
+					if(!isdedicated&&server.getCurrentPlayerCount()==1) {
 						Configuration config=ClientProxy.config;
 						if (GuiKeystrokes.guienabled) {
 							sender.addChatMessage(new ChatComponentTranslation("msg.keystrokes.disabled"));	//§cKeystrokes disabled
@@ -174,12 +170,13 @@ public class TastoolsCommandc extends CommandBase{
 							config.get("Duping","Enabled", true, "Activates the duping on startup").set(true);
 							config.save();
 						}
+					//If the TASMod is loaded
 					}else {
 						sender.addChatMessage(new ChatComponentTranslation("msg.duping.dupemoderr")); //§cDupeMod is loaded, so this command is disabled
 					}
 				}
 			}
-			// velocity singleplayer
+			//velocity singleplayer
 			if (args.length == 1 && args[0].equalsIgnoreCase("velocity")&&!isdedicated) {
 				if (VelocityEvents.velocityenabledClient) {
 					sender.addChatMessage(new ChatComponentTranslation("msg.velocityClient.disabled"));	//§cDisabled Velocity when joining the world
@@ -209,9 +206,22 @@ public class TastoolsCommandc extends CommandBase{
 							"Saves and applies Velocity when joining/leaving the server").set(true);
 					CommonProxy.serverconfig.save();
 				}
+			//reload config
+			} else if (args.length == 1&& args[0].equalsIgnoreCase("reload")) {
+				if(!server.isDedicatedServer()&&server.getCurrentPlayerCount()==1) {
+					ClientProxy.config.load();
+					new Util().reloadClientconfig();
+					notifyOperators(sender, this, "msg.misc.reload", new Object()); //Config reloaded!
+				}else {
+					new Util().reloadServerconfig();
+					ModLoader.NETWORK.sendToAll(new MiscPacket(0));
+					notifyOperators(sender, this, "msg.misc.reload", new Object()); //Config reloaded!
+				}
+			} 
 			//gui logo singleplayer
-			} else if(args.length == 1 && args[0].equalsIgnoreCase("logo")) {
-				if(!isdedicated){
+			else if(args.length == 1 && args[0].equalsIgnoreCase("logo")) {
+				if(!isdedicated&&server.getCurrentPlayerCount()==1){
+					
 					if(GuiOverlayLogo.potionenabled) {
 						sender.addChatMessage(new ChatComponentTranslation("msg.logo.disabled")); //§cDisabled Logo in HUD
 						GuiOverlayLogo.potionenabled=false;
@@ -226,7 +236,8 @@ public class TastoolsCommandc extends CommandBase{
 				}else {
 					ModLoader.NETWORK.sendTo(new MiscPacket(1), (EntityPlayerMP)sender);
 				}
-			}else if (args.length==2&&args[0].equalsIgnoreCase("logo")&&playerlist.getPlayerList().contains(playerlist.getPlayerByUsername(args[1]))) {
+			}
+			else if (args.length==2&&args[0].equalsIgnoreCase("logo")&&playerlist.getPlayerList().contains(playerlist.getPlayerByUsername(args[1]))) {
 				notifyOperators(sender, this, "msg.logo.multiplayerchange", new ChatComponentText(args[1]));
 				ModLoader.NETWORK.sendTo(new MiscPacket(1), playerlist.getPlayerByUsername(args[1]));
 			}
@@ -287,7 +298,7 @@ public class TastoolsCommandc extends CommandBase{
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		ServerConfigurationManager playerlist=server.getConfigurationManager();
 		if (args.length==1) {
-			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","logo"});
+			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","logo","reload"});
 		}
 		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
 			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft","guiPotion"});
