@@ -27,6 +27,7 @@ import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiDisconnected;
 import net.minecraft.client.gui.GuiIngameMenu;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldSettings;
@@ -161,11 +162,11 @@ public class SavestateHandlerClient {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
+				this.mc.ingameGUI.getChatGUI().clearChatMessages(true);
 				SavestateLoadEventsClient Events=new SavestateLoadEventsClient();
 				MinecraftForge.EVENT_BUS.register(Events);
-				this.mc.world.sendQuittingDisconnectingPacket();
 	            this.mc.loadWorld((WorldClient)null);
+
 			}
 		}
 	}
@@ -360,7 +361,10 @@ class SavestateLoadEventsClient extends SavestateHandlerClient{
 		if (ev.phase == Phase.START) {
 			if (!mc.isIntegratedServerRunning()) {
 				if (tickspassed >= endtimer) {
-					
+					if (!(mc.currentScreen instanceof GuiSavestateLoadingScreen)) {
+						return;
+					}
+					MinecraftForge.EVENT_BUS.unregister(this);
 					deleteDirContents(currentworldfolder, new String[] { " " });
 					try {
 						copyDirectory(targetsavefolder, currentworldfolder, new String[] { " " });
@@ -372,17 +376,9 @@ class SavestateLoadEventsClient extends SavestateHandlerClient{
 						return;
 					}
 					FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
-					MinecraftForge.EVENT_BUS.unregister(this);
 				}
 				tickspassed++;
 			}
-		}
-	}
-	@SubscribeEvent
-	public void onGuiOpen(GuiOpenEvent ev) {
-		if(ev.getGui() instanceof GuiDisconnected) {
-			ev.setCanceled(true);
-			mc.displayGuiScreen(new GuiSavestateLoadingScreen());
 		}
 	}
 }
