@@ -166,7 +166,7 @@ public class SavestateHandlerClient {
 				SavestateLoadEventsClient Events=new SavestateLoadEventsClient();
 				MinecraftForge.EVENT_BUS.register(Events);
 	            this.mc.loadWorld((WorldClient)null);
-
+	            this.mc.displayGuiScreen(new GuiSavestateLoadingScreen());
 			}
 		}
 	}
