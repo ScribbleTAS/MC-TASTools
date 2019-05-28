@@ -293,7 +293,7 @@ public class TastoolsCommandc extends CommandBase{
 			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","logo","reload"});
 		}
 		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
-			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft","guiPotion"});
+			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft"});
 			if(server.getPlayerList().getPlayers().size()>1) {
 				tabs.addAll(getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames()));
 			}
