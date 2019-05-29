@@ -162,6 +162,7 @@ public class SavestateHandlerClient {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				FMLCommonHandler.instance().firePlayerLoggedOut(FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList().get(0));
 				Minecraft.getMinecraft().loadWorld((WorldClient)null);
 				mc.displayGuiScreen(new GuiSavestateLoadingScreen());
 				SavestateLoadEventsClient Events=new SavestateLoadEventsClient();
