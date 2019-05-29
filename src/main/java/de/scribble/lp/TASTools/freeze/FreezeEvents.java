@@ -112,7 +112,7 @@ public class FreezeEvents {
 		EntityPlayerMP playerEV = (EntityPlayerMP) ev.player;
 		
 		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
-		
+		//Multiplayer
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			if (FreezeHandler.isServerFrozen()) {
 				

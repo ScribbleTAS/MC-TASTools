@@ -165,6 +165,7 @@ public class SavestateHandlerClient {
 				this.mc.ingameGUI.getChatGUI().clearChatMessages(true);
 				SavestateLoadEventsClient Events=new SavestateLoadEventsClient();
 				MinecraftForge.EVENT_BUS.register(Events);
+				FMLCommonHandler.instance().firePlayerLoggedOut(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers().get(0));
 	            this.mc.loadWorld((WorldClient)null);
 	            this.mc.displayGuiScreen(new GuiSavestateLoadingScreen());
 			}
