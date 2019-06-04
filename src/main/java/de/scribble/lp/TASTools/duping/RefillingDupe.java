@@ -68,8 +68,8 @@ public class RefillingDupe {
 								foundchest= (TileEntityChest) world.getTileEntity(new BlockPos(Integer.parseInt(coords[1]),Integer.parseInt(coords[2]),Integer.parseInt(coords[3])));
 								
 								/*Check if the player is too far away from the chest and prevents it from being refilled... A failsafe and cheat prevention*/
-								if(playerPos.distanceSq((double)foundchest.getPos().getX(), (double)foundchest.getPos().getY(), (double)foundchest.getPos().getZ())>50.0){
-										CommonProxy.logger.error("Chest at "+Integer.parseInt(coords[1])+" "+Integer.parseInt(coords[2])+" "+Integer.parseInt(coords[3])+" is too far away! Distance: "+playerPos.distanceSq((double)foundchest.getPos().getX(), (double)foundchest.getPos().getY(), (double)foundchest.getPos().getZ()));
+								if(playerPos.distanceSq(foundchest.getPos().getX(), foundchest.getPos().getY(), foundchest.getPos().getZ())>50.0){
+										CommonProxy.logger.error("Chest at "+Integer.parseInt(coords[1])+" "+Integer.parseInt(coords[2])+" "+Integer.parseInt(coords[3])+" is too far away! Distance: "+playerPos.distanceSq(foundchest.getPos().getX(), foundchest.getPos().getY(), foundchest.getPos().getZ()));
 										continue;
 								}
 								while(true){
@@ -118,8 +118,8 @@ public class RefillingDupe {
 					List<EntityItem> entitylist= world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(dupePos, dupePos).expand(10.0, 10.0, 10.0));
 					
 					
-					if(playerPos.distanceSq((double)dupePos.getX(),(double)dupePos.getY(),(double)dupePos.getZ())>=50.0){						//abort if the player is too far away from the duping position, cheat prevention and failsafe when using /dupe
-						CommonProxy.logger.error("Player moved too far from initial duping position. Aborting EntityDupe! DupePosition: ("+dupePos.getX()+";"+dupePos.getY()+";"+dupePos.getZ()+") Distance: "+playerPos.distanceSq((double)dupePos.getX(),(double)dupePos.getY(),(double)dupePos.getZ()));
+					if(playerPos.distanceSq(dupePos.getX(),dupePos.getY(),dupePos.getZ())>=50.0){						//abort if the player is too far away from the duping position, cheat prevention and failsafe when using /dupe
+						CommonProxy.logger.error("Player moved too far from initial duping position. Aborting EntityDupe! DupePosition: ("+dupePos.getX()+";"+dupePos.getY()+";"+dupePos.getZ()+") Distance: "+playerPos.distanceSq(dupePos.getX(),dupePos.getY(),dupePos.getZ()));
 						continue;
 					}
 					if(!entitylist.isEmpty()){	//Kill all items in the surrounding area

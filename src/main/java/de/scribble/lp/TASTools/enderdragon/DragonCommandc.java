@@ -1,17 +1,22 @@
 package de.scribble.lp.TASTools.enderdragon;
 
 import java.util.List;
+import java.util.Random;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 
 import de.scribble.lp.TASTools.CommonProxy;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 public class DragonCommandc extends CommandBase{
+	Random rand=new Random();
 	@Override
 	public String getCommandName() {
 		return "dragon";
@@ -37,7 +42,8 @@ public class DragonCommandc extends CommandBase{
 				return;
 			}else
 				for (int i = 0; i < dragons.size(); i++) {
-					dragons.get(i).forceNewTarget=true;
+					List<EntityPlayer> list = Lists.newArrayList(sender.getEntityWorld().playerEntities);
+					dragons.get(i).target=(Entity)list.get(this.rand.nextInt(list.size()));
 				}
 			
 		}

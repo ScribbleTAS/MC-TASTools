@@ -25,7 +25,8 @@ public class GuiSavestateIngameMenu extends GuiScreen{
      * Adds the buttons (and other controls) to the screen in question. Called when the GUI is displayed and when the
      * window resizes, the buttonList is cleared beforehand.
      */
-    public void initGui()
+    @Override
+	public void initGui()
     {
         this.field_146445_a = 0;
         this.buttonList.clear();
@@ -35,7 +36,7 @@ public class GuiSavestateIngameMenu extends GuiScreen{
 
         if (!this.mc.isIntegratedServerRunning())
         {
-            ((GuiButton)this.buttonList.get(0)).displayString = I18n.format("menu.disconnect", new Object[0]);
+            this.buttonList.get(0).displayString = I18n.format("menu.disconnect", new Object[0]);
         }
 
         this.buttonList.add(new GuiButton(4, this.width / 2 - 100, this.height / 4 + 24 + i, I18n.format("menu.returnToGame", new Object[0])));
@@ -51,7 +52,8 @@ public class GuiSavestateIngameMenu extends GuiScreen{
     /**
      * Called by the controls from the buttonList when activated. (Mouse pressed for buttons)
      */
-    protected void actionPerformed(GuiButton button) throws IOException
+    @Override
+	protected void actionPerformed(GuiButton button) throws IOException
     {
         switch (button.id)
         {
@@ -110,7 +112,8 @@ public class GuiSavestateIngameMenu extends GuiScreen{
     /**
      * Called from the main game loop to update the screen.
      */
-    public void updateScreen()
+    @Override
+	public void updateScreen()
     {
         super.updateScreen();
         ++this.field_146444_f;
@@ -119,7 +122,8 @@ public class GuiSavestateIngameMenu extends GuiScreen{
     /**
      * Draws the screen and all the components in it. Args : mouseX, mouseY, renderPartialTicks
      */
-    public void drawScreen(int mouseX, int mouseY, float partialTicks)
+    @Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks)
     {
         this.drawDefaultBackground();
         this.drawCenteredString(this.fontRendererObj, I18n.format("menu.game", new Object[0]), this.width / 2, 40, 16777215);

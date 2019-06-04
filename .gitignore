@@ -24,4 +24,4 @@ run
 gradlew
 gradle.properties
 *.txt
-
+*.hprof

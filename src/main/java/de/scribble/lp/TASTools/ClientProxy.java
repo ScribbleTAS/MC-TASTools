@@ -5,6 +5,7 @@ import java.io.File;
 import org.lwjgl.input.Keyboard;
 
 import de.scribble.lp.TASTools.duping.DupeEvents;
+import de.scribble.lp.TASTools.enderdragon.DragonEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
@@ -24,15 +25,18 @@ public class ClientProxy extends CommonProxy{
 	public static KeyBinding FreezeKey = new KeyBinding("Freeze/Unfreeze Players", Keyboard.KEY_Y, "TASTools");
 	public static KeyBinding SavestateSaveKey = new KeyBinding("Create a savestate", Keyboard.KEY_J, "TASTools");
 	public static KeyBinding SavestateLoadKey = new KeyBinding("Load latest savestate", Keyboard.KEY_K, "TASTools");
+	public static KeyBinding DragonKey = new KeyBinding("Make the dragon attack you", Keyboard.KEY_G, "TASTools");
 	
 	public static Configuration config;
 	
+	@Override
 	public void preInit(FMLPreInitializationEvent ev) {
 		
 		ClientRegistry.registerKeyBinding(DupeKey);
 		ClientRegistry.registerKeyBinding(FreezeKey);
 		ClientRegistry.registerKeyBinding(SavestateSaveKey);
 		ClientRegistry.registerKeyBinding(SavestateLoadKey);
+		ClientRegistry.registerKeyBinding(DragonKey);
 		config = new Configuration(ev.getSuggestedConfigurationFile());
 		config.load();
 		GuiKeystrokes.guienabled=config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").getBoolean();
@@ -60,6 +64,7 @@ public class ClientProxy extends CommonProxy{
 		super.preInit(ev);
 	}
 	
+	@Override
 	public void init(FMLInitializationEvent ev) {
 		super.init(ev);
 		//disable dupemod in this mod
@@ -75,8 +80,10 @@ public class ClientProxy extends CommonProxy{
 		}
 		MinecraftForge.EVENT_BUS.register(new GuiOverlayLogo());
 		MinecraftForge.EVENT_BUS.register(new SavestateEvents());
+		MinecraftForge.EVENT_BUS.register(new DragonEvents());
 	}
 	
+	@Override
 	public void postInit(FMLPostInitializationEvent ev) {
 		super.postInit(ev);
 	}

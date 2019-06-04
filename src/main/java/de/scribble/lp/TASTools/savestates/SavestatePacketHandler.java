@@ -2,7 +2,6 @@ package de.scribble.lp.TASTools.savestates;
 
 import de.scribble.lp.TASTools.ModLoader;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;

@@ -22,11 +22,7 @@ import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.velocity.SavingVelocity;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -40,7 +36,7 @@ public class SavestateHandlerServer {
 		if(FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			if(!isSaving) {
 				isSaving=true;
-				this.currentworldfolder = new File(FMLCommonHandler.instance().getSavesDirectory().getPath()
+				SavestateHandlerServer.currentworldfolder = new File(FMLCommonHandler.instance().getSavesDirectory().getPath()
 						+ File.separator + ModLoader.getLevelname());
 				targetsavefolder = null;
 				if (!FreezeHandler.isServerFrozen()) {
