@@ -75,7 +75,10 @@ public class FreezeHandler {
 								entity.get(o).getPosZ());
 						playerMP.get(i).rotationPitch = entity.get(o).getPitch();
 						playerMP.get(i).rotationYaw = entity.get(o).getYaw();
-						playerMP.get(i).capabilities.disableDamage=false;
+						
+						if(!playerMP.get(i).capabilities.isCreativeMode||!playerMP.get(i).isSpectator()) {
+							playerMP.get(i).capabilities.disableDamage=false;
+						}
 						playerMP.get(i).motionX = entity.get(o).getMotionX();
 						playerMP.get(i).motionY = entity.get(o).getMotionY();
 						playerMP.get(i).motionZ = entity.get(o).getMotionZ();
@@ -121,8 +124,8 @@ class ApplyFreezeServer extends FreezeHandler{
 						playerMP.get(i).setPositionAndUpdate(entity.get(i).getPosX(), entity.get(i).getPosY(),
 								entity.get(i).getPosZ());
 
-						playerMP.get(i).rotationPitch = FreezeHandler.entity.get(i).getPitch();
-						playerMP.get(i).prevRotationYaw = FreezeHandler.entity.get(i).getYaw();
+						playerMP.get(i).rotationPitch = entity.get(i).getPitch();
+						playerMP.get(i).rotationYaw = entity.get(i).getYaw();
 				}
 			}
 		}

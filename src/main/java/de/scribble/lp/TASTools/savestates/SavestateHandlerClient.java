@@ -42,7 +42,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
  */
 public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
-	public boolean isSaving=false;
+	protected static boolean isSaving=false;
+	protected static boolean isLoading=false;
 	protected static int endtimer=20;
 	
 	protected static File currentworldfolder;
@@ -59,78 +60,87 @@ public class SavestateHandlerClient {
 			worldname=Minecraft.getMinecraft().getIntegratedServer().getFolderName();
 			List<EntityPlayerMP> players=FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
 			//Check for worlds in the savestate folder
-			int i=1;
-			while (i<=256) {
-				if (i==256) {
-					CommonProxy.logger.error("Couldn't make a savestate, there are too many savestates in the target directory");
-					return;
+			if (!isSaving&&!isLoading) {
+				isSaving = true;
+				int i = 1;
+				while (i <= 256) {
+					if (i == 256) {
+						CommonProxy.logger.error(
+								"Couldn't make a savestate, there are too many savestates in the target directory");
+						return;
+					}
+					if (i > 256) {
+						CommonProxy.logger.error(
+								"Aborting saving due to savestate count being greater than 256 for safety reasons");
+						return;
+					}
+					targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir,
+							"saves" + File.separator + "savestates" + File.separator
+									+ Minecraft.getMinecraft().getIntegratedServer().getFolderName() + "-Savestate"
+									+ Integer.toString(i));
+					if (!targetsavefolder.exists()) {
+						break;
+					}
+					i++;
 				}
-				if (i>256) {
-					CommonProxy.logger.error("Aborting saving due to savestate count being greater than 256 for safety reasons");
-					return;
-				}
-				targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+Minecraft.getMinecraft().getIntegratedServer().getFolderName()+"-Savestate"+Integer.toString(i));
-				if (!targetsavefolder.exists()) {
-					break;
-				}
-				i++;
-			}
-			//Save the world
-			if(!isSaving) {
-				isSaving=true;
+				// Save the world
 				ModLoader.NETWORK.sendToAll(new SavestatePacket());
 				File file = new File(Minecraft.getMinecraft().mcDataDir,
 						"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
 								+ File.separator + "latest_velocity.txt");
-				//For LAN-Servers
-				if(players.size()>1) {
+				// For LAN-Servers
+				if (players.size() > 1) {
 					Minecraft.getMinecraft().getIntegratedServer().getConfigurationManager().saveAllPlayerData();
 					if (!FreezeHandler.isServerFrozen()) {
 						FreezeHandler.startFreezeServer();
 						ModLoader.NETWORK.sendToAll(new FreezePacket(true));
 					}
-					
+
 				}
-				//Save the velocity
-				if(VelocityEvents.velocityenabledClient) {
+				// Save the velocity
+				if (VelocityEvents.velocityenabledClient) {
 					new SavingVelocity().saveVelocity(mc.thePlayer, file);
-					//Save Velocity for other LAN-Players
-					if(players.size()>1) {
+					// Save Velocity for other LAN-Players
+					if (players.size() > 1) {
 						if (FreezeHandler.isServerFrozen()) {
 							for (int i1 = 0; i1 < players.size(); i1++) {
 								for (int j = 0; j < FreezeHandler.entity.size(); j++) {
 									if (FreezeHandler.entity.get(j).getPlayername().equals(players.get(i1).getName())) {
-										new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(j).getMotionX(),
+										new SavingVelocity().saveVelocityCustom(
+												FreezeHandler.entity.get(j).getMotionX(),
 												FreezeHandler.entity.get(i1).getMotionY(),
-												FreezeHandler.entity.get(i1).getMotionZ(),FreezeHandler.entity.get(i1).getFalldistance(), file);
+												FreezeHandler.entity.get(i1).getMotionZ(),
+												FreezeHandler.entity.get(i1).getFalldistance(), file);
 									}
 								}
 							}
 						}
 					}
 				}
-				//Save the info file
+				// Save the info file
 				try {
-					int[] incr=getInfoValues(getInfoFile(worldname));
-					if(incr[0]==0) {
+					int[] incr = getInfoValues(getInfoFile(worldname));
+					if (incr[0] == 0) {
 						saveInfo(getInfoFile(worldname), null);
-					}else {
+					} else {
 						incr[0]++;
 						saveInfo(getInfoFile(worldname), incr);
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				//
-				SavestateSaveEventsClient lol=new SavestateSaveEventsClient();
+				SavestateSaveEventsClient lol = new SavestateSaveEventsClient();
 				MinecraftForge.EVENT_BUS.register(lol);
+			}else {
+				CommonProxy.logger.error("Saving savestate is blocked by another action.");
 			}
 		}
 	}
 	
 	public void loadLastSavestate() {
 		if(!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
-			if(!isSaving) {
+			if(!isSaving&&!isLoading) {
+				isLoading=true;
 				currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + mc.getIntegratedServer().getFolderName());
 				foldername=mc.getIntegratedServer().getFolderName();
 				worldname=Minecraft.getMinecraft().getIntegratedServer().getFolderName();
@@ -164,7 +174,9 @@ public class SavestateHandlerClient {
 				mc.displayGuiScreen(new GuiSavestateLoadingScreen());
 				SavestateLoadEventsClient Events=new SavestateLoadEventsClient();
 				MinecraftForge.EVENT_BUS.register(Events);
-
+				
+			}else {
+				CommonProxy.logger.error("Loading savestate is blocked by another action.");
 			}
 		}
 	}
@@ -341,12 +353,13 @@ class SavestateSaveEventsClient extends SavestateHandlerClient{
 					CommonProxy.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate save)");
 					e.printStackTrace();
 					MinecraftForge.EVENT_BUS.unregister(this);
+					isSaving=false;
 					return;
 				}
 				
 				ModLoader.NETWORK.sendToAll(new SavestatePacket(true));
-				isSaving=false;
 				MinecraftForge.EVENT_BUS.unregister(this);
+				isSaving=false;
 				return;
 			}
 			tickspassed++;
@@ -356,11 +369,12 @@ class SavestateSaveEventsClient extends SavestateHandlerClient{
 class SavestateLoadEventsClient extends SavestateHandlerClient{
 	private int tickspassed=0;
 	@SubscribeEvent
-	public void onTick(TickEvent ev) {
+	public void onTick(TickEvent.ClientTickEvent ev) {
 		if (ev.phase == Phase.START) {
 			if (!mc.isIntegratedServerRunning()) {
 				if (tickspassed >= endtimer) {
 					if (!(mc.currentScreen instanceof GuiSavestateLoadingScreen)) {
+						isLoading=false;
 						return;
 					}
 					MinecraftForge.EVENT_BUS.unregister(this);
@@ -372,9 +386,11 @@ class SavestateLoadEventsClient extends SavestateHandlerClient{
 								+ targetsavefolder.getPath() + " for some reason (Savestate load)");
 						e.printStackTrace();
 						mc.displayGuiScreen(new GuiMainMenu());
+						isLoading=false;
 						return;
 					}
 					FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
+					isLoading=false;
 				}
 				tickspassed++;
 			}
