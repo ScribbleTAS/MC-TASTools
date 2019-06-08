@@ -25,13 +25,10 @@ import de.scribble.lp.TASTools.savestates.gui.GuiSavestateSavingScreen;
 import de.scribble.lp.TASTools.velocity.SavingVelocity;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiDisconnected;
 import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldSettings;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -44,7 +41,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
  */
 public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
-	public boolean isSaving=false;
+	protected static boolean isSaving=false;
+	protected static boolean isLoading=false;
 	protected static int endtimer=20;
 	
 	protected static File currentworldfolder;
@@ -60,50 +58,57 @@ public class SavestateHandlerClient {
 			targetsavefolder=null;
 			worldname=Minecraft.getMinecraft().getIntegratedServer().getFolderName();
 			List<EntityPlayerMP> players=FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
-			//Check for worlds in the savestate folder
-			int i=1;
-			while (i<=256) {
-				if (i==256) {
-					CommonProxy.logger.error("Couldn't make a savestate, there are too many savestates in the target directory");
-					return;
+			if (!isSaving && !isLoading) {
+				isSaving = true;
+				// Check for worlds in the savestate folder
+				int i = 1;
+				while (i <= 256) {
+					if (i == 256) {
+						CommonProxy.logger.error(
+								"Couldn't make a savestate, there are too many savestates in the target directory");
+						return;
+					}
+					if (i > 256) {
+						CommonProxy.logger.error(
+								"Aborting saving due to savestate count being greater than 256 for safety reasons");
+						return;
+					}
+					targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir,
+							"saves" + File.separator + "savestates" + File.separator
+									+ Minecraft.getMinecraft().getIntegratedServer().getFolderName() + "-Savestate"
+									+ Integer.toString(i));
+					if (!targetsavefolder.exists()) {
+						break;
+					}
+					i++;
 				}
-				if (i>256) {
-					CommonProxy.logger.error("Aborting saving due to savestate count being greater than 256 for safety reasons");
-					return;
-				}
-				targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+Minecraft.getMinecraft().getIntegratedServer().getFolderName()+"-Savestate"+Integer.toString(i));
-				if (!targetsavefolder.exists()) {
-					break;
-				}
-				i++;
-			}
-			//Save the world
-			if(!isSaving) {
-				isSaving=true;
+				// Save the world
+				isSaving = true;
 				ModLoader.NETWORK.sendToAll(new SavestatePacket());
 				File file = new File(Minecraft.getMinecraft().mcDataDir,
 						"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
 								+ File.separator + "latest_velocity.txt");
-				//For LAN-Servers
-				if(players.size()>1) {
+				// For LAN-Servers
+				if (players.size() > 1) {
 					Minecraft.getMinecraft().getIntegratedServer().saveAllWorlds(false);
 					Minecraft.getMinecraft().getIntegratedServer().getPlayerList().saveAllPlayerData();
 					if (!FreezeHandler.isServerFrozen()) {
 						FreezeHandler.startFreezeServer();
 						ModLoader.NETWORK.sendToAll(new FreezePacket(true));
 					}
-					
+
 				}
-				//Save the velocity
-				if(VelocityEvents.velocityenabledClient) {
+				// Save the velocity
+				if (VelocityEvents.velocityenabledClient) {
 					new SavingVelocity().saveVelocity(mc.player, file);
-					//Save Velocity for other LAN-Players
-					if(players.size()>1) {
+					// Save Velocity for other LAN-Players
+					if (players.size() > 1) {
 						if (FreezeHandler.isServerFrozen()) {
 							for (int i1 = 0; i1 < players.size(); i1++) {
 								for (int j = 0; j < FreezeHandler.entity.size(); j++) {
 									if (FreezeHandler.entity.get(j).getPlayername().equals(players.get(i1).getName())) {
-										new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(j).getMotionX(),
+										new SavingVelocity().saveVelocityCustom(
+												FreezeHandler.entity.get(j).getMotionX(),
 												FreezeHandler.entity.get(i1).getMotionY(),
 												FreezeHandler.entity.get(i1).getMotionZ(), file);
 									}
@@ -112,12 +117,12 @@ public class SavestateHandlerClient {
 						}
 					}
 				}
-				//Save the info file
+				// Save the info file
 				try {
-					int[] incr=getInfoValues(getInfoFile(worldname));
-					if(incr[0]==0) {
+					int[] incr = getInfoValues(getInfoFile(worldname));
+					if (incr[0] == 0) {
 						saveInfo(getInfoFile(worldname), null);
-					}else {
+					} else {
 						incr[0]++;
 						saveInfo(getInfoFile(worldname), incr);
 					}
@@ -125,15 +130,18 @@ public class SavestateHandlerClient {
 					e.printStackTrace();
 				}
 				//
-				SavestateSaveEventsClient lol=new SavestateSaveEventsClient();
+				SavestateSaveEventsClient lol = new SavestateSaveEventsClient();
 				MinecraftForge.EVENT_BUS.register(lol);
+			}else {
+				CommonProxy.logger.error("Saving savestate is blocked by another action.");
 			}
 		}
 	}
 	
 	public void loadLastSavestate() {
 		if(!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
-			if(!isSaving) {
+			if(!isSaving&&!isLoading) {
+				isLoading=true;
 				currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + mc.getIntegratedServer().getFolderName());
 				foldername=mc.getIntegratedServer().getFolderName();
 				worldname=Minecraft.getMinecraft().getIntegratedServer().getFolderName();
@@ -168,6 +176,8 @@ public class SavestateHandlerClient {
 				FMLCommonHandler.instance().firePlayerLoggedOut(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers().get(0));
 	            this.mc.loadWorld((WorldClient)null);
 	            this.mc.displayGuiScreen(new GuiSavestateLoadingScreen());
+			}else {
+				CommonProxy.logger.error("Loading savestate is blocked by another action.");
 			}
 		}
 	}
@@ -344,11 +354,13 @@ class SavestateSaveEventsClient extends SavestateHandlerClient{
 				} catch (IOException e) {
 					CommonProxy.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate save)");
 					e.printStackTrace();
+					isSaving=false;
+					return;
 				}
 				
 				ModLoader.NETWORK.sendToAll(new SavestatePacket(true));
-				isSaving=false;
 				MinecraftForge.EVENT_BUS.unregister(this);
+				isSaving=false;
 				return;
 			}
 			tickspassed++;
@@ -363,6 +375,7 @@ class SavestateLoadEventsClient extends SavestateHandlerClient{
 			if (!mc.isIntegratedServerRunning()) {
 				if (tickspassed >= endtimer) {
 					if (!(mc.currentScreen instanceof GuiSavestateLoadingScreen)) {
+						isLoading=false;
 						return;
 					}
 					MinecraftForge.EVENT_BUS.unregister(this);
@@ -374,9 +387,11 @@ class SavestateLoadEventsClient extends SavestateHandlerClient{
 								+ targetsavefolder.getPath() + " for some reason (Savestate load)");
 						e.printStackTrace();
 						MinecraftForge.EVENT_BUS.unregister(this);
+						isLoading=false;
 						return;
 					}
 					FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
+					isLoading=false;
 				}
 				tickspassed++;
 			}

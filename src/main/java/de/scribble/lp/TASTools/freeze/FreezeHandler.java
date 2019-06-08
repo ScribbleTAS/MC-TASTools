@@ -124,7 +124,7 @@ class ApplyFreezeServer extends FreezeHandler{
 								entity.get(i).getPosZ());
 
 						playerMP.get(i).rotationPitch = FreezeHandler.entity.get(i).getPitch();
-						playerMP.get(i).prevRotationYaw = FreezeHandler.entity.get(i).getYaw();
+						playerMP.get(i).rotationYaw = FreezeHandler.entity.get(i).getYaw();
 				}
 			}
 		}
