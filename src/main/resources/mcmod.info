@@ -3,7 +3,7 @@
   "modid": "tastools",
   "name": "TAS-Tools",
   "description": "Tools for MC-TASing",
-  "version": "${version}",
+  "version": "0.5",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",

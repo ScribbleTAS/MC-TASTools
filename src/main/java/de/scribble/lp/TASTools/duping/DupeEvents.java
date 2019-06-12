@@ -5,7 +5,10 @@ import java.io.File;
 import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
+import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiIngameMenu;
+import net.minecraftforge.fml.common.DuplicateModsFoundException;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -17,8 +20,8 @@ public class DupeEvents {
 	
 	@SubscribeEvent
 	public void onCloseServer(PlayerEvent.PlayerLoggedOutEvent ev){
-		if(dupingenabled&&!ev.player.worldObj.isRemote) {
-			CommonProxy.logger.info("Start saving...");
+		if((mc.currentScreen instanceof GuiIngameMenu||mc.currentScreen instanceof GuiSavestateIngameMenu)&&dupingenabled){
+			CommonProxy.logger.info("Start saving items/chests...");
 			new RecordingDupe().saveFile(ev.player);
 		}
 	}

@@ -123,7 +123,9 @@ public class FreezeEvents {
 						FreezeHandler.entity.remove(o);
 					}
 				}
-				playerEV.capabilities.disableDamage=false;
+				if(!playerEV.capabilities.isCreativeMode||!playerEV.isSpectator()) {
+					playerEV.capabilities.disableDamage=false;
+				}
 				playerEV.capabilities.isFlying=false;
 				ModLoader.NETWORK.sendTo(new FreezePacket(false), playerEV);
 			}
@@ -136,7 +138,9 @@ public class FreezeEvents {
 							FreezeHandler.entity.remove(o);
 						}
 					}
-					playerEV.capabilities.disableDamage=false;
+					if(!playerEV.capabilities.isCreativeMode||!playerEV.isSpectator()) {
+						playerEV.capabilities.disableDamage=false;
+					}
 					playerEV.capabilities.isFlying=false;
 					ModLoader.NETWORK.sendTo(new FreezePacket(false), playerEV);
 				}

@@ -91,6 +91,9 @@ public class FreezeHandler {
 		}
 		MinecraftForge.EVENT_BUS.unregister(FreezerSE);
 	}
+	/**
+	 * Used if there is no player on the server, and if you want to stop freezing
+	 */
 	public static void stopFreezeServerNoUpdate() {
 		serverfrozen=false;
 		MinecraftForge.EVENT_BUS.unregister(FreezerSE);
