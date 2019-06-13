@@ -68,7 +68,7 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 						}
 					}
 					else if(message.getMode()==1) {
-						new SavestateHandlerClient().loadLastSavestate();
+						if (Minecraft.getMinecraft().theWorld.isRemote)new SavestateHandlerClient().loadLastSavestate();
 					}
 				}
 				

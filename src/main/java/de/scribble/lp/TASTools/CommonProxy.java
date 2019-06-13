@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 import de.scribble.lp.TASTools.duping.DupePacket;
 import de.scribble.lp.TASTools.duping.DupePacketHandler;
+import de.scribble.lp.TASTools.enderdragon.DragonEvents;
 import de.scribble.lp.TASTools.freeze.FreezeEvents;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
@@ -69,7 +70,7 @@ public class CommonProxy {
 	
 	public void init(FMLInitializationEvent ev) {
 		MinecraftForge.EVENT_BUS.register(new FreezeEvents());
-		
+		MinecraftForge.EVENT_BUS.register(new DragonEvents());
 	}
 	
 	public void postInit(FMLPostInitializationEvent ev) {

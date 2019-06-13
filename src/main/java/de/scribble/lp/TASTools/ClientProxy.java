@@ -80,7 +80,7 @@ public class ClientProxy extends CommonProxy{
 		}
 		MinecraftForge.EVENT_BUS.register(new GuiOverlayLogo());
 		MinecraftForge.EVENT_BUS.register(new SavestateEvents());
-		MinecraftForge.EVENT_BUS.register(new DragonEvents());
+
 	}
 	
 	@Override

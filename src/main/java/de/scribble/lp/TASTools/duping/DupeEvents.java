@@ -8,8 +8,6 @@ import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraftforge.fml.common.DuplicateModsFoundException;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -39,10 +37,8 @@ public class DupeEvents {
 	
 	@SubscribeEvent
 	public void pressKeybinding(InputEvent.KeyInputEvent ev){
-		if (dupingenabled&&!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()){
-			if(ClientProxy.DupeKey.isPressed()){
-				ModLoader.NETWORK.sendToServer(new DupePacket());
-			}
+		if(ClientProxy.DupeKey.isPressed()&&dupingenabled){
+			ModLoader.NETWORK.sendToServer(new DupePacket());
 		}
 	}
 }

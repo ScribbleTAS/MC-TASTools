@@ -76,7 +76,7 @@ public class FreezeHandler {
 						playerMP.get(i).rotationPitch = entity.get(o).getPitch();
 						playerMP.get(i).rotationYaw = entity.get(o).getYaw();
 						
-						if(!playerMP.get(i).capabilities.isCreativeMode||!playerMP.get(i).isSpectator()) {
+						if(!playerMP.get(i).capabilities.isCreativeMode&&!playerMP.get(i).isSpectator()) {
 							playerMP.get(i).capabilities.disableDamage=false;
 						}
 						playerMP.get(i).motionX = entity.get(o).getMotionX();

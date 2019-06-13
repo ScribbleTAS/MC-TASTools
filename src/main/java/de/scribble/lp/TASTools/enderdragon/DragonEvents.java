@@ -7,9 +7,12 @@ import net.minecraft.entity.boss.EntityDragon;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class DragonEvents {
 	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
 	public void onKeyPress(InputEvent.KeyInputEvent ev) {
 		if(ClientProxy.DragonKey.isPressed()) {
 			Minecraft.getMinecraft().thePlayer.sendChatMessage("/dragon");
