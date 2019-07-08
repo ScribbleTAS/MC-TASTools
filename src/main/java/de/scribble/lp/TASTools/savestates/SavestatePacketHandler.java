@@ -13,44 +13,53 @@ import net.minecraftforge.fml.relauncher.Side;
 public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, IMessage>{
 
 	@Override
-	public IMessage onMessage(SavestatePacket message, MessageContext ctx) {
+	public IMessage onMessage(final SavestatePacket message, MessageContext ctx) {
 		if (ctx.side== Side.SERVER) {
-			EntityPlayerMP player=ctx.getServerHandler().player;
-			MinecraftServer server=FMLCommonHandler.instance().getMinecraftServerInstance();
+			final EntityPlayerMP player=ctx.getServerHandler().playerEntity;
+			final MinecraftServer server=FMLCommonHandler.instance().getMinecraftServerInstance();
 			if (!server.isDedicatedServer()) {
-				ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
-					if (!player.canUseCommand(2, "savestate")) {
-						return;
-					}
-					if(message.isLoadSave()) {
-						new SavestateHandlerClient().saveState();
-					}
-					else {
-						if(server.getCurrentPlayerCount()==1) {
-							ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) player);
+				ctx.getServerHandler().playerEntity.getServerWorld().addScheduledTask(new Runnable() {
+					@Override
+					public void run() {
+						if (!player.canUseCommand(2, "savestate")) {
+							return;
+						}
+						if(message.isLoadSave()) {
+							new SavestateHandlerClient().saveState();
 						}
 						else {
-							ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), server.getPlayerList().getPlayers().get(0));
+							if(server.getCurrentPlayerCount()==1) {
+								ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) player);
+							}
+							else {
+								ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), server.getPlayerList().getPlayers().get(0));
+							}
 						}
 					}
 				});
 			}else {
-				ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
-					if(message.isLoadSave())new SavestateHandlerServer().saveState();
-					else new SavestateHandlerServer().setFlagandShutdown();
+				ctx.getServerHandler().playerEntity.getServerWorld().addScheduledTask(new Runnable() {
+					@Override
+					public void run() {
+						if(message.isLoadSave())new SavestateHandlerServer().saveState();
+						else new SavestateHandlerServer().setFlagandShutdown();
+					}
 				});
 			}
 		} else if (ctx.side == Side.CLIENT) {
-			Minecraft.getMinecraft().addScheduledTask(()->{
-				if (message.getMode()==0) {
-					if(!message.isLoadSave()) {
-						new SavestateHandlerClient().displayLoadingScreen();
-					}else {
-						new SavestateHandlerClient().displayIngameMenu();
-					}
-				}else if (message.getMode()==1) {
-					if (!message.isLoadSave()) {
-						new SavestateHandlerClient().loadLastSavestate();
+			Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+				@Override
+				public void run() {
+					if (message.getMode()==0) {
+						if(!message.isLoadSave()) {
+							new SavestateHandlerClient().displayLoadingScreen();
+						}else {
+							new SavestateHandlerClient().displayIngameMenu();
+						}
+					}else if (message.getMode()==1) {
+						if (!message.isLoadSave()) {
+							new SavestateHandlerClient().loadLastSavestate();
+						}
 					}
 				}
 			});

@@ -115,7 +115,7 @@ public class RefillingDupe {
 					
 					String[] position=s.split(":");
 					BlockPos dupePos= new BlockPos(Integer.parseInt(position[1]),Integer.parseInt(position[2]),Integer.parseInt(position[3]));	//get the position where the s+q was done
-					List<EntityItem> entitylist= world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(dupePos).grow(10.0));			//get all entityitems around the player
+					List<EntityItem> entitylist= world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(dupePos).expandXyz(10.0));			//get all entityitems around the player
 					
 					
 					if(playerPos.distanceSq((double)dupePos.getX(),(double)dupePos.getY(),(double)dupePos.getZ())>=50.0){						//abort if the player is too far away from the duping position, cheat prevention and failsafe when using /dupe

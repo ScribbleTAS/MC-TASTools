@@ -77,14 +77,14 @@ public class RecordingDupe {
 		
 		output.append("Items:"+playerPos.getX()+":"+playerPos.getY()+":"+playerPos.getZ()+"\n");
 		
-		List<EntityItem> entitylist= world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(playerPos).grow(10.0));
+		List<EntityItem> entitylist= world.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(playerPos).expandXyz(10.0));
 		if(!entitylist.isEmpty()){
 			itemcounter=entitylist.size();
 			for(int i=0;i<entitylist.size();i++){
-				if(entitylist.get(i).getItem().hasDisplayName()){
-					output.append("\tItem;"+i+";"+entitylist.get(i).posX+";"+entitylist.get(i).posY+";"+entitylist.get(i).posZ+";"+Item.getIdFromItem(entitylist.get(i).getItem().getItem())+";("+entitylist.get(i).getItem().getUnlocalizedName()+");"+entitylist.get(i).getItem().getCount()+";"+entitylist.get(i).getItem().getItemDamage()+";"+entitylist.get(i).getItem().getDisplayName()+";"+entitylist.get(i).getItem().getEnchantmentTagList()+";"+entitylist.get(i).getAge()+";"+entitylist.get(i).getThrower()+"\n");
+				if(entitylist.get(i).getEntityItem().hasDisplayName()){
+					output.append("\tItem;"+i+";"+entitylist.get(i).posX+";"+entitylist.get(i).posY+";"+entitylist.get(i).posZ+";"+Item.getIdFromItem(entitylist.get(i).getEntityItem().getItem())+";("+entitylist.get(i).getEntityItem().getUnlocalizedName()+");"+entitylist.get(i).getEntityItem().getCount()+";"+entitylist.get(i).getEntityItem().getItemDamage()+";"+entitylist.get(i).getEntityItem().getDisplayName()+";"+entitylist.get(i).getEntityItem().getEnchantmentTagList()+";"+entitylist.get(i).getAge()+";"+entitylist.get(i).getThrower()+"\n");
 				}else{
-					output.append("\tItem;"+i+";"+entitylist.get(i).posX+";"+entitylist.get(i).posY+";"+entitylist.get(i).posZ+";"+Item.getIdFromItem(entitylist.get(i).getItem().getItem())+";("+entitylist.get(i).getItem().getUnlocalizedName()+");"+entitylist.get(i).getItem().getCount()+";"+entitylist.get(i).getItem().getItemDamage()+";null;"+entitylist.get(i).getItem().getEnchantmentTagList()+";"+entitylist.get(i).getAge()+";"+entitylist.get(i).getThrower()+"\n");
+					output.append("\tItem;"+i+";"+entitylist.get(i).posX+";"+entitylist.get(i).posY+";"+entitylist.get(i).posZ+";"+Item.getIdFromItem(entitylist.get(i).getEntityItem().getItem())+";("+entitylist.get(i).getEntityItem().getUnlocalizedName()+");"+entitylist.get(i).getEntityItem().getCount()+";"+entitylist.get(i).getEntityItem().getItemDamage()+";null;"+entitylist.get(i).getEntityItem().getEnchantmentTagList()+";"+entitylist.get(i).getAge()+";"+entitylist.get(i).getThrower()+"\n");
 				}
 			}
 		}
