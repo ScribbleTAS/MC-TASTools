@@ -65,14 +65,14 @@ public class SavestateHandlerServer {
 					i++;
 				}
 				if (VelocityEvents.velocityenabledServer) {
-					List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager()
+					List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
 							.getPlayerList();
 					for (int o = 0; o < players.size(); o++) {
 						for (int e = 0; e < FreezeHandler.entity.size(); e++) {
 							if (FreezeHandler.entity.get(e).getPlayername().equals(players.get(o).getName())) {
 								new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(o).getMotionX(),
 										FreezeHandler.entity.get(o).getMotionY(),
-										FreezeHandler.entity.get(o).getMotionZ(), FreezeHandler.entity.get(o).getFalldistance(), new File(currentworldfolder.getPath()
+										FreezeHandler.entity.get(o).getMotionZ(), new File(currentworldfolder.getPath()
 												+ File.separator + players.get(o).getName() + "_velocity.txt"));
 							}
 						}
@@ -89,7 +89,7 @@ public class SavestateHandlerServer {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().saveAllPlayerData();
+				FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().saveAllPlayerData();
 				try {
 					copyDirectory(currentworldfolder, targetsavefolder, new String[] {" "});
 					

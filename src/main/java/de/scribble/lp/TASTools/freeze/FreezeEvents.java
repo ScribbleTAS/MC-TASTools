@@ -30,23 +30,20 @@ public class FreezeEvents {
 					if (file.exists()) {
 						// Apply the motion to the player, instead of his current motion
 						double[] bewegung = new ReapplyingVelocity().getVelocity(file); // German for motion lol
-						float fallstrecke = new ReapplyingVelocity().getFalldistance(file); //falldistance
 						FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX, playerev.posY,
 								playerev.posZ, playerev.rotationPitch, playerev.rotationYaw, bewegung[0], bewegung[1],
-								bewegung[2], fallstrecke));
+								bewegung[2]));
 					} else {
 						FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX, playerev.posY,
 								playerev.posZ, playerev.rotationPitch, playerev.rotationYaw, playerev.motionX,
-								playerev.motionY, playerev.motionZ, playerev.fallDistance));
+								playerev.motionY, playerev.motionZ));
 					}
-					playerev.capabilities.disableDamage=true;
-					playerev.capabilities.isFlying=true;
+					playerev.setEntityInvulnerable(true);
 				} else { // if velocityserver is disabled
 					FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX, playerev.posY,
-							playerev.posZ, playerev.rotationPitch, playerev.rotationYaw, 0, 0, 0, 0));
+							playerev.posZ, playerev.rotationPitch, playerev.rotationYaw, 0, 0, 0));
 
-					playerev.capabilities.disableDamage=true;
-					playerev.capabilities.isFlying=true;
+					playerev.setEntityInvulnerable(true);
 				}
 				ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
 
@@ -54,7 +51,7 @@ public class FreezeEvents {
 		}else { // Open to LAN
 				if (ModLoader.freezeenabledSP) {
 					List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance()
-							.getConfigurationManager().getPlayerList();
+							.getPlayerList().getPlayerList();
 					if (playerMP.size() > 1) {
 						if (FreezeHandler.isServerFrozen()) {
 							if (VelocityEvents.velocityenabledClient) {
@@ -63,28 +60,26 @@ public class FreezeEvents {
 										+ File.separator + playerev.getName() + "_velocity.txt");
 
 								if (file.exists()) {
-									double[] bewegung = new ReapplyingVelocity().getVelocity(file); // German for motion lol
-									float fallstrecke = new ReapplyingVelocity().getFalldistance(file); //falldistance
+									double[] bewegung = new ReapplyingVelocity().getVelocity(file); // German for motion
+																									// lol
 									FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX,
 											playerev.posY, playerev.posZ, playerev.rotationPitch, playerev.rotationYaw,
-											bewegung[0], bewegung[1], bewegung[2], fallstrecke));
+											bewegung[0], bewegung[1], bewegung[2]));
 								} else {
 									FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX,
 											playerev.posY, playerev.posZ, playerev.rotationPitch, playerev.rotationYaw,
-											0, 0, 0, 0));
+											0, 0, 0));
 								}
-								playerev.capabilities.disableDamage=true;
-								playerev.capabilities.isFlying=true;
+								playerev.setEntityInvulnerable(true);
 								ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
 
 							} else { // if velocityclient is disabled
 
 								FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX,
 										playerev.posY, playerev.posZ, playerev.rotationPitch, playerev.rotationYaw,
-										playerev.motionX, playerev.motionY, playerev.motionZ, playerev.fallDistance));
+										playerev.motionX, playerev.motionY, playerev.motionZ));
 
-								playerev.capabilities.disableDamage=true;
-								playerev.capabilities.isFlying=true;
+								playerev.setEntityInvulnerable(true);
 								ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
 							}
 						}
@@ -96,8 +91,7 @@ public class FreezeEvents {
 											+ File.separator + "latest_velocity.txt");
 							if (file.exists()) {
 								double[] motion = new ReapplyingVelocity().getVelocity(file);
-								float fd = new ReapplyingVelocity().getFalldistance(file);
-								FreezeHandler.startFreezeSetMotionServer(motion[0], motion[1], motion[2], fd);
+								FreezeHandler.startFreezeSetMotionServer(motion[0], motion[1], motion[2]);
 							} else
 								FreezeHandler.startFreezeServer();
 						} else {
@@ -113,8 +107,8 @@ public class FreezeEvents {
 	public void onLeaveServer(PlayerLoggedOutEvent ev) {
 		EntityPlayerMP playerEV = (EntityPlayerMP) ev.player;
 		
-		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
-		
+		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerList();
+		//Multiplayer
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			if (FreezeHandler.isServerFrozen()) {
 				
@@ -123,10 +117,7 @@ public class FreezeEvents {
 						FreezeHandler.entity.remove(o);
 					}
 				}
-				if(!playerEV.capabilities.isCreativeMode||!playerEV.isSpectator()) {
-					playerEV.capabilities.disableDamage=false;
-				}
-				playerEV.capabilities.isFlying=false;
+				playerEV.setEntityInvulnerable(false);
 				ModLoader.NETWORK.sendTo(new FreezePacket(false), playerEV);
 			}
 		}else{
@@ -138,10 +129,7 @@ public class FreezeEvents {
 							FreezeHandler.entity.remove(o);
 						}
 					}
-					if(!playerEV.capabilities.isCreativeMode||!playerEV.isSpectator()) {
-						playerEV.capabilities.disableDamage=false;
-					}
-					playerEV.capabilities.isFlying=false;
+					playerEV.setEntityInvulnerable(false);
 					ModLoader.NETWORK.sendTo(new FreezePacket(false), playerEV);
 				}
 			}else {
@@ -151,12 +139,15 @@ public class FreezeEvents {
 
 		}
 	}
-
 	@SubscribeEvent
 	public void pressKeybinding(InputEvent.KeyInputEvent ev) {
-		Minecraft mc = Minecraft.getMinecraft();
-		if (ClientProxy.FreezeKey.isPressed()) {
-			ModLoader.NETWORK.sendToServer(new FreezePacket(true, 1));
+		if (ClientProxy.FreezeKey.isPressed() && Minecraft.getMinecraft().thePlayer.canCommandSenderUseCommand(2, "dupe")) {
+			ModLoader.NETWORK.sendToServer(new FreezePacket(true,1));
+			if (!FreezeHandler.isClientFrozen()) {
+				FreezeHandler.startFreezeClient();
+			} else
+				FreezeHandler.stopFreezeClient();
+
 		}
 	}
 }

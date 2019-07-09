@@ -10,7 +10,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class SavestateCommandc extends CommandBase{
@@ -26,8 +26,7 @@ public class SavestateCommandc extends CommandBase{
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-		MinecraftServer server=FMLCommonHandler.instance().getMinecraftServerInstance();
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (sender instanceof EntityPlayer) {
 			if (!server.isDedicatedServer()) {
 				if (args.length == 1 && args[0].equalsIgnoreCase("save")) {
@@ -56,12 +55,12 @@ public class SavestateCommandc extends CommandBase{
 		
 	}
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
-		MinecraftServer server=FMLCommonHandler.instance().getMinecraftServerInstance();
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args,
+			BlockPos targetPos) {
 		if(args.length==1) {
 			return getListOfStringsMatchingLastWord(args, new String[] {"save","load"});
 		}else {
-			return super.addTabCompletionOptions(sender, args, pos);
+			return super.getTabCompletionOptions(server, sender, args, targetPos);
 		}
 	}
 }

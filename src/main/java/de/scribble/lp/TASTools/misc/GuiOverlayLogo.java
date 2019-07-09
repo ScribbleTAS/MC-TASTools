@@ -13,12 +13,12 @@ public class GuiOverlayLogo extends Gui{
 	@SubscribeEvent
 	public void drawStuff2(RenderGameOverlayEvent.Post event){
 		Minecraft mc = Minecraft.getMinecraft();
-		if (event.isCancelable() || event.type != ElementType.EXPERIENCE) {
+		if (event.isCancelable() || event.getType() != ElementType.EXPERIENCE) {
 			return;
 		}
-		int posX = event.resolution.getScaledWidth() / 2;
-		int posY = event.resolution.getScaledHeight();
-		if(!mc.thePlayer.capabilities.isCreativeMode&&!mc.thePlayer.isSpectator()) {
+		int posX = event.getResolution().getScaledWidth() / 2;
+		int posY = event.getResolution().getScaledHeight();
+		if(!mc.thePlayer.isCreative()&&!mc.thePlayer.isSpectator()) {
 		mc.renderEngine.bindTexture(potion);
 			if (potionenabled) {
 				drawTexturedModalRect(posX - 6, posY - 50, 0, 0, 13, 20);

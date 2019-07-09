@@ -20,19 +20,19 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 			final MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 			final EntityPlayer player =ctx.getServerHandler().playerEntity;
 				if (!ctx.getServerHandler().playerEntity.mcServer.isDedicatedServer()) {
-					ctx.getServerHandler().playerEntity.getServerForPlayer().addScheduledTask(new Runnable() {
+					ctx.getServerHandler().playerEntity.getServer().addScheduledTask(new Runnable() {
 	
 						@Override
 						public void run() {
-							if(MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile())){
+							if(server.getPlayerList().canSendCommands(player.getGameProfile())){
 								if (message.isLoadSave()) {
 									new SavestateHandlerClient().saveState();
 								} else {
-									if(server.getConfigurationManager().getCurrentPlayerCount()==1) {
+									if(server.getPlayerList().getCurrentPlayerCount()==1) {
 										ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) player);
 									}
 									else {
-										ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), server.getConfigurationManager().getPlayerList().get(0));
+										ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), server.getPlayerList().getPlayerList().get(0));
 									}
 								}
 							}
@@ -40,11 +40,11 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 						
 					});
 				}else {
-					ctx.getServerHandler().playerEntity.getServerForPlayer().addScheduledTask(new Runnable(){
+					ctx.getServerHandler().playerEntity.getServer().addScheduledTask(new Runnable(){
 	
 						@Override
 						public void run() {
-							if(MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile())){
+							if(server.getPlayerList().canSendCommands(player.getGameProfile())){
 								if (message.getMode()==0) {
 									if(message.isLoadSave())new SavestateHandlerServer().saveState();
 									else new SavestateHandlerServer().setFlagandShutdown();

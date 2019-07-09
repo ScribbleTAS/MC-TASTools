@@ -37,7 +37,7 @@ public class GuiKeystrokes extends Gui {
 	
 	@SubscribeEvent
 	public void drawStuff(RenderGameOverlayEvent.Post event){
-		if (event.isCancelable() || event.type != ElementType.HOTBAR) {
+		if (event.isCancelable() || event.getType() != ElementType.HOTBAR) {
 			return;
 		}
 		ScaledResolution scaled = new ScaledResolution(mc);

@@ -58,7 +58,7 @@ public class SavestateHandlerClient {
 			currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName());
 			targetsavefolder=null;
 			worldname=Minecraft.getMinecraft().getIntegratedServer().getFolderName();
-			List<EntityPlayerMP> players=FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
+			List<EntityPlayerMP> players=FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerList();
 			//Check for worlds in the savestate folder
 			if (!isSaving&&!isLoading) {
 				isSaving = true;
@@ -90,7 +90,8 @@ public class SavestateHandlerClient {
 								+ File.separator + "latest_velocity.txt");
 				// For LAN-Servers
 				if (players.size() > 1) {
-					Minecraft.getMinecraft().getIntegratedServer().getConfigurationManager().saveAllPlayerData();
+					Minecraft.getMinecraft().getIntegratedServer().saveAllWorlds(false);
+					Minecraft.getMinecraft().getIntegratedServer().getPlayerList().saveAllPlayerData();
 					if (!FreezeHandler.isServerFrozen()) {
 						FreezeHandler.startFreezeServer();
 						ModLoader.NETWORK.sendToAll(new FreezePacket(true));
@@ -109,8 +110,7 @@ public class SavestateHandlerClient {
 										new SavingVelocity().saveVelocityCustom(
 												FreezeHandler.entity.get(j).getMotionX(),
 												FreezeHandler.entity.get(i1).getMotionY(),
-												FreezeHandler.entity.get(i1).getMotionZ(),
-												FreezeHandler.entity.get(i1).getFalldistance(), file);
+												FreezeHandler.entity.get(i1).getMotionZ(), file);
 									}
 								}
 							}
@@ -169,7 +169,7 @@ public class SavestateHandlerClient {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				FMLCommonHandler.instance().firePlayerLoggedOut(FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList().get(0));
+				FMLCommonHandler.instance().firePlayerLoggedOut(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerList().get(0));
 				Minecraft.getMinecraft().loadWorld((WorldClient)null);
 				mc.displayGuiScreen(new GuiSavestateLoadingScreen());
 				SavestateLoadEventsClient Events=new SavestateLoadEventsClient();

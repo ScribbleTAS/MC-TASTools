@@ -14,8 +14,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class RecordingDupe {
@@ -28,7 +28,7 @@ public class RecordingDupe {
 	public void nearbyChest(EntityPlayer player){
 
 		World world = player.getEntityWorld();
-		BlockPos playerPos = new net.minecraft.util.BlockPos(player);
+		BlockPos playerPos = new BlockPos(player);
 		
 		output.append("Chest:\n");
 		
@@ -36,7 +36,7 @@ public class RecordingDupe {
 			for(int y=-5; y<=5; y++){			//y
 				for(int z=-5; z<=5; z++){		//z
 
-					if (world.getBlockState(playerPos.add(x, y, z)).getBlock()== Blocks.chest||world.getBlockState(playerPos.add(x, y, z)).getBlock()== Blocks.trapped_chest){
+					if (world.getBlockState(playerPos.add(x, y, z)).getBlock()== Blocks.CHEST||world.getBlockState(playerPos.add(x, y, z)).getBlock()== Blocks.TRAPPED_CHEST){
 						TileEntityChest foundchest =(TileEntityChest) world.getTileEntity(playerPos.add(x,y,z));
 						chestcounter++;
 						//sendMessage(foundchest.getPos().toString().substring(9,foundchest.getPos().toString().length()-1));

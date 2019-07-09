@@ -13,7 +13,7 @@ public class SavestateEvents {
 	public static boolean savestatepauseenabled;
 	@SubscribeEvent
 	public void GuiOpen(GuiOpenEvent ev) {
-		if(ev.gui instanceof GuiIngameMenu) {
+		if(ev.getGui() instanceof GuiIngameMenu) {
 			if(savestatepauseenabled) {
 				ev.setCanceled(true);
 				Minecraft.getMinecraft().displayGuiScreen(new GuiSavestateIngameMenu());

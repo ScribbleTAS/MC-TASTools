@@ -6,7 +6,6 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -30,32 +29,33 @@ public class FreezeHandler {
 	
 	public static void startFreezeServer() {
 		serverfrozen=true;
-		List<EntityPlayerMP> playerTemp = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
+		List<EntityPlayerMP> playerTemp = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
+				.getPlayerList();
 
 		if (playerTemp.size() > 0) {
 			entity=new ArrayList<EntityDataStuff>();
 			for (int i = 0; i < (playerTemp.size()); i++) {
 				entity.add(i, new EntityDataStuff(playerTemp.get(i).getName(), playerTemp.get(i).posX, playerTemp.get(i).posY, playerTemp.get(i).posZ,
 								playerTemp.get(i).rotationPitch, playerTemp.get(i).rotationYaw,
-								playerTemp.get(i).motionX, playerTemp.get(i).motionY, playerTemp.get(i).motionZ, playerTemp.get(i).fallDistance));
-				playerTemp.get(i).capabilities.disableDamage=true;
+								playerTemp.get(i).motionX, playerTemp.get(i).motionY, playerTemp.get(i).motionZ));
+				playerTemp.get(i).setEntityInvulnerable(true);
 			}
 		}
 		playerMP = playerTemp;
 		MinecraftForge.EVENT_BUS.register(FreezerSE);
 	}
-	public static void startFreezeSetMotionServer(double X, double Y, double Z, float falldistance) {
+	public static void startFreezeSetMotionServer(double X, double Y, double Z) {
 		serverfrozen=true;
-		List<EntityPlayerMP> playerTemp2 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
+		List<EntityPlayerMP> playerTemp2 = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
+				.getPlayerList();
 
 		if (playerTemp2.size() > 0) {
 			entity=new ArrayList<EntityDataStuff>();
 			for (int i = 0; i < (playerTemp2.size()); i++) {
 				entity.add(i, new EntityDataStuff(playerTemp2.get(i).getName(), playerTemp2.get(i).posX, playerTemp2.get(i).posY, playerTemp2.get(i).posZ,
 								playerTemp2.get(i).rotationPitch, playerTemp2.get(i).rotationYaw,
-								X, Y, Z, falldistance));
-				playerTemp2.get(i).capabilities.disableDamage=true;
-				playerTemp2.get(i).capabilities.isFlying=true;
+								X, Y, Z));
+				playerTemp2.get(i).setEntityInvulnerable(true);
 			}
 		}
 		playerMP = playerTemp2;
@@ -65,8 +65,8 @@ public class FreezeHandler {
 	
 	public static void stopFreezeServer() {
 		serverfrozen=false;
-		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
-		
+		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
+				.getPlayerList();
 		if (playerMP.size() > 0) {
 			for (int i = 0; i < (playerMP.size()); i++) {
 				for (int o = 0; o < entity.size(); o++) {
@@ -75,15 +75,11 @@ public class FreezeHandler {
 								entity.get(o).getPosZ());
 						playerMP.get(i).rotationPitch = entity.get(o).getPitch();
 						playerMP.get(i).rotationYaw = entity.get(o).getYaw();
-						
-						if(!playerMP.get(i).capabilities.isCreativeMode&&!playerMP.get(i).isSpectator()) {
-							playerMP.get(i).capabilities.disableDamage=false;
-						}
+						playerMP.get(i).setEntityInvulnerable(false);
 						playerMP.get(i).motionX = entity.get(o).getMotionX();
 						playerMP.get(i).motionY = entity.get(o).getMotionY();
 						playerMP.get(i).motionZ = entity.get(o).getMotionZ();
 						playerMP.get(i).velocityChanged = true;
-						playerMP.get(i).fallDistance= entity.get(o).getFalldistance();
 						entity.remove(o);
 					}
 				}
@@ -91,9 +87,6 @@ public class FreezeHandler {
 		}
 		MinecraftForge.EVENT_BUS.unregister(FreezerSE);
 	}
-	/**
-	 * Used if there is no player on the server, and if you want to stop freezing
-	 */
 	public static void stopFreezeServerNoUpdate() {
 		serverfrozen=false;
 		MinecraftForge.EVENT_BUS.unregister(FreezerSE);
@@ -127,16 +120,10 @@ class ApplyFreezeServer extends FreezeHandler{
 						playerMP.get(i).setPositionAndUpdate(entity.get(i).getPosX(), entity.get(i).getPosY(),
 								entity.get(i).getPosZ());
 
-						playerMP.get(i).rotationPitch = entity.get(i).getPitch();
-						playerMP.get(i).rotationYaw = entity.get(i).getYaw();
+						playerMP.get(i).rotationPitch = FreezeHandler.entity.get(i).getPitch();
+						playerMP.get(i).rotationYaw = FreezeHandler.entity.get(i).getYaw();
 				}
 			}
-		}
-	}
-	@SubscribeEvent
-	public void disableFalldamage(LivingFallEvent ev) {
-		if (ev.entityLiving instanceof EntityPlayerMP) {
-			ev.setCanceled(true);
 		}
 	}
 }

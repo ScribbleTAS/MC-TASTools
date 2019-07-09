@@ -18,8 +18,8 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.realms.RealmsBridge;
 
 public class GuiSavestateIngameMenu extends GuiScreen{
-    private int field_146445_a;
-    private int field_146444_f;
+    private int saveStep;
+    private int visibleTime;
     
     /**
      * Adds the buttons (and other controls) to the screen in question. Called when the GUI is displayed and when the
@@ -28,7 +28,7 @@ public class GuiSavestateIngameMenu extends GuiScreen{
     @Override
 	public void initGui()
     {
-        this.field_146445_a = 0;
+        this.saveStep = 0;
         this.buttonList.clear();
         int i = -16;
         int j = 98;
@@ -36,7 +36,7 @@ public class GuiSavestateIngameMenu extends GuiScreen{
 
         if (!this.mc.isIntegratedServerRunning())
         {
-            this.buttonList.get(0).displayString = I18n.format("menu.disconnect", new Object[0]);
+            ((GuiButton)this.buttonList.get(0)).displayString = I18n.format("menu.disconnect", new Object[0]);
         }
 
         this.buttonList.add(new GuiButton(4, this.width / 2 - 100, this.height / 4 + 24 + i, I18n.format("menu.returnToGame", new Object[0])));
@@ -52,8 +52,7 @@ public class GuiSavestateIngameMenu extends GuiScreen{
     /**
      * Called by the controls from the buttonList when activated. (Mouse pressed for buttons)
      */
-    @Override
-	protected void actionPerformed(GuiButton button) throws IOException
+    protected void actionPerformed(GuiButton button) throws IOException
     {
         switch (button.id)
         {
@@ -62,7 +61,7 @@ public class GuiSavestateIngameMenu extends GuiScreen{
                 break;
             case 1:
                 boolean flag = this.mc.isIntegratedServerRunning();
-                boolean flag1 = this.mc.func_181540_al();
+                boolean flag1 = this.mc.isConnectedToRealms();
                 button.enabled = false;
                 this.mc.theWorld.sendQuittingDisconnectingPacket();
                 this.mc.loadWorld((WorldClient)null);
@@ -116,7 +115,7 @@ public class GuiSavestateIngameMenu extends GuiScreen{
 	public void updateScreen()
     {
         super.updateScreen();
-        ++this.field_146444_f;
+        ++this.visibleTime;
     }
 
     /**

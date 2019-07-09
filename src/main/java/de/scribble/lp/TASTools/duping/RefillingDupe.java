@@ -15,8 +15,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class RefillingDupe {
@@ -63,7 +63,7 @@ public class RefillingDupe {
 						}
 						else if(s.startsWith("\tx")){
 							coords=s.split("(x=)|(,\\ y=)|(,\\ z=)");		//getting the coordinates of the chest
-							if (world.getBlockState(new BlockPos(Integer.parseInt(coords[1]),Integer.parseInt(coords[2]),Integer.parseInt(coords[3]))).getBlock()== Blocks.chest||world.getBlockState(new BlockPos(Integer.parseInt(coords[1]),Integer.parseInt(coords[2]),Integer.parseInt(coords[3]))).getBlock()== Blocks.trapped_chest){	//check if the targeted block is a chest or a redstone chest
+							if (world.getBlockState(new BlockPos(Integer.parseInt(coords[1]),Integer.parseInt(coords[2]),Integer.parseInt(coords[3]))).getBlock()== Blocks.CHEST||world.getBlockState(new BlockPos(Integer.parseInt(coords[1]),Integer.parseInt(coords[2]),Integer.parseInt(coords[3]))).getBlock()== Blocks.TRAPPED_CHEST){	//check if the targeted block is a chest or a redstone chest
 									
 								foundchest= (TileEntityChest) world.getTileEntity(new BlockPos(Integer.parseInt(coords[1]),Integer.parseInt(coords[2]),Integer.parseInt(coords[3])));
 								
@@ -91,7 +91,7 @@ public class RefillingDupe {
 										if(!items[7].equals("[]")){
 											enchantments=items[7].split("(\\[\\{lvl:)|(s,id:)|(s\\},\\{lvl:)|(s\\})");
 											for(int index=1;index<=(enchantments.length-2)/2;index++){
-												properties.addEnchantment(Enchantment.getEnchantmentById(Integer.parseInt(enchantments[2*index])), Integer.parseInt(enchantments[2*index-1]));
+												properties.addEnchantment(Enchantment.getEnchantmentByID(Integer.parseInt(enchantments[2*index])), Integer.parseInt(enchantments[2*index-1]));
 											}
 										}
 										/*Add the custom name if available*/
@@ -141,7 +141,7 @@ public class RefillingDupe {
 							if(!props[10].equals("[]")){	//add Enchantments
 								enchantments=props[10].split("(\\[\\{lvl:)|(s,id:)|(s\\},\\{lvl:)|(s\\})");
 								for(int index=1;index<=(enchantments.length-2)/2;index++){
-									Overflow.addEnchantment(Enchantment.getEnchantmentById(Integer.parseInt(enchantments[2*index])), Integer.parseInt(enchantments[2*index-1]));
+									Overflow.addEnchantment(Enchantment.getEnchantmentByID(Integer.parseInt(enchantments[2*index])), Integer.parseInt(enchantments[2*index-1]));
 								}
 							}
 							if(!props[9].equals("null")){ //set customName
