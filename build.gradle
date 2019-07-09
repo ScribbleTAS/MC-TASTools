@@ -57,7 +57,11 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
 }
-
+jar {
+    manifest {
+        attributes 'FMLAT': 'tastools_at.cfg'
+    }
+}
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
