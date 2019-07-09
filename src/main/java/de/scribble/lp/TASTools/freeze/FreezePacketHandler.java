@@ -11,7 +11,7 @@ public class FreezePacketHandler implements IMessageHandler<FreezePacket, IMessa
 	@Override
 	public FreezePacket onMessage(final FreezePacket msg, MessageContext ctx) {
 		if (ctx.side == Side.SERVER) {
-			ctx.getServerHandler().playerEntity.getServerWorld().addScheduledTask(new Runnable() {
+			ctx.getServerHandler().playerEntity.getServer().addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
 					if (msg.getMode() == 0) {

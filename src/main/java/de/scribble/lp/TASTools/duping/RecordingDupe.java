@@ -36,7 +36,7 @@ public class RecordingDupe {
 			for(int y=-5; y<=5; y++){			//y
 				for(int z=-5; z<=5; z++){		//z
 
-					if (world.getBlockState(playerPos.add(x, y, z)).getBlock()== Blocks.CHEST||world.getBlockState(playerPos.add(x, y, z)).getBlock()== Blocks.TRAPPED_CHEST){
+					if (world.getBlockState(playerPos.add(x, y, z)).getBlock()== Blocks.chest||world.getBlockState(playerPos.add(x, y, z)).getBlock()== Blocks.trapped_chest){
 						TileEntityChest foundchest =(TileEntityChest) world.getTileEntity(playerPos.add(x,y,z));
 						chestcounter++;
 						//sendMessage(foundchest.getPos().toString().substring(9,foundchest.getPos().toString().length()-1));

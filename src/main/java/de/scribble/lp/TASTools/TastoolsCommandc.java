@@ -112,7 +112,7 @@ public class TastoolsCommandc extends CommandBase{
 				}
 				//Change other peoples keystroke settings
 				else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&server.getPlayerList().getPlayerList().contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
-					notifyCommandListener(sender, this, "msg.keystroke.multiplayerchange", new TextComponentString(args[1]));
+					notifyOperators(sender, this, "msg.keystroke.multiplayerchange", new TextComponentString(args[1]));
 					ModLoader.NETWORK.sendTo(new KeystrokesPacket(), server.getPlayerList().getPlayerByUsername(args[1]));
 				}
 			//If the TASMod is loaded
@@ -207,11 +207,11 @@ public class TastoolsCommandc extends CommandBase{
 				if (!server.isDedicatedServer() && server.getCurrentPlayerCount() == 1) {
 					ClientProxy.config.load();
 					new Util().reloadClientconfig();
-					notifyCommandListener(sender, this, "msg.misc.reload", new Object()); // Config reloaded!
+					notifyOperators(sender, this, "msg.misc.reload", new Object()); // Config reloaded!
 				} else {
 					new Util().reloadServerconfig();
 					ModLoader.NETWORK.sendToAll(new MiscPacket(0));
-					notifyCommandListener(sender, this, "msg.misc.reload", new Object()); // Config reloaded!
+					notifyOperators(sender, this, "msg.misc.reload", new Object()); // Config reloaded!
 				}
 
 			//gui logo singleplayer
@@ -232,7 +232,7 @@ public class TastoolsCommandc extends CommandBase{
 					ModLoader.NETWORK.sendTo(new MiscPacket(1), (EntityPlayerMP)sender);
 				}
 			}else if (args.length==2&&args[0].equalsIgnoreCase("logo")&&server.getPlayerList().getPlayerList().contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
-				notifyCommandListener(sender, this, "msg.logo.multiplayerchange", new TextComponentString(args[1]));
+				notifyOperators(sender, this, "msg.logo.multiplayerchange", new TextComponentString(args[1]));
 				ModLoader.NETWORK.sendTo(new MiscPacket(1), server.getPlayerList().getPlayerByUsername(args[1]));
 			}
 			// Other than sender=Player starts here

@@ -5,7 +5,6 @@ import java.io.File;
 import org.lwjgl.input.Keyboard;
 
 import de.scribble.lp.TASTools.duping.DupeEvents;
-import de.scribble.lp.TASTools.enderdragon.DragonEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
