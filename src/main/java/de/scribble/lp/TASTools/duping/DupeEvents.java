@@ -6,6 +6,7 @@ import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -25,11 +26,13 @@ public class DupeEvents {
 	
 	@SubscribeEvent
 	public void onOpenServer(PlayerEvent.PlayerLoggedInEvent ev){
-		if (dupingenabled&&!ev.player.world.isRemote) {
-			File file= new File(mc.mcDataDir, "saves" + File.separator +mc.getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
-			if (file.exists()){
-				CommonProxy.logger.info("Start refilling...");
-				new RefillingDupe().refill(file, ev.player);
+		if(mc.currentScreen instanceof GuiIngameMenu||mc.currentScreen instanceof GuiSavestateIngameMenu){
+			if (dupingenabled&&!ev.player.world.isRemote) {
+				File file= new File(mc.mcDataDir, "saves" + File.separator +mc.getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
+				if (file.exists()){
+					CommonProxy.logger.info("Start refilling...");
+					new RefillingDupe().refill(file, ev.player);
+				}
 			}
 		}
 	}
