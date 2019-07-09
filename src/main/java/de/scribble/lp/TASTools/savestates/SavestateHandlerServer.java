@@ -70,7 +70,7 @@ public class SavestateHandlerServer {
 				}
 				if (VelocityEvents.velocityenabledServer) {
 					List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance()
-							.getPlayerList().getPlayers();
+							.getPlayerList().getPlayerList();
 					for (int o = 0; o < players.size(); o++) {
 						for (int e = 0; e < FreezeHandler.entity.size(); e++) {
 							if (FreezeHandler.entity.get(e).getPlayername().equals(players.get(o).getName())) {

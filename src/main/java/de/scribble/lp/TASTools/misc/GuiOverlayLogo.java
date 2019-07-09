@@ -18,7 +18,7 @@ public class GuiOverlayLogo extends Gui{
 		}
 		int posX = event.getResolution().getScaledWidth() / 2;
 		int posY = event.getResolution().getScaledHeight();
-		if(!mc.player.isCreative()&&!mc.player.isSpectator()) {
+		if(!mc.thePlayer.isCreative()&&!mc.thePlayer.isSpectator()) {
 		mc.renderEngine.bindTexture(potion);
 			if (potionenabled) {
 				drawTexturedModalRect(posX - 6, posY - 50, 0, 0, 13, 20);

@@ -17,12 +17,12 @@ import net.minecraft.util.math.BlockPos;
 
 public class DragonCommandc extends CommandBase{
 	@Override
-	public String getName() {
+	public String getCommandName() {
 		return "dragon";
 	}
 
 	@Override
-	public String getUsage(ICommandSender sender) {
+	public String getCommandUsage(ICommandSender sender) {
 		return "/dragon <phase>";
 	}
 
@@ -82,11 +82,11 @@ public class DragonCommandc extends CommandBase{
 		}
 	}
 	@Override
-	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
 		if (args.length==1) {
 			return getListOfStringsMatchingLastWord(args, new String[] {"dying","holding_pattern","hover","landing","landing_approach","sitting_attacking","sitting_flaming","sitting_scanning","takeoff"});
 		}
-		return super.getTabCompletions(server, sender, args, targetPos);
+		return super.getTabCompletionOptions(server, sender, args, targetPos);
 	}
 }

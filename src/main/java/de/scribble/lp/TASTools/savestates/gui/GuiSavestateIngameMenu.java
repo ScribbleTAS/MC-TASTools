@@ -36,13 +36,13 @@ public class GuiSavestateIngameMenu extends GuiScreen
         this.buttonList.clear();
         int i = -16;
         int j = 98;
-        this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 144 + -16, I18n.format("menu.returnToMenu")));
-        
+        this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 120 + -16, I18n.format("menu.returnToMenu", new Object[0])));
+
         if (!this.mc.isIntegratedServerRunning())
         {
             ((GuiButton)this.buttonList.get(0)).displayString = I18n.format("menu.disconnect", new Object[0]);
         }
-
+        
         this.buttonList.add(new GuiButton(4, this.width / 2 - 100, this.height / 4 + 24 + -16, I18n.format("menu.returnToGame")));
         this.buttonList.add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 120 + -16, 98, 20, I18n.format("menu.options")));
         this.buttonList.add(new GuiButton(12, this.width / 2 + 2, this.height / 4 + 120 + i, 98, 20, I18n.format("fml.menu.modoptions")));
@@ -67,7 +67,7 @@ public class GuiSavestateIngameMenu extends GuiScreen
                 boolean flag = this.mc.isIntegratedServerRunning();
                 boolean flag1 = this.mc.isConnectedToRealms();
                 button.enabled = false;
-                this.mc.world.sendQuittingDisconnectingPacket();
+                this.mc.theWorld.sendQuittingDisconnectingPacket();
                 this.mc.loadWorld((WorldClient)null);
 
                 if (flag)
@@ -93,12 +93,12 @@ public class GuiSavestateIngameMenu extends GuiScreen
                 this.mc.setIngameFocus();
                 break;
             case 5:
-                if (this.mc.player != null)
-                this.mc.displayGuiScreen(new GuiAchievements(this, this.mc.player.getStatFileWriter()));
+                if (this.mc.thePlayer != null)
+                this.mc.displayGuiScreen(new GuiAchievements(this, this.mc.thePlayer.getStatFileWriter()));
                 break;
             case 6:
-                if (this.mc.player != null)
-                this.mc.displayGuiScreen(new GuiStats(this, this.mc.player.getStatFileWriter()));
+                if (this.mc.thePlayer != null)
+                this.mc.displayGuiScreen(new GuiStats(this, this.mc.thePlayer.getStatFileWriter()));
                 break;
             case 7:
                 this.mc.displayGuiScreen(new GuiShareToLan(this));
@@ -107,7 +107,7 @@ public class GuiSavestateIngameMenu extends GuiScreen
                 net.minecraftforge.fml.client.FMLClientHandler.instance().showInGameModOptions(new GuiIngameMenu());
                 break;
             case 13:
-				if (mc.player.canUseCommand(2, "savestate")) {
+				if (mc.thePlayer.canCommandSenderUseCommand(2, "savestate")) {
 					ModLoader.NETWORK.sendToServer(new SavestatePacket(true));
 				} else {
 					CommonProxy.logger.info("You don't have the required permissions to use the savestate button!");

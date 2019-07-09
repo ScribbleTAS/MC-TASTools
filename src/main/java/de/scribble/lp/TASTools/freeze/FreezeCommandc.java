@@ -9,12 +9,12 @@ import net.minecraft.server.MinecraftServer;
 public class FreezeCommandc extends CommandBase {
 	
 	@Override
-	public String getName() {
+	public String getCommandName() {
 		return "freeze";
 	}
 
 	@Override
-	public String getUsage(ICommandSender sender) {
+	public String getCommandUsage(ICommandSender sender) {
 		return "/freeze";
 	}
 

@@ -24,12 +24,12 @@ public class TastoolsCommandc extends CommandBase{
 
 	
 	@Override
-	public String getName() {
+	public String getCommandName() {
 		return "tastools";
 	}
 
 	@Override
-	public String getUsage(ICommandSender sender) {
+	public String getCommandUsage(ICommandSender sender) {
 		return "/tastools <keystrokes|duping|velocity>";
 	}
 	@Override
@@ -43,7 +43,7 @@ public class TastoolsCommandc extends CommandBase{
 		boolean isdedicated=server.isDedicatedServer();
 		if(sender instanceof EntityPlayer) {
 			if (args.length==0) {
-				sender.sendMessage(new TextComponentTranslation("msg.misc.info", ModLoader.VERSION.toString(), ModLoader.MCVERSION.toString()));
+				sender.addChatMessage(new TextComponentTranslation("msg.misc.info", ModLoader.VERSION.toString(), ModLoader.MCVERSION.toString()));
 			}
 			//Checks if the TASMod is loaded. This mod has a keystroke system on it's own so TASTools will disable it's keypresses...
 			if(!CommonProxy.isTASModLoaded()) {
@@ -53,12 +53,12 @@ public class TastoolsCommandc extends CommandBase{
 					if(!isdedicated&&server.getCurrentPlayerCount()==1) {
 						Configuration config=ClientProxy.config;
 						if (GuiKeystrokes.guienabled) {
-							sender.sendMessage(new TextComponentTranslation("msg.keystrokes.disabled"));	//§cKeystrokes disabled
+							sender.addChatMessage(new TextComponentTranslation("msg.keystrokes.disabled"));	//§cKeystrokes disabled
 							GuiKeystrokes.guienabled=false;
 							config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").set(false);
 							config.save();
 						}else if (!GuiKeystrokes.guienabled) {
-							sender.sendMessage(new TextComponentTranslation("msg.keystrokes.enabled"));		//§aKeystrokes enabled
+							sender.addChatMessage(new TextComponentTranslation("msg.keystrokes.enabled"));		//§aKeystrokes enabled
 							GuiKeystrokes.guienabled=true;
 							config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").set(true);
 							config.save();
@@ -111,25 +111,25 @@ public class TastoolsCommandc extends CommandBase{
 					}
 				}
 				//Change other peoples keystroke settings
-				else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&server.getPlayerList().getPlayers().contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
+				else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&server.getPlayerList().getPlayerList().contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
 					notifyCommandListener(sender, this, "msg.keystroke.multiplayerchange", new TextComponentString(args[1]));
 					ModLoader.NETWORK.sendTo(new KeystrokesPacket(), server.getPlayerList().getPlayerByUsername(args[1]));
 				}
 			//If the TASMod is loaded
 			}else {
 				if (args[0].equalsIgnoreCase("keystrokes")) {
-					sender.sendMessage(new TextComponentTranslation("msg.keystrokes.tasmoderr")); //Keystrokes are disabled due to the TASmod keystrokes. Please refer to /tasmod gui to change the settings
+					sender.addChatMessage(new TextComponentTranslation("msg.keystrokes.tasmoderr")); //Keystrokes are disabled due to the TASmod keystrokes. Please refer to /tasmod gui to change the settings
 				}
 			}
 			//freeze singleplayer
 			if (args.length == 1 && args[0].equalsIgnoreCase("freeze")&&!isdedicated) {
 				if (ModLoader.freezeenabledSP) {
-					sender.sendMessage(new TextComponentTranslation("msg.freezeClient.disabled")); // §cDisabled
+					sender.addChatMessage(new TextComponentTranslation("msg.freezeClient.disabled")); // §cDisabled
 					ModLoader.freezeenabledSP = false;
 					ClientProxy.config.get("Freeze", "Enabled", false, "Freezes the game when joining singleplayer").set(false);
 					ClientProxy.config.save();
 				} else if (!ModLoader.freezeenabledSP) {
-					sender.sendMessage(new TextComponentTranslation("msg.freezeClient.enabled")); // §aEnabled
+					sender.addChatMessage(new TextComponentTranslation("msg.freezeClient.enabled")); // §aEnabled
 					ModLoader.freezeenabledSP = true;
 					ClientProxy.config.get("Freeze", "Enabled", false, "Freezes the game when joining singleplayer").set(true);
 					ClientProxy.config.save();
@@ -139,12 +139,12 @@ public class TastoolsCommandc extends CommandBase{
 			else if (args.length == 1 && args[0].equalsIgnoreCase("freeze")) {
 				if (sender instanceof EntityPlayer) {
 					if(ModLoader.freezeenabledMP) {
-						sender.sendMessage(new TextComponentTranslation("msg.freezeServer.disabled")); //§cDisabled Freezing when starting the server
+						sender.addChatMessage(new TextComponentTranslation("msg.freezeServer.disabled")); //§cDisabled Freezing when starting the server
 						ModLoader.freezeenabledMP=false;
 						CommonProxy.serverconfig.get("Freeze","Enabled", false, "Freezes the game when starting the Server").set(false);
 						CommonProxy.serverconfig.save();
 					}else if (!ModLoader.freezeenabledMP) {
-						sender.sendMessage(new TextComponentTranslation("msg.freezeServer.enabled")); //§aEnabled Freezing when starting the server
+						sender.addChatMessage(new TextComponentTranslation("msg.freezeServer.enabled")); //§aEnabled Freezing when starting the server
 						ModLoader.freezeenabledMP=true;
 						CommonProxy.serverconfig.get("Freeze","Enabled", false, "Freezes the game when starting the Server").set(true);
 						CommonProxy.serverconfig.save();
@@ -157,31 +157,31 @@ public class TastoolsCommandc extends CommandBase{
 					if(!CommonProxy.isDupeModLoaded()) {
 						Configuration config=ClientProxy.config;
 						if (DupeEvents.dupingenabled) {
-							sender.sendMessage(new TextComponentTranslation("msg.duping.disabled")); //§cDuping disabled
+							sender.addChatMessage(new TextComponentTranslation("msg.duping.disabled")); //§cDuping disabled
 							DupeEvents.dupingenabled=false;
 							config.get("Duping","Enabled", true, "Activates the duping on startup").set(false);
 							config.save();
 						}else if (!DupeEvents.dupingenabled) {
-							sender.sendMessage(new TextComponentTranslation("msg.duping.enabled")); //§aDuping enabled
+							sender.addChatMessage(new TextComponentTranslation("msg.duping.enabled")); //§aDuping enabled
 							DupeEvents.dupingenabled=true;
 							config.get("Duping","Enabled", true, "Activates the duping on startup").set(true);
 							config.save();
 						}
 					}else {
-						sender.sendMessage(new TextComponentTranslation("msg.duping.dupemoderr")); //§cDupeMod is loaded, so this command is disabled
+						sender.addChatMessage(new TextComponentTranslation("msg.duping.dupemoderr")); //§cDupeMod is loaded, so this command is disabled
 					}
 				}
 			}
 			//velocity singleplayer
 			if (args.length == 1 && args[0].equalsIgnoreCase("velocity")&&!isdedicated) {
 				if (VelocityEvents.velocityenabledClient) {
-					sender.sendMessage(new TextComponentTranslation("msg.velocityClient.disabled"));	//§cDisabled Velocity when joining the world
+					sender.addChatMessage(new TextComponentTranslation("msg.velocityClient.disabled"));	//§cDisabled Velocity when joining the world
 					VelocityEvents.velocityenabledClient = false;
 					ClientProxy.config.get("Velocity", "Enabled", true, "Activates velocity saving on startup")
 							.set(false);
 					ClientProxy.config.save();
 				} else if (!VelocityEvents.velocityenabledClient) {
-					sender.sendMessage(new TextComponentTranslation("msg.velocityClient.enabled"));		//§aEnabled Velocity when joining the world
+					sender.addChatMessage(new TextComponentTranslation("msg.velocityClient.enabled"));		//§aEnabled Velocity when joining the world
 					VelocityEvents.velocityenabledClient = true;
 					ClientProxy.config.get("Velocity", "Enabled", true, "Activates velocity saving on startup")
 							.set(true);
@@ -190,13 +190,13 @@ public class TastoolsCommandc extends CommandBase{
 			//velocity multiplayer
 			} else if (args.length == 1 && args[0].equalsIgnoreCase("velocity")) {
 				if (VelocityEvents.velocityenabledServer) {
-					sender.sendMessage(new TextComponentTranslation("msg.velocityServer.disabled"));	//§cDisabled Velocity when logging into the server
+					sender.addChatMessage(new TextComponentTranslation("msg.velocityServer.disabled"));	//§cDisabled Velocity when logging into the server
 					VelocityEvents.velocityenabledServer = false;
 					CommonProxy.serverconfig.get("Velocity", "Enabled", true,
 							"Saves and applies Velocity when joining/leaving the server").set(false);
 					CommonProxy.serverconfig.save();
 				} else if (!VelocityEvents.velocityenabledServer) {
-					sender.sendMessage(new TextComponentTranslation("msg.velocityServer.enabled"));		//§aEnabled Velocity when logging into the server
+					sender.addChatMessage(new TextComponentTranslation("msg.velocityServer.enabled"));		//§aEnabled Velocity when logging into the server
 					VelocityEvents.velocityenabledServer = true;
 					CommonProxy.serverconfig.get("Velocity", "Enabled", true,
 							"Saves and applies Velocity when joining/leaving the server").set(true);
@@ -218,12 +218,12 @@ public class TastoolsCommandc extends CommandBase{
 			} else if(args.length == 1 && args[0].equalsIgnoreCase("logo")) {
 				if(!isdedicated){
 					if(GuiOverlayLogo.potionenabled) {
-						sender.sendMessage(new TextComponentTranslation("msg.logo.disabled")); //§cDisabled Logo in HUD
+						sender.addChatMessage(new TextComponentTranslation("msg.logo.disabled")); //§cDisabled Logo in HUD
 						GuiOverlayLogo.potionenabled=false;
 						ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").set(false);
 						ClientProxy.config.save();
 					}else if(!GuiOverlayLogo.potionenabled) {
-						sender.sendMessage(new TextComponentTranslation("msg.logo.enabled"));	//§aEnabled Logo in HUD
+						sender.addChatMessage(new TextComponentTranslation("msg.logo.enabled"));	//§aEnabled Logo in HUD
 						GuiOverlayLogo.potionenabled=true;
 						ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").set(true);
 						ClientProxy.config.save();
@@ -231,7 +231,7 @@ public class TastoolsCommandc extends CommandBase{
 				}else {
 					ModLoader.NETWORK.sendTo(new MiscPacket(1), (EntityPlayerMP)sender);
 				}
-			}else if (args.length==2&&args[0].equalsIgnoreCase("logo")&&server.getPlayerList().getPlayers().contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
+			}else if (args.length==2&&args[0].equalsIgnoreCase("logo")&&server.getPlayerList().getPlayerList().contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
 				notifyCommandListener(sender, this, "msg.logo.multiplayerchange", new TextComponentString(args[1]));
 				ModLoader.NETWORK.sendTo(new MiscPacket(1), server.getPlayerList().getPlayerByUsername(args[1]));
 			}
@@ -272,14 +272,14 @@ public class TastoolsCommandc extends CommandBase{
 
 			} else if (args.length == 1 && args[0].equalsIgnoreCase("keystrokes")) {
 				CommonProxy.logger.warn("Cannot enable keystrokes");
-			} else if (args.length == 2 && args[0].equalsIgnoreCase("keystrokes") && server.getPlayerList().getPlayers()
+			} else if (args.length == 2 && args[0].equalsIgnoreCase("keystrokes") && server.getPlayerList().getPlayerList()
 					.contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
 				CommonProxy.logger.info("Changed Keystroke-Settings for " + args[1]);
 				ModLoader.NETWORK.sendTo(new KeystrokesPacket(), server.getPlayerList().getPlayerByUsername(args[1]));
 				
 			} else if (args.length == 1 && args[0].equalsIgnoreCase("logo")) {
 				CommonProxy.logger.warn("Cannot enable the logo. Use /tastools logo <Playername>");
-			}else if(args.length == 2 && args[0].equalsIgnoreCase("logo")&& server.getPlayerList().getPlayers()
+			}else if(args.length == 2 && args[0].equalsIgnoreCase("logo")&& server.getPlayerList().getPlayerList()
 					.contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
 				ModLoader.NETWORK.sendTo(new MiscPacket(1), server.getPlayerList().getPlayerByUsername(args[1]));
 			}
@@ -287,21 +287,21 @@ public class TastoolsCommandc extends CommandBase{
 	}
 
 	@Override
-	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
 		if (args.length==1) {
 			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","logo","reload"});
 		}
 		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
 			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft"});
-			if(server.getPlayerList().getPlayers().size()>1) {
-				tabs.addAll(getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames()));
+			if(server.getPlayerList().getPlayerList().size()>1) {
+				tabs.addAll(getListOfStringsMatchingLastWord(args, server.getAllUsernames()));
 			}
 			return tabs;
 		}
 		else if(args.length==2&&args[0].equalsIgnoreCase("logo")) {
-			return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
+			return getListOfStringsMatchingLastWord(args, server.getAllUsernames());
 		}
-		return super.getTabCompletions(server, sender, args, targetPos);
+		return super.getTabCompletionOptions(server, sender, args, targetPos);
 	}
 }

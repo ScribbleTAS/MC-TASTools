@@ -13,13 +13,13 @@ import net.minecraft.world.World;
 public class DupeCommandc extends CommandBase{
 	
 	@Override
-	public String getName() {
+	public String getCommandName() {
 		
 		return "dupe";
 	}
 
 	@Override
-	public String getUsage(ICommandSender sender) {
+	public String getCommandUsage(ICommandSender sender) {
 		return "/dupe";
 	}
 	@Override

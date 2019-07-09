@@ -26,7 +26,7 @@ public class SavestateEvents {
 			if (Minecraft.getMinecraft().isIntegratedServerRunning()) {
 				ModLoader.NETWORK.sendToServer(new SavestatePacket(true));
 			}else {
-				if(Minecraft.getMinecraft().player.canUseCommand(2, "savestate"))
+				if(Minecraft.getMinecraft().thePlayer.canCommandSenderUseCommand(2, "savestate"))
 				ModLoader.NETWORK.sendToServer(new SavestatePacket(true));
 			}
 		}
@@ -34,7 +34,7 @@ public class SavestateEvents {
 			if (Minecraft.getMinecraft().isIntegratedServerRunning()) {
 				ModLoader.NETWORK.sendToServer(new SavestatePacket(false));
 			}else {
-				if(Minecraft.getMinecraft().player.canUseCommand(2, "savestate"))
+				if(Minecraft.getMinecraft().thePlayer.canCommandSenderUseCommand(2, "savestate"))
 				ModLoader.NETWORK.sendToServer(new SavestatePacket(false));
 			}
 		}

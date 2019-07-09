@@ -15,12 +15,12 @@ import net.minecraft.util.math.BlockPos;
 public class SavestateCommandc extends CommandBase{
 
 	@Override
-	public String getName() {
+	public String getCommandName() {
 		return "savestate";
 	}
 
 	@Override
-	public String getUsage(ICommandSender sender) {
+	public String getCommandUsage(ICommandSender sender) {
 		return "/savestate <save|load>";
 	}
 
@@ -54,14 +54,14 @@ public class SavestateCommandc extends CommandBase{
 		
 	}
 	@Override
-	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
+	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
 		if(args.length==1) {
 			if(!server.isDedicatedServer()) {
 				return getListOfStringsMatchingLastWord(args, new String[] {"save","load"});
 			}else return getListOfStringsMatchingLastWord(args, new String[] {"save"});
 		}else {
-			return super.getTabCompletions(server, sender, args, targetPos);
+			return super.getTabCompletionOptions(server, sender, args, targetPos);
 		}
 	}
 }

@@ -30,7 +30,7 @@ public class FreezeHandler {
 	public static void startFreezeServer() {
 		serverfrozen=true;
 		List<EntityPlayerMP> playerTemp = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
-				.getPlayers();
+				.getPlayerList();
 
 		if (playerTemp.size() > 0) {
 			entity=new ArrayList<EntityDataStuff>();
@@ -48,7 +48,7 @@ public class FreezeHandler {
 	public static void startFreezeSetMotionServer(double X, double Y, double Z) {
 		serverfrozen=true;
 		List<EntityPlayerMP> playerTemp2 = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
-				.getPlayers();
+				.getPlayerList();
 
 		if (playerTemp2.size() > 0) {
 			entity=new ArrayList<EntityDataStuff>();
@@ -68,7 +68,7 @@ public class FreezeHandler {
 	public static void stopFreezeServer() {
 		serverfrozen=false;
 		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
-				.getPlayers();
+				.getPlayerList();
 		if (playerMP.size() > 0) {
 			for (int i = 0; i < (playerMP.size()); i++) {
 				for (int o = 0; o < entity.size(); o++) {

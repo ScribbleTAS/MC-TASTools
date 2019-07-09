@@ -57,7 +57,7 @@ public class SavestateHandlerClient {
 			currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName());
 			targetsavefolder=null;
 			worldname=Minecraft.getMinecraft().getIntegratedServer().getFolderName();
-			List<EntityPlayerMP> players=FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
+			List<EntityPlayerMP> players=FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerList();
 			if (!isSaving && !isLoading) {
 				isSaving = true;
 				// Check for worlds in the savestate folder
@@ -100,7 +100,7 @@ public class SavestateHandlerClient {
 				}
 				// Save the velocity
 				if (VelocityEvents.velocityenabledClient) {
-					new SavingVelocity().saveVelocity(mc.player, file);
+					new SavingVelocity().saveVelocity(mc.thePlayer, file);
 					// Save Velocity for other LAN-Players
 					if (players.size() > 1) {
 						if (FreezeHandler.isServerFrozen()) {
@@ -170,10 +170,10 @@ public class SavestateHandlerClient {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				this.mc.ingameGUI.getChatGUI().clearChatMessages(true);
+				this.mc.ingameGUI.getChatGUI().clearChatMessages();
 				SavestateLoadEventsClient Events=new SavestateLoadEventsClient();
 				MinecraftForge.EVENT_BUS.register(Events);
-				FMLCommonHandler.instance().firePlayerLoggedOut(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers().get(0));
+				FMLCommonHandler.instance().firePlayerLoggedOut(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerList().get(0));
 	            this.mc.loadWorld((WorldClient)null);
 	            this.mc.displayGuiScreen(new GuiSavestateLoadingScreen());
 			}else {

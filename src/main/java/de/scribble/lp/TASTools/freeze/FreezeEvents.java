@@ -53,7 +53,7 @@ public class FreezeEvents {
 		}else { // Open to LAN
 				if (ModLoader.freezeenabledSP) {
 					List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance()
-							.getPlayerList().getPlayers();
+							.getPlayerList().getPlayerList();
 					if (playerMP.size() > 1) {
 						if (FreezeHandler.isServerFrozen()) {
 							if (VelocityEvents.velocityenabledClient) {
@@ -111,7 +111,7 @@ public class FreezeEvents {
 	public void onLeaveServer(PlayerLoggedOutEvent ev) {
 		EntityPlayerMP playerEV = (EntityPlayerMP) ev.player;
 		
-		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
+		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerList();
 		//Multiplayer
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			if (FreezeHandler.isServerFrozen()) {
@@ -147,7 +147,7 @@ public class FreezeEvents {
 	}
 	@SubscribeEvent
 	public void pressKeybinding(InputEvent.KeyInputEvent ev) {
-		if (ClientProxy.FreezeKey.isPressed() && Minecraft.getMinecraft().player.canUseCommand(2, "dupe")) {
+		if (ClientProxy.FreezeKey.isPressed() && Minecraft.getMinecraft().thePlayer.canCommandSenderUseCommand(2, "dupe")) {
 			ModLoader.NETWORK.sendToServer(new FreezePacket(true,1));
 			if (!FreezeHandler.isClientFrozen()) {
 				FreezeHandler.startFreezeClient();

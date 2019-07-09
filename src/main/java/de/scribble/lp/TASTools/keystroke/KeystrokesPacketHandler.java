@@ -16,12 +16,12 @@ public class KeystrokesPacketHandler implements IMessageHandler<KeystrokesPacket
 		if (ctx.side == Side.CLIENT) {
 			if (!GuiKeystrokes.guienabled && msg.getCorner() == 4) {
 				GuiKeystrokes.guienabled = true;
-				Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("msg.keystrokes.enabled"));
+				Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentTranslation("msg.keystrokes.enabled"));
 				ClientProxy.config.get("Keystrokes", "Enabled", true, "Activates the keystrokes on startup").set(true);
 				ClientProxy.config.save();
 			} else if (GuiKeystrokes.guienabled && msg.getCorner() == 4) {
 				GuiKeystrokes.guienabled = false;
-				Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("msg.keystrokes.disabled"));
+				Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentTranslation("msg.keystrokes.disabled"));
 				ClientProxy.config.get("Keystrokes", "Enabled", true, "Activates the keystrokes on startup").set(false);
 				ClientProxy.config.save();
 			} else if (msg.getCorner() != 4) {
