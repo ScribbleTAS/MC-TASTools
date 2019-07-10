@@ -148,26 +148,18 @@ public class RefillingDupe {
 								Overflow.setStackDisplayName(props[9]);
 							}
 							/*Create the EntityItem. The variable name is stupid, I know*/
-							EntityItem endidyidem=new EntityItem(world, Double.parseDouble(props[2]), Double.parseDouble(props[3]), Double.parseDouble(props[4]), Overflow);
-							world.spawnEntity(endidyidem);
+							EntityItem newitem=new EntityItem(world, Double.parseDouble(props[2]), Double.parseDouble(props[3]), Double.parseDouble(props[4]), Overflow);
+							world.spawnEntity(newitem);
 							
-							if(endidyidem.lifespan>Integer.parseInt(props[11])){	//check if value is bigger than the lifespan aka over 6000
-								endidyidem.lifespan=endidyidem.lifespan-Integer.parseInt(props[11]);	//set lifespan
-							}
+							//Apply the age
+							newitem.age=Integer.parseInt(props[11]);
 							
-							if(props[12].equals("null")) {
-								if(endidyidem.getAge()<10){		//set pickup delay
-									endidyidem.setPickupDelay(10-Integer.parseInt(props[11]));
-								}
-							}
-							else {
-								if(endidyidem.getAge()<40){		//set pickup delay when a person threw the block
-									endidyidem.setPickupDelay(40-Integer.parseInt(props[11]));
-								}
-							}
-							endidyidem.motionX=0;	//set the motion to zero so it doesn't fly around
-							endidyidem.motionY=0;
-							endidyidem.motionZ=0;
+							//Apply the pickupdelay
+							newitem.delayBeforeCanPickup=Integer.parseInt(props[12]);
+
+							newitem.motionX=0;	//set the motion to zero so it doesn't fly around
+							newitem.motionY=0;
+							newitem.motionZ=0;
 							itemcounter++; //for logging
 						}
 					}
