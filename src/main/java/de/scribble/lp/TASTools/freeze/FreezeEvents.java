@@ -49,6 +49,11 @@ public class FreezeEvents {
 				}
 				ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
 
+			}else { //Due to a strange bug, invulnerability and no gravity will get carried over even tho the server is shut down...
+				if(!playerev.isSpectator()&&!playerev.isCreative()) {
+					playerev.setEntityInvulnerable(false);
+					playerev.setNoGravity(false);
+				}
 			}
 		}else { // Open to LAN
 				if (ModLoader.freezeenabledSP) {
