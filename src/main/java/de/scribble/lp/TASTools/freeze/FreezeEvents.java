@@ -82,6 +82,10 @@ public class FreezeEvents {
 								playerev.setEntityInvulnerable(true);
 								ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
 							}
+						}else { //Due to a strange bug, invulnerability and no gravity will get carried over even tho the server is shut down...
+							if(!playerev.isSpectator()&&!playerev.isCreative()) {
+								playerev.setEntityInvulnerable(false);
+							}
 						}
 					} else { // Singleplayer
 						if (VelocityEvents.velocityenabledClient) {
