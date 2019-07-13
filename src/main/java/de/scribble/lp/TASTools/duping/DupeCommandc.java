@@ -32,7 +32,7 @@ public class DupeCommandc extends CommandBase{
 	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		World world =sender.getEntityWorld();
 		MinecraftServer server=FMLCommonHandler.instance().getMinecraftServerInstance();
-		if (!server.isDedicatedServer()&&server.getCurrentPlayerCount()>1) {
+		if (!server.isDedicatedServer()&&!(server.getCurrentPlayerCount()>1)) {
 			if(sender instanceof EntityPlayer &&DupeEvents.dupingenabled){
 				if(args.length==0){
 					File file= new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator +Minecraft.getMinecraft().getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
