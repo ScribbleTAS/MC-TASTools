@@ -30,7 +30,7 @@ public class DupeCommandc extends CommandBase{
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		World world =sender.getEntityWorld();
-		if (!server.isDedicatedServer()&&server.getCurrentPlayerCount()>1) {
+		if (!server.isDedicatedServer()&&server.getCurrentPlayerCount()==1) {
 			if(sender instanceof EntityPlayer &&DupeEvents.dupingenabled){
 				if(args.length==0){
 					File file= new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator +Minecraft.getMinecraft().getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
