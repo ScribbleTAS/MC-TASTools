@@ -1,7 +1,7 @@
 package de.scribble.lp.TASTools.savestates;
 
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class SavestatePacket implements IMessage{
 	private boolean loadSave;

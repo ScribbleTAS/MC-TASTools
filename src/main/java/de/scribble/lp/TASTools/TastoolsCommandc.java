@@ -2,6 +2,7 @@ package de.scribble.lp.TASTools;
 
 import java.util.List;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
@@ -19,7 +20,6 @@ import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class TastoolsCommandc extends CommandBase{
 
@@ -115,9 +115,9 @@ public class TastoolsCommandc extends CommandBase{
 					}
 				}
 				//Change other peoples keystroke settings
-				else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&playerlist.getPlayerList().contains(playerlist.getPlayerByUsername(args[1]))) {
-					notifyOperators(sender, this, "msg.keystroke.multiplayerchange", new ChatComponentText(args[1]));
-					ModLoader.NETWORK.sendTo(new KeystrokesPacket(), playerlist.getPlayerByUsername(args[1]));
+				else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&playerlist.playerEntityList.contains(playerlist.getPlayerList(args[1]))) {
+					func_152374_a(sender, this,1, "msg.keystroke.multiplayerchange", new ChatComponentText(args[1]));
+					ModLoader.NETWORK.sendTo(new KeystrokesPacket(), (EntityPlayerMP) playerlist.getPlayerList(args[1]));
 				}
 			}else {
 				if (args[0].equalsIgnoreCase("keystrokes")) {
@@ -211,11 +211,11 @@ public class TastoolsCommandc extends CommandBase{
 				if(!server.isDedicatedServer()&&server.getCurrentPlayerCount()==1) {
 					ClientProxy.config.load();
 					new Util().reloadClientconfig();
-					notifyOperators(sender, this, "msg.misc.reload", new Object()); //Config reloaded!
+					func_152374_a(sender, this,1, "msg.misc.reload", new Object()); //Config reloaded!
 				}else {
 					new Util().reloadServerconfig();
 					ModLoader.NETWORK.sendToAll(new MiscPacket(0));
-					notifyOperators(sender, this, "msg.misc.reload", new Object()); //Config reloaded!
+					func_152374_a(sender, this,1, "msg.misc.reload", new Object()); //Config reloaded!
 				}
 			} 
 			//gui logo singleplayer
@@ -237,9 +237,9 @@ public class TastoolsCommandc extends CommandBase{
 					ModLoader.NETWORK.sendTo(new MiscPacket(1), (EntityPlayerMP)sender);
 				}
 			}
-			else if (args.length==2&&args[0].equalsIgnoreCase("logo")&&playerlist.getPlayerList().contains(playerlist.getPlayerByUsername(args[1]))) {
-				notifyOperators(sender, this, "msg.logo.multiplayerchange", new ChatComponentText(args[1]));
-				ModLoader.NETWORK.sendTo(new MiscPacket(1), playerlist.getPlayerByUsername(args[1]));
+			else if (args.length==2&&args[0].equalsIgnoreCase("logo")&&playerlist.playerEntityList.contains(playerlist.getPlayerList(args[1]))) {
+				func_152374_a(sender, this,1, "msg.logo.multiplayerchange", new ChatComponentText(args[1]));
+				ModLoader.NETWORK.sendTo(new MiscPacket(1), (EntityPlayerMP) playerlist.getPlayerList(args[1]));
 			}
 			// Other than sender=Player starts here
 		} else {
@@ -278,39 +278,37 @@ public class TastoolsCommandc extends CommandBase{
 
 			} else if (args.length == 1 && args[0].equalsIgnoreCase("keystrokes")) {
 				CommonProxy.logger.warn("Cannot enable keystrokes");
-			} else if (args.length == 2 && args[0].equalsIgnoreCase("keystrokes") && playerlist.getPlayerList()
-					.contains(playerlist.getPlayerByUsername(args[1]))) {
+			} else if (args.length == 2 && args[0].equalsIgnoreCase("keystrokes") && playerlist.playerEntityList
+					.contains(playerlist.getPlayerList(args[1]))) {
 				CommonProxy.logger.info("Changed Keystroke-Settings for " + args[1]);
-				ModLoader.NETWORK.sendTo(new KeystrokesPacket(), playerlist.getPlayerByUsername(args[1]));
+				ModLoader.NETWORK.sendTo(new KeystrokesPacket(), (EntityPlayerMP) playerlist.getPlayerList(args[1]));
 				
 			} else if (args.length == 1 && args[0].equalsIgnoreCase("logo")) {
 				CommonProxy.logger.warn("Cannot enable the logo. Use /tastools logo <Playername>");
-			}else if(args.length == 2 && args[0].equalsIgnoreCase("logo")&& playerlist.getPlayerList()
-					.contains(playerlist.getPlayerByUsername(args[1]))) {
-				ModLoader.NETWORK.sendTo(new MiscPacket(1), playerlist.getPlayerByUsername(args[1]));
+			}else if(args.length == 2 && args[0].equalsIgnoreCase("logo")&& playerlist.playerEntityList
+					.contains(playerlist.getPlayerList(args[1]))) {
+				ModLoader.NETWORK.sendTo(new MiscPacket(1), (EntityPlayerMP) playerlist.getPlayerList(args[1]));
 			}
 		}
 	}
 
-	@Override
-
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, net.minecraft.util.BlockPos pos) {
-		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-		ServerConfigurationManager playerlist=server.getConfigurationManager();
-		if (args.length==1) {
-			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","logo","reload"});
-		}
-		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
-			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft","guiPotion"});
-			if(playerlist.getPlayerList().size()>1) {
-				tabs.addAll(getListOfStringsMatchingLastWord(args, playerlist.getAllUsernames()));
-			}
-			return tabs;
-		}
-		else if(args.length==2&&args[0].equalsIgnoreCase("logo")) {
-			return getListOfStringsMatchingLastWord(args, playerlist.getAllUsernames());
-		}
-		return super.addTabCompletionOptions(sender, args, pos);
+@Override
+public List addTabCompletionOptions(ICommandSender sender, String[] args) {
+	MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+	ServerConfigurationManager playerlist=server.getConfigurationManager();
+	if (args.length==1) {
+		return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","logo","reload"});
 	}
-
+	else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
+		List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft","guiPotion"});
+		if(playerlist.playerEntityList.size()>1) {
+			tabs.addAll(getListOfStringsMatchingLastWord(args, playerlist.getAllUsernames()));
+		}
+		return tabs;
+	}
+	else if(args.length==2&&args[0].equalsIgnoreCase("logo")) {
+		return getListOfStringsMatchingLastWord(args, playerlist.getAllUsernames());
+	}
+	return super.addTabCompletionOptions(sender, args);
+}
 }

@@ -1,13 +1,12 @@
 package de.scribble.lp.TASTools.savestates;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
 
 public class SavestateEvents {
 	public static boolean savestatepauseenabled;

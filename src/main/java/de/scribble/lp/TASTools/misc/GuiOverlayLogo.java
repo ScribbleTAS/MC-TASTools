@@ -1,11 +1,11 @@
 package de.scribble.lp.TASTools.misc;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class GuiOverlayLogo extends Gui{
 	ResourceLocation potion = new ResourceLocation("tastools:textures/potion_small.png");

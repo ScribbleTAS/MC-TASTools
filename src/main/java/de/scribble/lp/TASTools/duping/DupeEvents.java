@@ -2,15 +2,13 @@ package de.scribble.lp.TASTools.duping;
 
 import java.io.File;
 
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 public class DupeEvents {
 	private Minecraft mc= Minecraft.getMinecraft();
