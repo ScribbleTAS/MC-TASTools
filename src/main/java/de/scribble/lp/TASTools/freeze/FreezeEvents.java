@@ -5,6 +5,7 @@ import java.util.List;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import de.scribble.lp.TASTools.ClientProxy;
@@ -24,24 +25,24 @@ public class FreezeEvents {
 				if (VelocityEvents.velocityenabledServer) { // If velocity in the server config is enabled
 					File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath()
 							+ File.separator + ev.player.getEntityWorld().getWorldInfo().getWorldName() + File.separator
-							+ playerev.getName() + "_velocity.txt");
+							+ playerev.getDisplayName() + "_velocity.txt");
 
 					if (file.exists()) {
 						// Apply the motion to the player, instead of his current motion
 						double[] bewegung = new ReapplyingVelocity().getVelocity(file); // German for motion lol
 						float fallstrecke = new ReapplyingVelocity().getFalldistance(file); //falldistance
-						FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX, playerev.posY,
+						FreezeHandler.entity.add(new EntityDataStuff(playerev.getDisplayName(), playerev.posX, playerev.posY,
 								playerev.posZ, playerev.rotationPitch, playerev.rotationYaw, bewegung[0], bewegung[1],
 								bewegung[2], fallstrecke));
 					} else {
-						FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX, playerev.posY,
+						FreezeHandler.entity.add(new EntityDataStuff(playerev.getDisplayName(), playerev.posX, playerev.posY,
 								playerev.posZ, playerev.rotationPitch, playerev.rotationYaw, playerev.motionX,
 								playerev.motionY, playerev.motionZ, playerev.fallDistance));
 					}
 					playerev.capabilities.disableDamage=true;
 					playerev.capabilities.isFlying=true;
 				} else { // if velocityserver is disabled
-					FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX, playerev.posY,
+					FreezeHandler.entity.add(new EntityDataStuff(playerev.getDisplayName(), playerev.posX, playerev.posY,
 							playerev.posZ, playerev.rotationPitch, playerev.rotationYaw, 0, 0, 0, 0));
 
 					playerev.capabilities.disableDamage=true;
@@ -53,22 +54,22 @@ public class FreezeEvents {
 		}else { // Open to LAN
 				if (ModLoader.freezeenabledSP) {
 					List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance()
-							.getConfigurationManager().getPlayerList();
+							.getConfigurationManager().playerEntityList;
 					if (playerMP.size() > 1) {
 						if (FreezeHandler.isServerFrozen()) {
 							if (VelocityEvents.velocityenabledClient) {
 								File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath()
 										+ File.separator + ev.player.getEntityWorld().getWorldInfo().getWorldName()
-										+ File.separator + playerev.getName() + "_velocity.txt");
+										+ File.separator + playerev.getDisplayName() + "_velocity.txt");
 
 								if (file.exists()) {
 									double[] bewegung = new ReapplyingVelocity().getVelocity(file); // German for motion lol
 									float fallstrecke = new ReapplyingVelocity().getFalldistance(file); //falldistance
-									FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX,
+									FreezeHandler.entity.add(new EntityDataStuff(playerev.getDisplayName(), playerev.posX,
 											playerev.posY, playerev.posZ, playerev.rotationPitch, playerev.rotationYaw,
 											bewegung[0], bewegung[1], bewegung[2], fallstrecke));
 								} else {
-									FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX,
+									FreezeHandler.entity.add(new EntityDataStuff(playerev.getDisplayName(), playerev.posX,
 											playerev.posY, playerev.posZ, playerev.rotationPitch, playerev.rotationYaw,
 											0, 0, 0, 0));
 								}
@@ -78,7 +79,7 @@ public class FreezeEvents {
 
 							} else { // if velocityclient is disabled
 
-								FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX,
+								FreezeHandler.entity.add(new EntityDataStuff(playerev.getDisplayName(), playerev.posX,
 										playerev.posY, playerev.posZ, playerev.rotationPitch, playerev.rotationYaw,
 										playerev.motionX, playerev.motionY, playerev.motionZ, playerev.fallDistance));
 
@@ -112,17 +113,17 @@ public class FreezeEvents {
 	public void onLeaveServer(PlayerLoggedOutEvent ev) {
 		EntityPlayerMP playerEV = (EntityPlayerMP) ev.player;
 		
-		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
+		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
 		
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			if (FreezeHandler.isServerFrozen()) {
 				
 				for (int o=0; o<FreezeHandler.entity.size();o++) {
-					if(FreezeHandler.entity.get(o).getPlayername().equals(playerEV.getName())) {
+					if(FreezeHandler.entity.get(o).getPlayername().equals(playerEV.getDisplayName())) {
 						FreezeHandler.entity.remove(o);
 					}
 				}
-				if(!playerEV.capabilities.isCreativeMode||!playerEV.isSpectator()) {
+				if(!playerEV.capabilities.isCreativeMode) {
 					playerEV.capabilities.disableDamage=false;
 				}
 				playerEV.capabilities.isFlying=false;
@@ -133,11 +134,11 @@ public class FreezeEvents {
 				if (FreezeHandler.isServerFrozen()) {
 					
 					for (int o=0; o<FreezeHandler.entity.size();o++) {
-						if(FreezeHandler.entity.get(o).getPlayername().equals(playerEV.getName())) {
+						if(FreezeHandler.entity.get(o).getPlayername().equals(playerEV.getDisplayName())) {
 							FreezeHandler.entity.remove(o);
 						}
 					}
-					if(!playerEV.capabilities.isCreativeMode||!playerEV.isSpectator()) {
+					if(!playerEV.capabilities.isCreativeMode) {
 						playerEV.capabilities.disableDamage=false;
 					}
 					playerEV.capabilities.isFlying=false;

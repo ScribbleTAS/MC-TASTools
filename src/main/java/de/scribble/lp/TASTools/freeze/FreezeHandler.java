@@ -30,12 +30,12 @@ public class FreezeHandler {
 	
 	public static void startFreezeServer() {
 		serverfrozen=true;
-		List<EntityPlayerMP> playerTemp = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
+		List<EntityPlayerMP> playerTemp = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
 
 		if (playerTemp.size() > 0) {
 			entity=new ArrayList<EntityDataStuff>();
 			for (int i = 0; i < (playerTemp.size()); i++) {
-				entity.add(i, new EntityDataStuff(playerTemp.get(i).getName(), playerTemp.get(i).posX, playerTemp.get(i).posY, playerTemp.get(i).posZ,
+				entity.add(i, new EntityDataStuff(playerTemp.get(i).getDisplayName(), playerTemp.get(i).posX, playerTemp.get(i).posY, playerTemp.get(i).posZ,
 								playerTemp.get(i).rotationPitch, playerTemp.get(i).rotationYaw,
 								playerTemp.get(i).motionX, playerTemp.get(i).motionY, playerTemp.get(i).motionZ, playerTemp.get(i).fallDistance));
 				playerTemp.get(i).capabilities.disableDamage=true;
@@ -46,12 +46,12 @@ public class FreezeHandler {
 	}
 	public static void startFreezeSetMotionServer(double X, double Y, double Z, float falldistance) {
 		serverfrozen=true;
-		List<EntityPlayerMP> playerTemp2 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
+		List<EntityPlayerMP> playerTemp2 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
 
 		if (playerTemp2.size() > 0) {
 			entity=new ArrayList<EntityDataStuff>();
 			for (int i = 0; i < (playerTemp2.size()); i++) {
-				entity.add(i, new EntityDataStuff(playerTemp2.get(i).getName(), playerTemp2.get(i).posX, playerTemp2.get(i).posY, playerTemp2.get(i).posZ,
+				entity.add(i, new EntityDataStuff(playerTemp2.get(i).getDisplayName(), playerTemp2.get(i).posX, playerTemp2.get(i).posY, playerTemp2.get(i).posZ,
 								playerTemp2.get(i).rotationPitch, playerTemp2.get(i).rotationYaw,
 								X, Y, Z, falldistance));
 				playerTemp2.get(i).capabilities.disableDamage=true;
@@ -65,18 +65,18 @@ public class FreezeHandler {
 	
 	public static void stopFreezeServer() {
 		serverfrozen=false;
-		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
+		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
 		
 		if (playerMP.size() > 0) {
 			for (int i = 0; i < (playerMP.size()); i++) {
 				for (int o = 0; o < entity.size(); o++) {
-					if (playerMP.get(i).getName().equals(entity.get(o).getPlayername())) {
+					if (playerMP.get(i).getDisplayName().equals(entity.get(o).getPlayername())) {
 						playerMP.get(i).setPositionAndUpdate(entity.get(o).getPosX(), entity.get(o).getPosY(),
 								entity.get(o).getPosZ());
 						playerMP.get(i).rotationPitch = entity.get(o).getPitch();
 						playerMP.get(i).rotationYaw = entity.get(o).getYaw();
 						
-						if(!playerMP.get(i).capabilities.isCreativeMode&&!playerMP.get(i).isSpectator()) {
+						if(!playerMP.get(i).capabilities.isCreativeMode) {
 							playerMP.get(i).capabilities.disableDamage=false;
 						}
 						playerMP.get(i).motionX = entity.get(o).getMotionX();
@@ -123,7 +123,7 @@ class ApplyFreezeServer extends FreezeHandler{
 	public void onServerTick(TickEvent.ServerTickEvent ev) {
 		if (playerMP.size() > 0) {
 			for (int i = 0; i < playerMP.size(); i++) {
-					if (playerMP.get(i).getName().equals(entity.get(i).getPlayername())) {
+					if (playerMP.get(i).getDisplayName().equals(entity.get(i).getPlayername())) {
 						playerMP.get(i).setPositionAndUpdate(entity.get(i).getPosX(), entity.get(i).getPosY(),
 								entity.get(i).getPosZ());
 

@@ -2,6 +2,7 @@ package de.scribble.lp.TASTools.freeze;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import de.scribble.lp.TASTools.ModLoader;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,7 +15,7 @@ public class FreezePacketHandler implements IMessageHandler<FreezePacket, IMessa
 	public FreezePacket onMessage(final FreezePacket msg, MessageContext ctx) {
 		if (ctx.side == Side.SERVER) {
 			final EntityPlayer player = ctx.getServerHandler().playerEntity;
-			ctx.getServerHandler().playerEntity.getServerForPlayer().addScheduledTask(new Runnable(){
+			ctx.getServerHandler().playerEntity.getServerForPlayer().(new Runnable(){
 
 				@Override
 				public void run() {

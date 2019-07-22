@@ -7,6 +7,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 import de.scribble.lp.TASTools.CommonProxy;
+import ibxm.Player;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -31,12 +32,7 @@ public class DragonCommandc extends CommandBase{
 	public void processCommand(ICommandSender sender, String[] args) throws CommandException {
 		if (sender instanceof EntityPlayerMP) {
 
-			List<EntityDragon> dragons = sender.getEntityWorld().getEntities(EntityDragon.class, new Predicate<EntityDragon>() {
-				@Override
-				public boolean apply(EntityDragon e) {
-					return !e.isDead;
-				}
-			});
+			List<EntityDragon> dragons = sender.getEntityWorld().getEntitiesWithinAABB(EntityDragon.class, ((EntityPlayerMP) sender).boundingBox.expand(10000, 10000, 10000));
 			if (dragons.size() == 0) {
 				CommonProxy.logger.error("Couldn't find a dragon :(");
 				return;
