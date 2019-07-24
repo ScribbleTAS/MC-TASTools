@@ -2,6 +2,7 @@ package de.scribble.lp.TASTools.duping;
 
 import java.io.File;
 
+import io.netty.buffer.DuplicatedByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -33,7 +34,9 @@ public class DupeCommandc extends CommandBase{
 			if(sender instanceof EntityPlayer &&DupeEvents.dupingenabled){
 				if(args.length==0||(args[0].equalsIgnoreCase("chest")&&args.length==1)){
 					File file= new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator +Minecraft.getMinecraft().getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
-					if (file.exists())new RefillingDupe().refill(file, (EntityPlayer)sender);
+					if (file.exists()) {
+						new RefillingDupe().refill(file, (EntityPlayer)sender);
+					}
 				}
 			}
 		}
