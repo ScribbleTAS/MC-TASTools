@@ -55,7 +55,6 @@ public class DupeEvents {
 		Minecraft.getMinecraft().thePlayer.velocityChanged=true;
 		playa.setEntityInvulnerable(true);
 		MinecraftForge.EVENT_BUS.register(stopit);
-		length=0;
 	}
 
 }
