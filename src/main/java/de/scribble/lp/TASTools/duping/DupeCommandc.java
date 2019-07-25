@@ -34,7 +34,10 @@ public class DupeCommandc extends CommandBase{
 			if(sender instanceof EntityPlayer &&DupeEvents.dupingenabled){
 				if(args.length==0){
 					File file= new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator +Minecraft.getMinecraft().getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
-					if (file.exists())new RefillingDupe().refill(file, (EntityPlayer)sender);
+					if (file.exists()) {
+						new DupeEvents().startStopping((EntityPlayer)sender);
+						new RefillingDupe().refill(file, (EntityPlayer)sender);
+					}
 				}
 			}
 		} else {
