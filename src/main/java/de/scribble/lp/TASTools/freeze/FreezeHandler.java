@@ -143,8 +143,8 @@ class ApplyFreezeServer extends FreezeHandler{
 
 class ApplyFreezeClient extends FreezeHandler{
 	
-	/*@SubscribeEvent
+	@SubscribeEvent
 	public void disableMouse(MouseEvent ev) {
 		ev.setCanceled(true);
-	}*/
+	}
 }
