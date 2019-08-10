@@ -16,9 +16,11 @@ import de.scribble.lp.TASTools.duping.DupeCommandc;
 import de.scribble.lp.TASTools.enderdragon.DragonCommandc;
 import de.scribble.lp.TASTools.freeze.FreezeCommandc;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
+import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateCommandc;
 import de.scribble.lp.TASTools.savestates.SavestateHandlerServer;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * 
@@ -55,6 +57,8 @@ public class ModLoader {
 	@EventHandler
 	public void init(FMLInitializationEvent ev) {
 		proxy.init(ev);
+		//disable keystrokes from this mod
+			MinecraftForge.EVENT_BUS.register(new GuiKeystrokes());
 	}
 	
 	@EventHandler

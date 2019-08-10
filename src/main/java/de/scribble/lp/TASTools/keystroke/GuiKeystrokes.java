@@ -40,7 +40,7 @@ public class GuiKeystrokes extends Gui {
 		if (event.isCancelable() || event.type != ElementType.HOTBAR) {
 			return;
 		}
-		ScaledResolution scaled = new ScaledResolution(mc, 0, 0);
+		ScaledResolution scaled = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 		int width = scaled.getScaledWidth();
 		int height = scaled.getScaledHeight();
 		if(guienabled) {
@@ -60,121 +60,121 @@ public class GuiKeystrokes extends Gui {
 	}
 	
 	private void downLeft(int width, int height) {
-		if(mc.gameSettings.keyBindForward.isPressed()){
+		if(mc.gameSettings.keyBindForward.pressed){
 			new Gui().drawString(mc.fontRenderer, "W", 3, height-13, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindBack.isPressed()){
+		if(mc.gameSettings.keyBindBack.pressed){
 			new Gui().drawString(mc.fontRenderer, "S", 11, height-13, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindLeft.isPressed()){
+		if(mc.gameSettings.keyBindLeft.pressed){
 			new Gui().drawString(mc.fontRenderer, "A", 19, height-13, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindRight.isPressed()){
+		if(mc.gameSettings.keyBindRight.pressed){
 			new Gui().drawString(mc.fontRenderer, "D", 27, height-13, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindJump.isPressed()){
+		if(mc.gameSettings.keyBindJump.pressed){
 			new Gui().drawString(mc.fontRenderer, "Space", 35, height-13, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindSneak.isPressed()){
+		if(mc.gameSettings.keyBindSneak.pressed){
 			new Gui().drawString(mc.fontRenderer, "Shift", 67, height-13, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindSprint.isPressed()){
+		if(mc.gameSettings.keyBindSprint.pressed){
 			new Gui().drawString(mc.fontRenderer, "Ctrl", 92, height-13, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindAttack.isPressed()){
+		if(mc.gameSettings.keyBindAttack.pressed){
 			new Gui().drawString(mc.fontRenderer, "LK", 113, height-13, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindUseItem.isPressed()){
+		if(mc.gameSettings.keyBindUseItem.pressed){
 			new Gui().drawString(mc.fontRenderer, "RK", 127, height-13, 0xFFFFFF);
 		}
 	}
 	
 	private void downRight(int width, int height) {
-		if(mc.gameSettings.keyBindForward.isPressed()){
+		if(mc.gameSettings.keyBindForward.pressed){
 			new Gui().drawString(mc.fontRenderer, "W", width-139, height-13, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindBack.isPressed()){
+		if(mc.gameSettings.keyBindBack.pressed){
 			new Gui().drawString(mc.fontRenderer, "S", width-131, height-13, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindLeft.isPressed()){
+		if(mc.gameSettings.keyBindLeft.pressed){
 			new Gui().drawString(mc.fontRenderer, "A", width-123, height-13, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindRight.isPressed()){
+		if(mc.gameSettings.keyBindRight.pressed){
 			new Gui().drawString(mc.fontRenderer, "D", width-115, height-13, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindJump.isPressed()){
+		if(mc.gameSettings.keyBindJump.pressed){
 			new Gui().drawString(mc.fontRenderer, "Space", width-107, height-13, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindSneak.isPressed()){
+		if(mc.gameSettings.keyBindSneak.pressed){
 			new Gui().drawString(mc.fontRenderer, "Shift", width-75, height-13, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindSprint.isPressed()){
+		if(mc.gameSettings.keyBindSprint.pressed){
 			new Gui().drawString(mc.fontRenderer, "Ctrl", width-50, height-13, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindAttack.isPressed()){
+		if(mc.gameSettings.keyBindAttack.pressed){
 			new Gui().drawString(mc.fontRenderer, "LK", width-29, height-13, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindUseItem.isPressed()){
+		if(mc.gameSettings.keyBindUseItem.pressed){
 			new Gui().drawString(mc.fontRenderer, "RK", width-15, height-13, 0xFFFFFF);
 		}
 	}
 	
 	private void upRight(int width, int height) {
-		if(mc.gameSettings.keyBindForward.isPressed()){
+		if(mc.gameSettings.keyBindForward.pressed){
 			new Gui().drawString(mc.fontRenderer, "W", width-139, 5, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindBack.isPressed()){
+		if(mc.gameSettings.keyBindBack.pressed){
 			new Gui().drawString(mc.fontRenderer, "S", width-131, 5, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindLeft.isPressed()){
+		if(mc.gameSettings.keyBindLeft.pressed){
 			new Gui().drawString(mc.fontRenderer, "A", width-123, 5, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindRight.isPressed()){
+		if(mc.gameSettings.keyBindRight.pressed){
 			new Gui().drawString(mc.fontRenderer, "D", width-115, 5, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindJump.isPressed()){
+		if(mc.gameSettings.keyBindJump.pressed){
 			new Gui().drawString(mc.fontRenderer, "Space", width-107, 5, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindSneak.isPressed()){
+		if(mc.gameSettings.keyBindSneak.pressed){
 			new Gui().drawString(mc.fontRenderer, "Shift", width-75, 5, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindSprint.isPressed()){
+		if(mc.gameSettings.keyBindSprint.pressed){
 			new Gui().drawString(mc.fontRenderer, "Ctrl", width-50, 5, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindAttack.isPressed()){
+		if(mc.gameSettings.keyBindAttack.pressed){
 			new Gui().drawString(mc.fontRenderer, "LK", width-29, 5, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindUseItem.isPressed()){
+		if(mc.gameSettings.keyBindUseItem.pressed){
 			new Gui().drawString(mc.fontRenderer, "RK", width-15, 5, 0xFFFFFF);
 		}
 	}
 
 	private void upLeft(int width, int height) {
-		if(mc.gameSettings.keyBindForward.isPressed()){
+		if(mc.gameSettings.keyBindForward.pressed){
 			new Gui().drawString(mc.fontRenderer, "W", 3, 5, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindBack.isPressed()){
+		if(mc.gameSettings.keyBindBack.pressed){
 			new Gui().drawString(mc.fontRenderer, "S", 11, 5, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindLeft.isPressed()){
+		if(mc.gameSettings.keyBindLeft.pressed){
 			new Gui().drawString(mc.fontRenderer, "A", 19, 5, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindRight.isPressed()){
+		if(mc.gameSettings.keyBindRight.pressed){
 			new Gui().drawString(mc.fontRenderer, "D", 27, 5, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindJump.isPressed()){
+		if(mc.gameSettings.keyBindJump.pressed){
 			new Gui().drawString(mc.fontRenderer, "Space", 35, 5, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindSneak.isPressed()){
+		if(mc.gameSettings.keyBindSneak.pressed){
 			new Gui().drawString(mc.fontRenderer, "Shift", 67, 5, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindSprint.isPressed()){
+		if(mc.gameSettings.keyBindSprint.pressed){
 			new Gui().drawString(mc.fontRenderer, "Ctrl", 92, 5, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindAttack.isPressed()){
+		if(mc.gameSettings.keyBindAttack.pressed){
 			new Gui().drawString(mc.fontRenderer, "LK", 113, 5, 0xFFFFFF);
 		}
-		if(mc.gameSettings.keyBindUseItem.isPressed()){
+		if(mc.gameSettings.keyBindUseItem.pressed){
 			new Gui().drawString(mc.fontRenderer, "RK", 127, 5, 0xFFFFFF);
 		}
 	}

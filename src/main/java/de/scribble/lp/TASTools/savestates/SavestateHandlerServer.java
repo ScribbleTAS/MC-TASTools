@@ -66,14 +66,14 @@ public class SavestateHandlerServer {
 				}
 				if (VelocityEvents.velocityenabledServer) {
 					List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager()
-							.getPlayerList();
+							.playerEntityList;
 					for (int o = 0; o < players.size(); o++) {
 						for (int e = 0; e < FreezeHandler.entity.size(); e++) {
-							if (FreezeHandler.entity.get(e).getPlayername().equals(players.get(o).getName())) {
+							if (FreezeHandler.entity.get(e).getPlayername().equals(players.get(o).getDisplayName())) {
 								new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(o).getMotionX(),
 										FreezeHandler.entity.get(o).getMotionY(),
 										FreezeHandler.entity.get(o).getMotionZ(), FreezeHandler.entity.get(o).getFalldistance(), new File(currentworldfolder.getPath()
-												+ File.separator + players.get(o).getName() + "_velocity.txt"));
+												+ File.separator + players.get(o).getDisplayName() + "_velocity.txt"));
 							}
 						}
 					}

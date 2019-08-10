@@ -5,6 +5,7 @@ import java.util.List;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
@@ -18,7 +19,7 @@ public class VelocityEvents {
 	@SubscribeEvent
 	public void onCloseServer(PlayerEvent.PlayerLoggedOutEvent ev) {
 		if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
-			List<EntityPlayerMP> players= FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
+			List<EntityPlayerMP> players= FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
 			// Singleplayer
 			if (players.size() == 1) {
 				if (velocityenabledClient) {
@@ -39,11 +40,11 @@ public class VelocityEvents {
 				if (velocityenabledClient) {
 					File file = new File(Minecraft.getMinecraft().mcDataDir,
 							"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
-									+ File.separator + ev.player.getName() + "_velocity.txt");
-					CommonProxy.logger.info("Start saving velocity for " + ev.player.getName() + " (Singleplayer)");
+									+ File.separator + ev.player.getDisplayName() + "_velocity.txt");
+					CommonProxy.logger.info("Start saving velocity for " + ev.player.getDisplayName() + " (Singleplayer)");
 					if (FreezeHandler.isServerFrozen()) {
 						for (int i = 0; i < players.size(); i++) {
-							if (FreezeHandler.entity.get(i).getPlayername().equals(ev.player.getName())) {
+							if (FreezeHandler.entity.get(i).getPlayername().equals(ev.player.getDisplayName())) {
 								new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(i).getMotionX(),
 										FreezeHandler.entity.get(i).getMotionY(),
 										FreezeHandler.entity.get(i).getMotionZ(), FreezeHandler.entity.get(i).getFalldistance(), file);
@@ -58,12 +59,12 @@ public class VelocityEvents {
 		}else {
 			if(velocityenabledServer) {
 				File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath() + File.separator + ModLoader.getLevelname() +File.separator
-						+ ev.player.getName() + "_velocity.txt");
-				List<EntityPlayerMP> players= FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
-				CommonProxy.logger.info("Saving velocity of "+ev.player.getName());
+						+ ev.player.getDisplayName() + "_velocity.txt");
+				List<EntityPlayerMP> players= FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
+				CommonProxy.logger.info("Saving velocity of "+ev.player.getDisplayName());
 				if(FreezeHandler.isServerFrozen()) {
 					for(int i=0;i<players.size();i++) {
-						if(FreezeHandler.entity.get(i).getPlayername().equals(ev.player.getName())) {
+						if(FreezeHandler.entity.get(i).getPlayername().equals(ev.player.getDisplayName())) {
 							new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(i).getMotionX(), FreezeHandler.entity.get(i).getMotionY(), FreezeHandler.entity.get(i).getMotionZ(), FreezeHandler.entity.get(0).getFalldistance(), file);
 						}
 					}

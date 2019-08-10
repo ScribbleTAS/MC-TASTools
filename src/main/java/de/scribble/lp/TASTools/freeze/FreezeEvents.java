@@ -151,12 +151,7 @@ public class FreezeEvents {
 
 		}
 	}
+	
 
-	@SubscribeEvent
-	public void pressKeybinding(InputEvent.KeyInputEvent ev) {
-		Minecraft mc = Minecraft.getMinecraft();
-		if (ClientProxy.FreezeKey.isPressed()) {
-			ModLoader.NETWORK.sendToServer(new FreezePacket(true, 1));
-		}
-	}
+
 }

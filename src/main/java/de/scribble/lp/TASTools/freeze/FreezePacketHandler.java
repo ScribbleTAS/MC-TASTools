@@ -15,11 +15,8 @@ public class FreezePacketHandler implements IMessageHandler<FreezePacket, IMessa
 	public FreezePacket onMessage(final FreezePacket msg, MessageContext ctx) {
 		if (ctx.side == Side.SERVER) {
 			final EntityPlayer player = ctx.getServerHandler().playerEntity;
-			ctx.getServerHandler().playerEntity.getServerForPlayer().(new Runnable(){
 
-				@Override
-				public void run() {
-					if(MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile())) {
+					if(MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile())) {
 						if (msg.getMode() == 0) {
 							if (msg.startstop()) {
 								FreezeHandler.startFreezeServer();
@@ -40,8 +37,6 @@ public class FreezePacketHandler implements IMessageHandler<FreezePacket, IMessa
 							}
 						}
 					}
-				}
-			});
 		} else if (ctx.side == Side.CLIENT) {
 			if (msg.startstop()) {
 				FreezeHandler.startFreezeClient();

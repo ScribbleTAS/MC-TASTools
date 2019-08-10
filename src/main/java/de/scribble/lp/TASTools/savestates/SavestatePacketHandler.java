@@ -3,6 +3,7 @@ package de.scribble.lp.TASTools.savestates;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import de.scribble.lp.TASTools.ModLoader;
 import net.minecraft.client.Minecraft;
@@ -19,11 +20,8 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 			final MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 			final EntityPlayer player =ctx.getServerHandler().playerEntity;
 				if (!ctx.getServerHandler().playerEntity.mcServer.isDedicatedServer()) {
-					ctx.getServerHandler().playerEntity.getServerForPlayer().addScheduledTask(new Runnable() {
-	
-						@Override
-						public void run() {
-							if(MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile())){
+
+							if(MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile())){
 								if (message.isLoadSave()) {
 									new SavestateHandlerClient().saveState();
 								} else {
@@ -31,34 +29,24 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 										ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) player);
 									}
 									else {
-										ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), server.getConfigurationManager().getPlayerList().get(0));
+										ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) server.getConfigurationManager().playerEntityList.get(0));
 									}
 								}
 							}
-						}
-						
-					});
+
 				}else {
-					ctx.getServerHandler().playerEntity.getServerForPlayer().addScheduledTask(new Runnable(){
-	
-						@Override
-						public void run() {
-							if(MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile())){
+
+							if(MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile())){
 								if (message.getMode()==0) {
 									if(message.isLoadSave())new SavestateHandlerServer().saveState();
 									else new SavestateHandlerServer().setFlagandShutdown();
 								}
 							}
-						}
-						
-					});
+
 				}
 			
 		} else if (ctx.side == Side.CLIENT) {
-			Minecraft.getMinecraft().addScheduledTask(new Runnable() {
 
-				@Override
-				public void run() {
 					if (message.getMode()==0) {
 						if(!message.isLoadSave()) {
 							new SavestateHandlerClient().displayLoadingScreen();
@@ -71,8 +59,7 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 					}
 				}
 				
-			});
-		}
+
 
 		return null;
 	}

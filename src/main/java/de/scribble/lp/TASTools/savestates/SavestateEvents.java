@@ -1,6 +1,7 @@
 package de.scribble.lp.TASTools.savestates;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
 import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
@@ -21,11 +22,6 @@ public class SavestateEvents {
 	}
 	@SubscribeEvent
 	public void pressKeybinding(InputEvent.KeyInputEvent ev){
-		if (ClientProxy.SavestateSaveKey.isPressed()) {
-			ModLoader.NETWORK.sendToServer(new SavestatePacket(true));
-		}
-		if (ClientProxy.SavestateLoadKey.isPressed()) {
-			ModLoader.NETWORK.sendToServer(new SavestatePacket(false));
-		}
+
 	}
 }

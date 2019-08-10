@@ -21,6 +21,11 @@ version = "0.5"
 group= "de.scribble.lp.tastools" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "TASTools-1.7.10"
 
+jar {
+    manifest {
+        attributes 'FMLAT': 'tastools_at.cfg'
+    }
+}
 minecraft {
     version = "1.7.10-10.13.4.1614-1.7.10"
     runDir = "eclipse"
@@ -41,7 +46,11 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
 }
-
+jar {
+    manifest {
+        attributes 'FMLAT': 'tastools_at.cfg'
+    }
+}
 processResources
 {
     // this will ensure that this task is redone when the versions change.

@@ -11,7 +11,6 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.BlockPos;
 
 public class SavestateCommandc extends CommandBase{
 
@@ -56,12 +55,12 @@ public class SavestateCommandc extends CommandBase{
 		
 	}
 	@Override
-	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args, BlockPos pos) {
+	public List<String> addTabCompletionOptions(ICommandSender sender, String[] args) {
 		MinecraftServer server=FMLCommonHandler.instance().getMinecraftServerInstance();
 		if(args.length==1) {
 			return getListOfStringsMatchingLastWord(args, new String[] {"save","load"});
 		}else {
-			return super.addTabCompletionOptions(sender, args, pos);
+			return super.addTabCompletionOptions(sender, args);
 		}
 	}
 }

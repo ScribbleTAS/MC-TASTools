@@ -5,10 +5,12 @@ import java.io.File;
 import org.lwjgl.input.Keyboard;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import de.scribble.lp.TASTools.duping.DupeEvents;
+import de.scribble.lp.TASTools.duping.DupeEvents2;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
@@ -68,7 +70,8 @@ public class ClientProxy extends CommonProxy{
 		super.init(ev);
 		//disable dupemod in this mod
 		if(!CommonProxy.isDupeModLoaded()){
-			MinecraftForge.EVENT_BUS.register(new DupeEvents());
+			FMLCommonHandler.instance().bus().register(new DupeEvents());
+			MinecraftForge.EVENT_BUS.register(new DupeEvents2());
 		}
 		else {
 			CommonProxy.logger.warn("Found the DupeMod to be installed! DupeMod is integrated in TAStools, so no need to load that!");
@@ -77,6 +80,7 @@ public class ClientProxy extends CommonProxy{
 		if(!CommonProxy.isTASModLoaded()) {
 			MinecraftForge.EVENT_BUS.register(new GuiKeystrokes());
 		}
+		FMLCommonHandler.instance().bus().register(new KeyBindings());
 		MinecraftForge.EVENT_BUS.register(new GuiOverlayLogo());
 		MinecraftForge.EVENT_BUS.register(new SavestateEvents());
 

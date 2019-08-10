@@ -19,6 +19,7 @@ import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
@@ -32,6 +33,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldSettings;
 import net.minecraftforge.common.MinecraftForge;
@@ -57,7 +59,7 @@ public class SavestateHandlerClient {
 			currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName());
 			targetsavefolder=null;
 			worldname=Minecraft.getMinecraft().getIntegratedServer().getFolderName();
-			List<EntityPlayerMP> players=FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList();
+			List<EntityPlayerMP> players=FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
 			//Check for worlds in the savestate folder
 			if (!isSaving&&!isLoading) {
 				isSaving = true;
@@ -104,7 +106,7 @@ public class SavestateHandlerClient {
 						if (FreezeHandler.isServerFrozen()) {
 							for (int i1 = 0; i1 < players.size(); i1++) {
 								for (int j = 0; j < FreezeHandler.entity.size(); j++) {
-									if (FreezeHandler.entity.get(j).getPlayername().equals(players.get(i1).getName())) {
+									if (FreezeHandler.entity.get(j).getPlayername().equals(players.get(i1).getDisplayName())) {
 										new SavingVelocity().saveVelocityCustom(
 												FreezeHandler.entity.get(j).getMotionX(),
 												FreezeHandler.entity.get(i1).getMotionY(),
@@ -168,7 +170,7 @@ public class SavestateHandlerClient {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				FMLCommonHandler.instance().firePlayerLoggedOut(FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList().get(0));
+				FMLCommonHandler.instance().firePlayerLoggedOut((EntityPlayer) FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList.get(0));
 				Minecraft.getMinecraft().loadWorld((WorldClient)null);
 				mc.displayGuiScreen(new GuiSavestateLoadingScreen());
 				SavestateLoadEventsClient Events=new SavestateLoadEventsClient();
