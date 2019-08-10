@@ -12,7 +12,7 @@ public class GuiSavestateSavingScreen extends GuiScreen{
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
 		
-		ScaledResolution scaled = new ScaledResolution(Minecraft.getMinecraft(), 0, 0);
+		ScaledResolution scaled = new ScaledResolution(Minecraft.getMinecraft(), mc.displayWidth, mc.displayHeight);
 		int width = scaled.getScaledWidth();
 		int height = scaled.getScaledHeight();
 		

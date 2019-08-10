@@ -69,7 +69,7 @@ public class CommonProxy {
 	}
 	
 	public void init(FMLInitializationEvent ev) {
-		MinecraftForge.EVENT_BUS.register(new FreezeEvents());
+		FMLCommonHandler.instance().bus().register(new FreezeEvents());
 		MinecraftForge.EVENT_BUS.register(new DragonEvents());
 	}
 	

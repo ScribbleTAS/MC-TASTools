@@ -46,7 +46,7 @@ public class ModLoader {
 	public static boolean stopit;
 	
 	public static final String VERSION="${version}";		//If you want to know how I did this, check the build.gradle file under minceraft and "replace"
-	public static final String MCVERSION="${mcversion}";
+	public static final String MCVERSION="1.7.10";
 	
 
 	@EventHandler

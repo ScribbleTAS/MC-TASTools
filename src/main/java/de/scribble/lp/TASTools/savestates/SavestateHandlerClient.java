@@ -45,7 +45,7 @@ public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
 	protected static boolean isSaving=false;
 	protected static boolean isLoading=false;
-	protected static int endtimer=20;
+
 	
 	protected static File currentworldfolder;
 	protected static File targetsavefolder=null;
@@ -85,7 +85,7 @@ public class SavestateHandlerClient {
 					i++;
 				}
 				// Save the world
-				ModLoader.NETWORK.sendToAll(new SavestatePacket());
+				ModLoader.NETWORK.sendToAll(new SavestatePacket(true));
 				File file = new File(Minecraft.getMinecraft().mcDataDir,
 						"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
 								+ File.separator + "latest_velocity.txt");
@@ -130,8 +130,9 @@ public class SavestateHandlerClient {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				SavestateSaveEventsClient lol = new SavestateSaveEventsClient();
-				MinecraftForge.EVENT_BUS.register(lol);
+				//If I learn this stuff correctly, then I swear  I will change and update everything but for now this will do, sry
+				SavestateEvents2.tickspassed=0;
+				SavestateEvents2.clientsaving=true;
 			}else {
 				CommonProxy.logger.error("Saving savestate is blocked by another action.");
 			}
@@ -173,8 +174,8 @@ public class SavestateHandlerClient {
 				FMLCommonHandler.instance().firePlayerLoggedOut((EntityPlayer) FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList.get(0));
 				Minecraft.getMinecraft().loadWorld((WorldClient)null);
 				mc.displayGuiScreen(new GuiSavestateLoadingScreen());
-				SavestateLoadEventsClient Events=new SavestateLoadEventsClient();
-				MinecraftForge.EVENT_BUS.register(Events);
+				SavestateEvents2.tickspassed=0;
+				SavestateEvents2.clientloading=true;
 				
 			}else {
 				CommonProxy.logger.error("Loading savestate is blocked by another action.");
@@ -191,7 +192,7 @@ public class SavestateHandlerClient {
      * @param ignore array of ignored names (strings)
      * @throws IOException
      */
-    protected void copyDirectory(File sourceLocation, File targetLocation, String[] ignore) throws IOException
+    protected static void copyDirectory(File sourceLocation, File targetLocation, String[] ignore) throws IOException
     {
         if (sourceLocation.isDirectory())
         {
@@ -247,7 +248,7 @@ public class SavestateHandlerClient {
      * @param ignore ignored files
      * @return true on success
      */
-    protected boolean deleteDirContents(File dir, String[] ignore){
+    protected static boolean deleteDirContents(File dir, String[] ignore){
     	
         if (dir.isDirectory())
         {
@@ -338,63 +339,6 @@ public class SavestateHandlerClient {
 			mc.displayGuiScreen(new GuiIngameMenu());
 		} else {
 			mc.displayGuiScreen(new GuiSavestateIngameMenu());
-		}
-	}
-}
-class SavestateSaveEventsClient extends SavestateHandlerClient{
-	int tickspassed=0;
-	@SubscribeEvent
-	public void onTick(TickEvent.ClientTickEvent ev) {
-		if (ev.phase==Phase.START) {
-			if (tickspassed>=20) {
-				try {
-					copyDirectory(currentworldfolder, targetsavefolder, new String[] {" "});
-					
-				} catch (IOException e) {
-					CommonProxy.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate save)");
-					e.printStackTrace();
-					MinecraftForge.EVENT_BUS.unregister(this);
-					isSaving=false;
-					return;
-				}
-				
-				ModLoader.NETWORK.sendToAll(new SavestatePacket(true));
-				MinecraftForge.EVENT_BUS.unregister(this);
-				isSaving=false;
-				return;
-			}
-			tickspassed++;
-		}
-	}
-}
-class SavestateLoadEventsClient extends SavestateHandlerClient{
-	private int tickspassed=0;
-	@SubscribeEvent
-	public void onTick(TickEvent.ClientTickEvent ev) {
-		if (ev.phase == Phase.START) {
-			if (!mc.isIntegratedServerRunning()) {
-				if (tickspassed >= endtimer) {
-					if (!(mc.currentScreen instanceof GuiSavestateLoadingScreen)) {
-						isLoading=false;
-						return;
-					}
-					MinecraftForge.EVENT_BUS.unregister(this);
-					deleteDirContents(currentworldfolder, new String[] { " " });
-					try {
-						copyDirectory(targetsavefolder, currentworldfolder, new String[] { " " });
-					} catch (IOException e) {
-						CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
-								+ targetsavefolder.getPath() + " for some reason (Savestate load)");
-						e.printStackTrace();
-						mc.displayGuiScreen(new GuiMainMenu());
-						isLoading=false;
-						return;
-					}
-					FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
-					isLoading=false;
-				}
-				tickspassed++;
-			}
 		}
 	}
 }

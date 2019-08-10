@@ -17,9 +17,10 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "0.5"
+version = "Beta"
 group= "de.scribble.lp.tastools" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "TASTools-1.7.10"
+
 
 jar {
     manifest {
@@ -29,6 +30,7 @@ jar {
 minecraft {
     version = "1.7.10-10.13.4.1614-1.7.10"
     runDir = "eclipse"
+    replace '${version}':project.version
 }
 
 dependencies {

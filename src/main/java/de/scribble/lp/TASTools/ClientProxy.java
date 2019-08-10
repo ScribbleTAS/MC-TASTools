@@ -11,9 +11,11 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.duping.DupeEvents2;
+import de.scribble.lp.TASTools.freeze.FreezeEvents2;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
+import de.scribble.lp.TASTools.savestates.SavestateEvents2;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -81,8 +83,10 @@ public class ClientProxy extends CommonProxy{
 			MinecraftForge.EVENT_BUS.register(new GuiKeystrokes());
 		}
 		FMLCommonHandler.instance().bus().register(new KeyBindings());
+		MinecraftForge.EVENT_BUS.register(new FreezeEvents2());
 		MinecraftForge.EVENT_BUS.register(new GuiOverlayLogo());
 		MinecraftForge.EVENT_BUS.register(new SavestateEvents());
+		FMLCommonHandler.instance().bus().register(new SavestateEvents2());
 
 	}
 	

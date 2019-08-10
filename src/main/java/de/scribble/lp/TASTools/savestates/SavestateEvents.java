@@ -20,8 +20,4 @@ public class SavestateEvents {
 			}
 		}
 	}
-	@SubscribeEvent
-	public void pressKeybinding(InputEvent.KeyInputEvent ev){
-
-	}
 }

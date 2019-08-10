@@ -13,8 +13,6 @@ import net.minecraftforge.event.entity.living.LivingFallEvent;
 
 public class FreezeHandler {
 	
-	static ApplyFreezeServer FreezerSE = new ApplyFreezeServer();
-	static ApplyFreezeClient FreezerCL = new ApplyFreezeClient();
 	public static ArrayList<EntityDataStuff> entity = new ArrayList<EntityDataStuff>();
 	
 	public static List<EntityPlayerMP> playerMP;
@@ -29,7 +27,6 @@ public class FreezeHandler {
 	private static boolean clientfrozen;
 	
 	public static void startFreezeServer() {
-		serverfrozen=true;
 		List<EntityPlayerMP> playerTemp = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
 
 		if (playerTemp.size() > 0) {
@@ -42,7 +39,7 @@ public class FreezeHandler {
 			}
 		}
 		playerMP = playerTemp;
-		MinecraftForge.EVENT_BUS.register(FreezerSE);
+		serverfrozen=true;
 	}
 	public static void startFreezeSetMotionServer(double X, double Y, double Z, float falldistance) {
 		serverfrozen=true;
@@ -59,12 +56,10 @@ public class FreezeHandler {
 			}
 		}
 		playerMP = playerTemp2;
-		MinecraftForge.EVENT_BUS.register(FreezerSE);
 	}
 	
 	
 	public static void stopFreezeServer() {
-		serverfrozen=false;
 		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
 		
 		if (playerMP.size() > 0) {
@@ -89,23 +84,20 @@ public class FreezeHandler {
 				}
 			}
 		}
-		MinecraftForge.EVENT_BUS.unregister(FreezerSE);
+		serverfrozen=false;
 	}
 	/**
 	 * Used if there is no player on the server, and if you want to stop freezing
 	 */
 	public static void stopFreezeServerNoUpdate() {
 		serverfrozen=false;
-		MinecraftForge.EVENT_BUS.unregister(FreezerSE);
 	}
 	
 	public static void startFreezeClient() {
 		clientfrozen=true;
-		MinecraftForge.EVENT_BUS.register(FreezerCL);
 	}
 	public static void stopFreezeClient() {
 		clientfrozen=false;
-		MinecraftForge.EVENT_BUS.unregister(FreezerCL);
 	}
 	public static boolean isServerFrozen() {
 		return serverfrozen;
@@ -115,36 +107,3 @@ public class FreezeHandler {
 	}
 }
 
-
-
-class ApplyFreezeServer extends FreezeHandler{
-
-	@SubscribeEvent
-	public void onServerTick(TickEvent.ServerTickEvent ev) {
-		if (playerMP.size() > 0) {
-			for (int i = 0; i < playerMP.size(); i++) {
-					if (playerMP.get(i).getDisplayName().equals(entity.get(i).getPlayername())) {
-						playerMP.get(i).setPositionAndUpdate(entity.get(i).getPosX(), entity.get(i).getPosY(),
-								entity.get(i).getPosZ());
-
-						playerMP.get(i).rotationPitch = entity.get(i).getPitch();
-						playerMP.get(i).rotationYaw = entity.get(i).getYaw();
-				}
-			}
-		}
-	}
-	@SubscribeEvent
-	public void disableFalldamage(LivingFallEvent ev) {
-		if (ev.entityLiving instanceof EntityPlayerMP) {
-			ev.setCanceled(true);
-		}
-	}
-}
-
-class ApplyFreezeClient extends FreezeHandler{
-	
-	@SubscribeEvent
-	public void disableMouse(MouseEvent ev) {
-		ev.setCanceled(true);
-	}
-}

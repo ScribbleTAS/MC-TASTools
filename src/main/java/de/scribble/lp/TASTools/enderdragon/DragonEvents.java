@@ -11,13 +11,7 @@ import net.minecraft.entity.boss.EntityDragon;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class DragonEvents {
-	@SubscribeEvent
-	@SideOnly(Side.CLIENT)
-	public void onKeyPress(InputEvent.KeyInputEvent ev) {
-		if(ClientProxy.DragonKey.isPressed()) {
-			Minecraft.getMinecraft().thePlayer.sendChatMessage("/dragon");
-		}
-	}
+
 	@SubscribeEvent
 	public void displayDamageinConsole(LivingHurtEvent ev) {
 		if (ev.entity instanceof EntityDragon) {

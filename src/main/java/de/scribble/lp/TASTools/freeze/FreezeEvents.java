@@ -6,6 +6,7 @@ import java.util.List;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import de.scribble.lp.TASTools.ClientProxy;
@@ -14,6 +15,8 @@ import de.scribble.lp.TASTools.velocity.ReapplyingVelocity;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.event.entity.living.LivingFallEvent;
 
 public class FreezeEvents {
 	@SubscribeEvent
@@ -151,7 +154,28 @@ public class FreezeEvents {
 
 		}
 	}
+	@SubscribeEvent
+	public void onServerTick(TickEvent.ServerTickEvent ev) {
+		if (FreezeHandler.isServerFrozen()){
+			if (FreezeHandler.playerMP.size() > 0) {
+				for (int i = 0; i < FreezeHandler.playerMP.size(); i++) {
+						if (FreezeHandler.playerMP.get(i).getDisplayName().equals(FreezeHandler.entity.get(i).getPlayername())) {
+							FreezeHandler.playerMP.get(i).setPositionAndUpdate(FreezeHandler.entity.get(i).getPosX(), FreezeHandler.entity.get(i).getPosY(),
+									FreezeHandler.entity.get(i).getPosZ());
 	
-
-
+							FreezeHandler.playerMP.get(i).rotationPitch = FreezeHandler.entity.get(i).getPitch();
+							FreezeHandler.playerMP.get(i).rotationYaw = FreezeHandler.entity.get(i).getYaw();
+					}
+				}
+			}
+		}
+	}
+	@SubscribeEvent
+	public void disableFalldamage(LivingFallEvent ev) {
+		if (FreezeHandler.isClientFrozen()){
+			if (ev.entityLiving instanceof EntityPlayerMP) {
+				ev.setCanceled(true);
+			}
+		}
+	}
 }
