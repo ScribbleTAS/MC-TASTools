@@ -18,6 +18,7 @@ public class VelocityEvents {
 
 	@SubscribeEvent
 	public void onCloseServer(PlayerEvent.PlayerLoggedOutEvent ev) {
+		CommonProxy.logger.debug("PLO Event triggered in VelocityEvents");
 		if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			List<EntityPlayerMP> players= FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
 			// Singleplayer

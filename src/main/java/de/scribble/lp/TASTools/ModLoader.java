@@ -46,7 +46,7 @@ public class ModLoader {
 	public static boolean stopit;
 	
 	public static final String VERSION="${version}";		//If you want to know how I did this, check the build.gradle file under minceraft and "replace"
-	public static final String MCVERSION="1.7.10";
+	public static final String MCVERSION="${mcversion}";
 	
 
 	@EventHandler
@@ -57,8 +57,6 @@ public class ModLoader {
 	@EventHandler
 	public void init(FMLInitializationEvent ev) {
 		proxy.init(ev);
-		//disable keystrokes from this mod
-			MinecraftForge.EVENT_BUS.register(new GuiKeystrokes());
 	}
 	
 	@EventHandler

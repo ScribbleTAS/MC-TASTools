@@ -15,6 +15,7 @@ import de.scribble.lp.TASTools.duping.DupePacket;
 import de.scribble.lp.TASTools.duping.DupePacketHandler;
 import de.scribble.lp.TASTools.enderdragon.DragonEvents;
 import de.scribble.lp.TASTools.freeze.FreezeEvents;
+import de.scribble.lp.TASTools.freeze.FreezeEvents3;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
 import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
@@ -70,6 +71,7 @@ public class CommonProxy {
 	
 	public void init(FMLInitializationEvent ev) {
 		FMLCommonHandler.instance().bus().register(new FreezeEvents());
+		MinecraftForge.EVENT_BUS.register(new FreezeEvents3());
 		MinecraftForge.EVENT_BUS.register(new DragonEvents());
 	}
 	

@@ -7,9 +7,11 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent.ServerDisconnectionFromClientEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import de.scribble.lp.TASTools.ClientProxy;
+import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.velocity.ReapplyingVelocity;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
@@ -17,10 +19,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.event.world.WorldEvent;
 
 public class FreezeEvents {
+
 	@SubscribeEvent
 	public void onjoinServer(PlayerLoggedInEvent ev) {
+		FreezeEvents3.unloadstop=true;
 		EntityPlayerMP playerev = (EntityPlayerMP) ev.player;
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) { // Multiplayer
 			if (FreezeHandler.isServerFrozen()) {
@@ -115,9 +120,9 @@ public class FreezeEvents {
 	@SubscribeEvent
 	public void onLeaveServer(PlayerLoggedOutEvent ev) {
 		EntityPlayerMP playerEV = (EntityPlayerMP) ev.player;
-		
+		CommonProxy.logger.debug("PLO Event triggered in Freeze Events");
 		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
-		
+			
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			if (FreezeHandler.isServerFrozen()) {
 				
@@ -147,13 +152,11 @@ public class FreezeEvents {
 					playerEV.capabilities.isFlying=false;
 					ModLoader.NETWORK.sendTo(new FreezePacket(false), playerEV);
 				}
-			}else {
-				FreezeHandler.stopFreezeServerNoUpdate();
-				ModLoader.NETWORK.sendTo(new FreezePacket(false),playerEV);
 			}
-
 		}
 	}
+
+	
 	@SubscribeEvent
 	public void onServerTick(TickEvent.ServerTickEvent ev) {
 		if (FreezeHandler.isServerFrozen()){
