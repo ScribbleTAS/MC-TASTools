@@ -20,7 +20,7 @@ public class DupeCommandc extends CommandBase{
 
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "/dupe";
+		return "command.dupe.usage";
 	}
 	@Override
 	public int getRequiredPermissionLevel() {

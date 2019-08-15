@@ -45,7 +45,7 @@ public class DupeEvents {
 	
 	@SubscribeEvent
 	public void pressKeybinding(InputEvent.KeyInputEvent ev){
-		if (dupingenabled&&!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()){
+		if (dupingenabled){
 			if(ClientProxy.DupeKey.isPressed()){
 				ModLoader.NETWORK.sendToServer(new DupePacket());
 			}
