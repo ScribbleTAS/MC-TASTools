@@ -296,7 +296,7 @@ public class TastoolsCommandc extends CommandBase{
 				ModLoader.NETWORK.sendTo(new KeystrokesPacket(), server.getPlayerList().getPlayerByUsername(args[1]));
 				
 			} else if (args.length == 1 && args[0].equalsIgnoreCase("gui")) {
-				CommonProxy.logger.warn("Cannot enable the logo. Use /tastools logo <Playername>");
+				CommonProxy.logger.warn("Cannot enable the logo. Use /tastools gui <Playername>");
 			}else if(args.length == 2 && args[0].equalsIgnoreCase("gui")&& server.getPlayerList().getPlayers()
 					.contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
 				ModLoader.NETWORK.sendTo(new MiscPacket(1), server.getPlayerList().getPlayerByUsername(args[1]));
