@@ -21,14 +21,14 @@ public class DragonCommandc extends CommandBase{
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		return "/dragon <phase>";
+		return "command.dragon.usage";
 	}
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (sender instanceof EntityPlayerMP) {
 			if (args.length < 1) {
-				throw new WrongUsageException("/dragon <phase>", new Object[0]);
+				throw new WrongUsageException("command.dragon.usage", new Object[0]);
 			}
 			List<EntityDragon> dragons = sender.getEntityWorld().getEntities(EntityDragon.class, e -> !e.isDead);
 			if (dragons.size() == 0) {

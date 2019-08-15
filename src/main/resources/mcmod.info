@@ -1,7 +1,7 @@
 [
 {
   "modid": "tastools",
-  "name": "TAS-Tools",
+  "name": "TASTools",
   "description": "Tools for MC-TASing",
   "version": "${version}",
   "mcversion": "${mcversion}",

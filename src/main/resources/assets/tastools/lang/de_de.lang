@@ -30,9 +30,16 @@ gui.savestate.savingscreen.msg=Erstelle gerade einen Sicherungspunkt, bitte wart
 gui.savestate.savingscreen.credit=Idee und Code von MightyPork und bspkrs' WorldStateCheckpoints!
 gui.savestate.loadingscreen.msg=Lädt einen Sicherungspunkt!
 
+#usage (Do not translate this section)
+command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | logo | folder>
+command.dupe.usage=/dupe
+command.dragon.usage=/dragon <phase>
+command.freeze.usage=/freeze
+command.savestate.usage=/savestate <save | load>
+
 #misc
 msg.misc.info=TASTools Version %s für Minecraft Version %s
-msg.logo.disabled=§cLogo im HUD ausgeschaltet
-msg.logo.enabled=§aLogo im HUD eingeschaltet
-msg.logo.multiplayerchange=Logo Einstellungen von %s verändert
+msg.gui.disabled=§cLogo im HUD ausgeschaltet
+msg.gui.enabled=§aLogo im HUD eingeschaltet
+msg.gui.multiplayerchange=Logo Einstellungen von %s verändert
 msg.misc.reload=Konfigurationsdateien erneut geladen!
