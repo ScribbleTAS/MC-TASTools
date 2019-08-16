@@ -28,7 +28,7 @@ public class FreezeHandler {
 	
 	public static void startFreezeServer() {
 		List<EntityPlayerMP> playerTemp = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
-
+		serverfrozen=true;
 		if (playerTemp.size() > 0) {
 			entity=new ArrayList<EntityDataStuff>();
 			for (int i = 0; i < (playerTemp.size()); i++) {
@@ -39,7 +39,6 @@ public class FreezeHandler {
 			}
 		}
 		playerMP = playerTemp;
-		serverfrozen=true;
 	}
 	public static void startFreezeSetMotionServer(double X, double Y, double Z, float falldistance) {
 		serverfrozen=true;
@@ -52,7 +51,6 @@ public class FreezeHandler {
 								playerTemp2.get(i).rotationPitch, playerTemp2.get(i).rotationYaw,
 								X, Y, Z, falldistance));
 				playerTemp2.get(i).capabilities.disableDamage=true;
-				playerTemp2.get(i).capabilities.isFlying=true;
 			}
 		}
 		playerMP = playerTemp2;

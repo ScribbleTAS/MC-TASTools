@@ -25,6 +25,7 @@ import de.scribble.lp.TASTools.misc.MiscPacketHandler;
 import de.scribble.lp.TASTools.savestates.SavestatePacket;
 import de.scribble.lp.TASTools.savestates.SavestatePacketHandler;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
+import de.scribble.lp.TASTools.velocity.VelocityEvents2;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
@@ -44,7 +45,6 @@ public class CommonProxy {
 		istasmodloaded=Loader.isModLoaded("tasmod");
 		isdupemodloaded=Loader.isModLoaded("dupemod");
 		
-		MinecraftForge.EVENT_BUS.register(new VelocityEvents());
 		
 		ModLoader.NETWORK= NetworkRegistry.INSTANCE.newSimpleChannel("tastools");
 		ModLoader.NETWORK.registerMessage(FreezePacketHandler.class, FreezePacket.class, 0, Side.SERVER);
@@ -73,6 +73,7 @@ public class CommonProxy {
 		FMLCommonHandler.instance().bus().register(new FreezeEvents());
 		MinecraftForge.EVENT_BUS.register(new FreezeEvents3());
 		MinecraftForge.EVENT_BUS.register(new DragonEvents());
+		FMLCommonHandler.instance().bus().register(new VelocityEvents());
 	}
 	
 	public void postInit(FMLPostInitializationEvent ev) {

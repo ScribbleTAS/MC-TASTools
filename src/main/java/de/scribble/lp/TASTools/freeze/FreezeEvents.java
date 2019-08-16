@@ -14,6 +14,7 @@ import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.velocity.ReapplyingVelocity;
+import de.scribble.lp.TASTools.velocity.SavingVelocity;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -48,13 +49,11 @@ public class FreezeEvents {
 								playerev.motionY, playerev.motionZ, playerev.fallDistance));
 					}
 					playerev.capabilities.disableDamage=true;
-					playerev.capabilities.isFlying=true;
 				} else { // if velocityserver is disabled
 					FreezeHandler.entity.add(new EntityDataStuff(playerev.getDisplayName(), playerev.posX, playerev.posY,
 							playerev.posZ, playerev.rotationPitch, playerev.rotationYaw, 0, 0, 0, 0));
 
 					playerev.capabilities.disableDamage=true;
-					playerev.capabilities.isFlying=true;
 				}
 				ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
 
@@ -124,6 +123,25 @@ public class FreezeEvents {
 		List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
 			
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
+			
+			//moved here from VelocityEvents to here to avoid race conditions
+			if(VelocityEvents.velocityenabledServer) {
+				File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath() + File.separator + ModLoader.getLevelname() +File.separator
+						+ ev.player.getDisplayName() + "_velocity.txt");
+				List<EntityPlayerMP> players= FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
+				CommonProxy.logger.info("Saving velocity of "+ev.player.getDisplayName());
+				if(FreezeHandler.isServerFrozen()) {
+					for(int i=0;i<players.size();i++) {
+						if(FreezeHandler.entity.get(i).getPlayername().equals(ev.player.getDisplayName())) {
+							new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(i).getMotionX(), FreezeHandler.entity.get(i).getMotionY(), FreezeHandler.entity.get(i).getMotionZ(), FreezeHandler.entity.get(0).getFalldistance(), file);
+						}
+					}
+				}
+				else {
+					new SavingVelocity().saveVelocity(ev.player, file);
+				}
+			}
+		
 			if (FreezeHandler.isServerFrozen()) {
 				
 				for (int o=0; o<FreezeHandler.entity.size();o++) {

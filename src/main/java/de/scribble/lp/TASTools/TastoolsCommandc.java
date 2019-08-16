@@ -248,13 +248,13 @@ public class TastoolsCommandc extends CommandBase{
 				if (ModLoader.freezeenabledMP) {
 					CommonProxy.logger.info("Disabled Serverside settings for 'freeze'");
 					ModLoader.freezeenabledMP = false;
-					CommonProxy.serverconfig.get("Freeze", "Enabled", false, "Freezes the game when joining the Server")
-							.set(true);
+					CommonProxy.serverconfig.get("Freeze", "Enabled", false, "Freezes the game when starting the Server")
+							.set(false);
 					CommonProxy.serverconfig.save();
 				} else if (!ModLoader.freezeenabledMP) {
 					CommonProxy.logger.info("Enabled Serverside settings for 'freeze'");
 					ModLoader.freezeenabledMP = true;
-					CommonProxy.serverconfig.get("Freeze", "Enabled", false, "Freezes the game when joining the Server")
+					CommonProxy.serverconfig.get("Freeze", "Enabled", false, "Freezes the game when starting the Server")
 							.set(true);
 					CommonProxy.serverconfig.save();
 				}

@@ -27,7 +27,7 @@ import net.minecraftforge.common.MinecraftForge;
  * @author ScribbleLP
  *
  */
-@Mod(modid = "tastools", name = "TAS-Tools",version=ModLoader.VERSION)
+@Mod(modid = "tastools", name = "TAS-Tools",version="Beta")
 public class ModLoader {
 	 
 	
