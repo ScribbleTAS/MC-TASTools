@@ -17,7 +17,7 @@ public class DupePacketHandler implements IMessageHandler<DupePacket, IMessage>{
 	@Override
 	public IMessage onMessage(DupePacket message, MessageContext ctx) {
 		if (ctx.side==Side.SERVER) {
-			if(!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
+			if(!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()&&FMLCommonHandler.instance().getMinecraftServerInstance().getCurrentPlayerCount()==1) {
 				File file= new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator +Minecraft.getMinecraft().getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
 				EntityPlayerMP player =ctx.getServerHandler().player;
 				new DupeEvents().startStopping(player);
