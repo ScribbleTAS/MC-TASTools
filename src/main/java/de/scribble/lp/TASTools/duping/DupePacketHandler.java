@@ -2,6 +2,7 @@ package de.scribble.lp.TASTools.duping;
 
 import java.io.File;
 
+import de.scribble.lp.TASTools.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -20,6 +21,8 @@ public class DupePacketHandler implements IMessageHandler<DupePacket, IMessage>{
 				EntityPlayerMP player =ctx.getServerHandler().playerEntity;
 				new DupeEvents().startStopping(player);
 				new RefillingDupe().refill(file, player);
+			}else {
+				CommonProxy.logger.warn("Can't duplicate items on a server!");
 			}
 		}
 		return null;

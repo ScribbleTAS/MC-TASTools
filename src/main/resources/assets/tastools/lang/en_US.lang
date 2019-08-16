@@ -30,9 +30,16 @@ gui.savestate.savingscreen.msg=Making a savestate, please wait!
 gui.savestate.savingscreen.credit=Idea and code from MightyPork and bspkrs' WorldStateCheckpoints!
 gui.savestate.loadingscreen.msg=Loading a savestate!
 
+#usage (Do not translate this section)
+command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | logo | folder>
+command.dupe.usage=/dupe
+command.dragon.usage=/dragon <phase>
+command.freeze.usage=/freeze
+command.savestate.usage=/savestate <save | load>
+
 #misc
 msg.misc.info=TASTools version %s for Minecraft version %s
-msg.logo.disabled=§cDisabled Logo in HUD
-msg.logo.enabled=§aEnabled Logo in HUD
-msg.logo.multiplayerchange=Changed Logo-Settings for %s
+msg.gui.disabled=§cDisabled Logo in HUD
+msg.gui.enabled=§aEnabled Logo in HUD
+msg.gui.multiplayerchange=Changed Logo-Settings for %s
 msg.misc.reload=Config reloaded!
