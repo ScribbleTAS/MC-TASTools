@@ -20,11 +20,10 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class ClientProxy extends CommonProxy{
 	
-	public static KeyBinding DupeKey = new KeyBinding("Load Chests/Items", Keyboard.KEY_I, "DupeMod");
+	public static KeyBinding DupeKey = new KeyBinding("Load Chests/Items (Dupemod)", Keyboard.KEY_I, "TASTools");
 	public static KeyBinding FreezeKey = new KeyBinding("Freeze/Unfreeze Players", Keyboard.KEY_Y, "TASTools");
-	public static KeyBinding SavestateSaveKey = new KeyBinding("Create a savestate", Keyboard.KEY_J, "TASTools");
-	public static KeyBinding SavestateLoadKey = new KeyBinding("Load latest savestate", Keyboard.KEY_K, "TASTools");
-	public static KeyBinding DragonKey = new KeyBinding("Make the dragon attack you", Keyboard.KEY_G, "TASTools");
+	public static KeyBinding SavestateSaveKey = new KeyBinding("Create Savestate", Keyboard.KEY_J, "TASTools");
+	public static KeyBinding SavestateLoadKey = new KeyBinding("Load Latest Savestate", Keyboard.KEY_K, "TASTools");
 	
 	public static Configuration config;
 	
@@ -35,7 +34,7 @@ public class ClientProxy extends CommonProxy{
 		ClientRegistry.registerKeyBinding(FreezeKey);
 		ClientRegistry.registerKeyBinding(SavestateSaveKey);
 		ClientRegistry.registerKeyBinding(SavestateLoadKey);
-		ClientRegistry.registerKeyBinding(DragonKey);
+		
 		config = new Configuration(ev.getSuggestedConfigurationFile());
 		config.load();
 		GuiKeystrokes.guienabled=config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").getBoolean();

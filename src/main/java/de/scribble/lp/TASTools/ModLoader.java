@@ -25,7 +25,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
  * @author ScribbleLP
  *
  */
-@Mod(modid = "tastools", name = "TAS-Tools",version=ModLoader.VERSION)
+@Mod(modid = "tastools", name = "TASTools",version=ModLoader.VERSION)
 public class ModLoader {
 	 
 	
