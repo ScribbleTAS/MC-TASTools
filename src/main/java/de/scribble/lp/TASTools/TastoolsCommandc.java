@@ -1,5 +1,8 @@
 package de.scribble.lp.TASTools;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import de.scribble.lp.TASTools.duping.DupeEvents;
@@ -9,9 +12,11 @@ import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
 import de.scribble.lp.TASTools.misc.MiscPacket;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -219,16 +224,16 @@ public class TastoolsCommandc extends CommandBase{
 				}
 			} 
 			//gui logo singleplayer
-			else if(args.length == 1 && args[0].equalsIgnoreCase("logo")) {
+			else if(args.length == 1 && args[0].equalsIgnoreCase("gui")) {
 				if(!isdedicated&&server.getCurrentPlayerCount()==1){
 					
 					if(GuiOverlayLogo.potionenabled) {
-						sender.addChatMessage(new ChatComponentTranslation("msg.logo.disabled")); //§cDisabled Logo in HUD
+						sender.addChatMessage(new ChatComponentTranslation("msg.gui.disabled")); //§cDisabled Logo in HUD
 						GuiOverlayLogo.potionenabled=false;
 						ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").set(false);
 						ClientProxy.config.save();
 					}else if(!GuiOverlayLogo.potionenabled) {
-						sender.addChatMessage(new ChatComponentTranslation("msg.logo.enabled"));	//§aEnabled Logo in HUD
+						sender.addChatMessage(new ChatComponentTranslation("msg.gui.enabled"));	//§aEnabled Logo in HUD
 						GuiOverlayLogo.potionenabled=true;
 						ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").set(true);
 						ClientProxy.config.save();
@@ -236,10 +241,20 @@ public class TastoolsCommandc extends CommandBase{
 				}else {
 					ModLoader.NETWORK.sendTo(new MiscPacket(1), (EntityPlayerMP)sender);
 				}
-			}
-			else if (args.length==2&&args[0].equalsIgnoreCase("logo")&&playerlist.getPlayerList().contains(playerlist.getPlayerByUsername(args[1]))) {
-				notifyOperators(sender, this, "msg.logo.multiplayerchange", new ChatComponentText(args[1]));
+				
+			} else if (args.length==2&&args[0].equalsIgnoreCase("gui")&&playerlist.getPlayerList().contains(playerlist.getPlayerByUsername(args[1]))) {
+				notifyOperators(sender, this, "msg.gui.multiplayerchange", new ChatComponentText(args[1]));
 				ModLoader.NETWORK.sendTo(new MiscPacket(1), playerlist.getPlayerByUsername(args[1]));
+				
+			} else if(args.length==1&&args[0].equalsIgnoreCase("folder")){
+				try {
+					Desktop.getDesktop().open(new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + "savestates"));
+				} catch (IOException e) {
+					CommonProxy.logger.fatal("Something went wrong while opening ", new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + "savestates").getPath());
+					e.printStackTrace();
+				}
+			}else {
+				throw new WrongUsageException("command.tastools.usage", new Object[0]);
 			}
 			// Other than sender=Player starts here
 		} else {
@@ -283,9 +298,9 @@ public class TastoolsCommandc extends CommandBase{
 				CommonProxy.logger.info("Changed Keystroke-Settings for " + args[1]);
 				ModLoader.NETWORK.sendTo(new KeystrokesPacket(), playerlist.getPlayerByUsername(args[1]));
 				
-			} else if (args.length == 1 && args[0].equalsIgnoreCase("logo")) {
-				CommonProxy.logger.warn("Cannot enable the logo. Use /tastools logo <Playername>");
-			}else if(args.length == 2 && args[0].equalsIgnoreCase("logo")&& playerlist.getPlayerList()
+			} else if (args.length == 1 && args[0].equalsIgnoreCase("gui")) {
+				CommonProxy.logger.warn("Cannot enable the logo. Use /tastools gui <Playername>");
+			}else if(args.length == 2 && args[0].equalsIgnoreCase("gui")&& playerlist.getPlayerList()
 					.contains(playerlist.getPlayerByUsername(args[1]))) {
 				ModLoader.NETWORK.sendTo(new MiscPacket(1), playerlist.getPlayerByUsername(args[1]));
 			}
@@ -298,7 +313,7 @@ public class TastoolsCommandc extends CommandBase{
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		ServerConfigurationManager playerlist=server.getConfigurationManager();
 		if (args.length==1) {
-			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","logo","reload"});
+			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","gui","reload","folder"});
 		}
 		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
 			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft","guiPotion"});
@@ -307,7 +322,7 @@ public class TastoolsCommandc extends CommandBase{
 			}
 			return tabs;
 		}
-		else if(args.length==2&&args[0].equalsIgnoreCase("logo")) {
+		else if(args.length==2&&args[0].equalsIgnoreCase("gui")) {
 			return getListOfStringsMatchingLastWord(args, playerlist.getAllUsernames());
 		}
 		return super.addTabCompletionOptions(sender, args, pos);

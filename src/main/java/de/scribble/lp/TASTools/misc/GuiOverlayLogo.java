@@ -13,7 +13,7 @@ public class GuiOverlayLogo extends Gui{
 	@SubscribeEvent
 	public void drawStuff2(RenderGameOverlayEvent.Post event){
 		Minecraft mc = Minecraft.getMinecraft();
-		if (event.isCancelable() || event.type != ElementType.EXPERIENCE) {
+		if (event.isCancelable() || event.type != ElementType.FOOD) {
 			return;
 		}
 		int posX = event.resolution.getScaledWidth() / 2;

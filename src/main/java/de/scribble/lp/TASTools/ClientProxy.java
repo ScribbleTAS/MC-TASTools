@@ -21,11 +21,11 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class ClientProxy extends CommonProxy{
 	
-	public static KeyBinding DupeKey = new KeyBinding("Load Chests/Items", Keyboard.KEY_I, "DupeMod");
+	public static KeyBinding DupeKey = new KeyBinding("Load Chests/Items (Dupemod)", Keyboard.KEY_I, "TASTools");
 	public static KeyBinding FreezeKey = new KeyBinding("Freeze/Unfreeze Players", Keyboard.KEY_Y, "TASTools");
-	public static KeyBinding SavestateSaveKey = new KeyBinding("Create a savestate", Keyboard.KEY_J, "TASTools");
-	public static KeyBinding SavestateLoadKey = new KeyBinding("Load latest savestate", Keyboard.KEY_K, "TASTools");
-	public static KeyBinding DragonKey = new KeyBinding("Make the dragon attack you", Keyboard.KEY_G, "TASTools");
+	public static KeyBinding SavestateSaveKey = new KeyBinding("Create Savestate", Keyboard.KEY_J, "TASTools");
+	public static KeyBinding SavestateLoadKey = new KeyBinding("Load Latest Savestate", Keyboard.KEY_K, "TASTools");
+	public static KeyBinding DragonKey = new KeyBinding("Make The Dragon Attack You", Keyboard.KEY_G, "TASTools");
 	
 	public static Configuration config;
 	

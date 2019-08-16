@@ -14,7 +14,7 @@ public class FreezeCommandc extends CommandBase {
 
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "/freeze";
+		return "command.freeze.usage";
 	}
 
 	@Override

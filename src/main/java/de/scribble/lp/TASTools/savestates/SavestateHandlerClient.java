@@ -88,6 +88,10 @@ public class SavestateHandlerClient {
 				File file = new File(Minecraft.getMinecraft().mcDataDir,
 						"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
 								+ File.separator + "latest_velocity.txt");
+				
+				//Normally works without this, but low tickrates make it so the player doesn't get saved
+				Minecraft.getMinecraft().getIntegratedServer().getConfigurationManager().saveAllPlayerData();
+				
 				// For LAN-Servers
 				if (players.size() > 1) {
 					Minecraft.getMinecraft().getIntegratedServer().getConfigurationManager().saveAllPlayerData();

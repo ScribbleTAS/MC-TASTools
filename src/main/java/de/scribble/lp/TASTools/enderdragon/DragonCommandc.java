@@ -24,7 +24,7 @@ public class DragonCommandc extends CommandBase{
 
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "/dragon";
+		return "command.dragon.usage";
 	}
 
 	@Override

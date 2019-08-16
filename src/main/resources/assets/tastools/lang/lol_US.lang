@@ -30,9 +30,16 @@ gui.savestate.savingscreen.msg=Mayking a Déjà-vu-point, plis hold ur butts!
 gui.savestate.savingscreen.credit=Idea n code stolen frum MightyPork and bspkrs' WurldStaytDéjà-vu-pointz!
 gui.savestate.loadingscreen.msg=Rofl-ing a Déjà-vu-point!
 
+#usage (Do not translate this section)
+command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | logo | folder>
+command.dupe.usage=/dupe
+command.dragon.usage=/dragon <phase>
+command.freeze.usage=/freeze
+command.savestate.usage=/savestate <save | load>
+
 #misc
 msg.misc.info=TASBot overlurd verzion %s for Minceraft verzion %s initialized... beep boop...
-msg.logo.disabled=§cDizabled Bottle in Kitteh-Paws
-msg.logo.enabled=§aEnabled Bottle in Kitteh-Paws
-msg.logo.multiplayerchange=Hack'd new Bottle in Kitteh-Paws-Settingz to %s
+msg.gui.disabled=§cDizabled Bottle in Kitteh-Paws
+msg.gui.enabled=§aEnabled Bottle in Kitteh-Paws
+msg.gui.multiplayerchange=Hack'd new Bottle in Kitteh-Paws-Settingz to %s
 msg.misc.reload=Cat reloaded!
