@@ -39,7 +39,7 @@ command.savestate.usage=/savestate <save | load>
 
 #misc
 msg.misc.info=TASTools Version %s für Minecraft Version %s
-msg.logo.disabled=§cLogo im HUD ausgeschaltet
-msg.logo.enabled=§aLogo im HUD eingeschaltet
-msg.logo.multiplayerchange=Logo Einstellungen von %s verändert
+msg.gui.disabled=§cLogo im HUD ausgeschaltet
+msg.gui.enabled=§aLogo im HUD eingeschaltet
+msg.gui.multiplayerchange=Logo Einstellungen von %s verändert
 msg.misc.reload=Konfigurationsdateien erneut geladen!
