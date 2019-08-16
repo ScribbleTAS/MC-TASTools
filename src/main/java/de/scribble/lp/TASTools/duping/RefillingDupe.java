@@ -155,7 +155,7 @@ public class RefillingDupe {
 							newitem.age=Integer.parseInt(props[11]);
 							
 							//Apply the pickupdelay
-							newitem.delayBeforeCanPickup=Integer.parseInt(props[12]);
+							newitem.pickupDelay=Integer.parseInt(props[12]);
 
 							newitem.motionX=0;	//set the motion to zero so it doesn't fly around
 							newitem.motionY=0;

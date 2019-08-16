@@ -82,9 +82,9 @@ public class RecordingDupe {
 			itemcounter=entitylist.size();
 			for(int i=0;i<entitylist.size();i++){
 				if(entitylist.get(i).getItem().hasDisplayName()){
-					output.append("\tItem;"+i+";"+entitylist.get(i).posX+";"+entitylist.get(i).posY+";"+entitylist.get(i).posZ+";"+Item.getIdFromItem(entitylist.get(i).getItem().getItem())+";("+entitylist.get(i).getItem().getUnlocalizedName()+");"+entitylist.get(i).getItem().getCount()+";"+entitylist.get(i).getItem().getItemDamage()+";"+entitylist.get(i).getItem().getDisplayName()+";"+entitylist.get(i).getItem().getEnchantmentTagList()+";"+entitylist.get(i).getAge()+";"+entitylist.get(i).delayBeforeCanPickup+"\n");
+					output.append("\tItem;"+i+";"+entitylist.get(i).posX+";"+entitylist.get(i).posY+";"+entitylist.get(i).posZ+";"+Item.getIdFromItem(entitylist.get(i).getItem().getItem())+";("+entitylist.get(i).getItem().getUnlocalizedName()+");"+entitylist.get(i).getItem().getCount()+";"+entitylist.get(i).getItem().getItemDamage()+";"+entitylist.get(i).getItem().getDisplayName()+";"+entitylist.get(i).getItem().getEnchantmentTagList()+";"+entitylist.get(i).getAge()+";"+entitylist.get(i).pickupDelay+"\n");
 				}else{
-					output.append("\tItem;"+i+";"+entitylist.get(i).posX+";"+entitylist.get(i).posY+";"+entitylist.get(i).posZ+";"+Item.getIdFromItem(entitylist.get(i).getItem().getItem())+";("+entitylist.get(i).getItem().getUnlocalizedName()+");"+entitylist.get(i).getItem().getCount()+";"+entitylist.get(i).getItem().getItemDamage()+";null;"+entitylist.get(i).getItem().getEnchantmentTagList()+";"+entitylist.get(i).getAge()+";"+entitylist.get(i).delayBeforeCanPickup+"\n");
+					output.append("\tItem;"+i+";"+entitylist.get(i).posX+";"+entitylist.get(i).posY+";"+entitylist.get(i).posZ+";"+Item.getIdFromItem(entitylist.get(i).getItem().getItem())+";("+entitylist.get(i).getItem().getUnlocalizedName()+");"+entitylist.get(i).getItem().getCount()+";"+entitylist.get(i).getItem().getItemDamage()+";null;"+entitylist.get(i).getItem().getEnchantmentTagList()+";"+entitylist.get(i).getAge()+";"+entitylist.get(i).pickupDelay+"\n");
 				}
 			}
 		}
