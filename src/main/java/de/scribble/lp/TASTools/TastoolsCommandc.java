@@ -264,7 +264,7 @@ public class TastoolsCommandc extends CommandBase{
 					CommonProxy.logger.info("Disabled Serverside settings for 'freeze'");
 					ModLoader.freezeenabledMP = false;
 					CommonProxy.serverconfig.get("Freeze", "Enabled", false, "Freezes the game when joining the Server")
-							.set(true);
+							.set(false);
 					CommonProxy.serverconfig.save();
 				} else if (!ModLoader.freezeenabledMP) {
 					CommonProxy.logger.info("Enabled Serverside settings for 'freeze'");
@@ -316,7 +316,7 @@ public class TastoolsCommandc extends CommandBase{
 			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","gui","reload","folder"});
 		}
 		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
-			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft","guiPotion"});
+			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft"});
 			if(playerlist.getPlayerList().size()>1) {
 				tabs.addAll(getListOfStringsMatchingLastWord(args, playerlist.getAllUsernames()));
 			}
