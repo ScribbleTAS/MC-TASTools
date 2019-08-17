@@ -17,7 +17,7 @@ public class FreezeEvents3 {
 	public static boolean unloadstop=false;
 	@SubscribeEvent
 	public void onLeaveWorld(WorldEvent.Unload ev) {
-		if (unloadstop) {
+		if (unloadstop&&ev.world.isRemote) {
 			CommonProxy.logger.debug("WorldUnload Event triggered in Freeze Events");
 			unloadstop = false;
 			{
