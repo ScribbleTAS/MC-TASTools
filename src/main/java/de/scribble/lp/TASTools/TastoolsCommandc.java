@@ -248,11 +248,7 @@ public class TastoolsCommandc extends CommandBase{
 					CommonProxy.logger.fatal("Something went wrong while opening ", new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + "savestates").getPath());
 					e.printStackTrace();
 				}
-			}else {
-				throw new WrongUsageException("command.tastools.usage", new Object[0]);
 			}
-			
-			
 			// Other than sender=Player starts here
 		} else {
 
