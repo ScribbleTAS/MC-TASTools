@@ -2,7 +2,6 @@ package de.scribble.lp.TASTools.duping;
 
 import java.io.File;
 
-import io.netty.buffer.DuplicatedByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;

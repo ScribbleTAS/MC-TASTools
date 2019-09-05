@@ -1,5 +1,6 @@
 package de.scribble.lp.TASTools.savestates;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,6 +20,7 @@ import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
+import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateSavingScreen;
@@ -50,16 +52,20 @@ public class SavestateHandlerClient {
 	protected static WorldSettings settings;
 	protected static String foldername;
 	protected static String worldname;
+	protected static BufferedImage screenshot;
+	protected static String screenshotname;
+	
 	
 	
 	public void saveState() {
 		if(!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
+			
 			currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName());
 			targetsavefolder=null;
 			worldname=Minecraft.getMinecraft().getIntegratedServer().getFolderName();
+			
 			List<EntityPlayerMP> players=FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
 			if (!isSaving && !isLoading) {
-				isSaving = true;
 				// Check for worlds in the savestate folder
 				int i = 1;
 				while (i <= 256) {
@@ -78,12 +84,14 @@ public class SavestateHandlerClient {
 									+ Minecraft.getMinecraft().getIntegratedServer().getFolderName() + "-Savestate"
 									+ Integer.toString(i));
 					if (!targetsavefolder.exists()) {
+						screenshotname="Savestate "+i+".png";	//Setting the name of the savestate as the ScreenshotName
 						break;
 					}
 					i++;
 				}
 				// Save the world
 				isSaving = true;
+				screenshot= new Util().makeAscreenShot();
 				ModLoader.NETWORK.sendToAll(new SavestatePacket());
 				File file = new File(Minecraft.getMinecraft().mcDataDir,
 						"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
@@ -360,7 +368,7 @@ class SavestateSaveEventsClient extends SavestateHandlerClient{
 					isSaving=false;
 					return;
 				}
-				
+				new Util().saveScreenshotAt(targetsavefolder, screenshotname, screenshot);
 				ModLoader.NETWORK.sendToAll(new SavestatePacket(true));
 				MinecraftForge.EVENT_BUS.unregister(this);
 				isSaving=false;

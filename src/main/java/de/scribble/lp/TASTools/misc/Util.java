@@ -1,9 +1,12 @@
 package de.scribble.lp.TASTools.misc;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
@@ -12,11 +15,15 @@ import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ScreenShotHelper;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class Util {
+	
+	
 	public String getLevelNamefromServer() {
 		String out=null;
 		File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath()+File.separator+"server.properties");
@@ -56,5 +63,27 @@ public class Util {
 		ModLoader.freezeenabledSP=ClientProxy.config.get("Freeze","Enabled", false, "Freezes the game when joining singleplayer").getBoolean();
 		SavestateEvents.savestatepauseenabled=ClientProxy.config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu").getBoolean();
 		GuiOverlayLogo.potionenabled=ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").getBoolean();
+	}
+	@SideOnly(Side.CLIENT)
+	public void saveScreenshotAt(File path, String name, BufferedImage image) {
+		File file = new File(path, name);
+		try {
+			file = file.getCanonicalFile();
+		} catch (IOException e) {
+			CommonProxy.logger.error("Screenshot name has an invalid name");
+			CommonProxy.logger.catching(e);
+		}
+		try {
+			ImageIO.write(image, "png", file);
+		} catch (IOException e) {
+			CommonProxy.logger.error("Screenshot something went wrong while writing the screenshot to a file");
+			CommonProxy.logger.catching(e);
+		}
+	}
+	@SideOnly(Side.CLIENT)
+	public BufferedImage makeAscreenShot() {
+		Minecraft mc = Minecraft.getMinecraft();
+		BufferedImage image=ScreenShotHelper.createScreenshot(mc.displayWidth, mc.displayHeight, mc.getFramebuffer());
+		return image;
 	}
 }
