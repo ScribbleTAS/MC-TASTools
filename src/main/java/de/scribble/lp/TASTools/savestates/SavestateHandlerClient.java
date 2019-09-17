@@ -54,6 +54,7 @@ public class SavestateHandlerClient {
 	protected static String worldname;
 	protected static BufferedImage screenshot;
 	protected static String screenshotname;
+	protected static BufferedImage worldIcon;
 	
 	
 	
@@ -68,15 +69,15 @@ public class SavestateHandlerClient {
 			if (!isSaving && !isLoading) {
 				// Check for worlds in the savestate folder
 				int i = 1;
-				while (i <= 256) {
-					if (i == 256) {
+				while (i <= 300) {
+					if (i == 300) {
 						CommonProxy.logger.error(
 								"Couldn't make a savestate, there are too many savestates in the target directory");
 						return;
 					}
-					if (i > 256) {
+					if (i > 300) {
 						CommonProxy.logger.error(
-								"Aborting saving due to savestate count being greater than 256 for safety reasons");
+								"Aborting saving due to savestate count being greater than 300 for safety reasons");
 						return;
 					}
 					targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir,
@@ -91,7 +92,10 @@ public class SavestateHandlerClient {
 				}
 				// Save the world
 				isSaving = true;
-				screenshot= new Util().makeAscreenShot();
+				if(Util.enableSavestateScreenshotting) {
+					screenshot = new Util().makeAscreenShot();
+					worldIcon=new Util().createWorldIcon(screenshot);
+				}
 				ModLoader.NETWORK.sendToAll(new SavestatePacket());
 				File file = new File(Minecraft.getMinecraft().mcDataDir,
 						"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
@@ -140,7 +144,7 @@ public class SavestateHandlerClient {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				//
+				
 				SavestateSaveEventsClient lol = new SavestateSaveEventsClient();
 				MinecraftForge.EVENT_BUS.register(lol);
 			}else {
@@ -368,7 +372,10 @@ class SavestateSaveEventsClient extends SavestateHandlerClient{
 					isSaving=false;
 					return;
 				}
-				new Util().saveScreenshotAt(targetsavefolder, screenshotname, screenshot);
+				if(Util.enableSavestateScreenshotting) {
+					new Util().saveWorldIcon(worldIcon, targetsavefolder);
+					new Util().saveScreenshotAt(targetsavefolder, screenshotname, screenshot);
+				}
 				ModLoader.NETWORK.sendToAll(new SavestatePacket(true));
 				MinecraftForge.EVENT_BUS.unregister(this);
 				isSaving=false;

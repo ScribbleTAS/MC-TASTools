@@ -49,15 +49,15 @@ public class SavestateHandlerServer {
 				}
 				ModLoader.NETWORK.sendToAll(new SavestatePacket());
 				int i = 1;
-				while (i <= 256) {
-					if (i == 256) {
+				while (i <= 300) {
+					if (i == 300) {
 						CommonProxy.logger.error(
 								"Couldn't make a savestate, there are too many savestates in the target directory");
 						return;
 					}
-					if (i > 256) {
+					if (i > 300) {
 						CommonProxy.logger.error(
-								"Aborting saving due to savestate count being greater than 256 for safety reasons");
+								"Aborting saving due to savestate count being greater than 300 for safety reasons");
 						return;
 					}
 					targetsavefolder = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath()
