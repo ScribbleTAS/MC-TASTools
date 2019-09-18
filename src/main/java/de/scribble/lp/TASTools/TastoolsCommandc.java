@@ -1,8 +1,5 @@
 package de.scribble.lp.TASTools;
 
-import java.awt.Desktop;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import de.scribble.lp.TASTools.duping.DupeEvents;
@@ -13,7 +10,6 @@ import de.scribble.lp.TASTools.misc.MiscPacket;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -213,6 +209,9 @@ public class TastoolsCommandc extends CommandBase{
 					ClientProxy.config.load();
 					new Util().reloadClientconfig();
 					notifyCommandListener(sender, this, "msg.misc.reload", new Object()); // Config reloaded!
+				} else if(!server.isDedicatedServer() && server.getCurrentPlayerCount() > 1) {
+					ModLoader.NETWORK.sendTo(new MiscPacket(0),(EntityPlayerMP) sender);
+					notifyCommandListener(sender, this, "msg.misc.reload", new Object());
 				} else {
 					new Util().reloadServerconfig();
 					ModLoader.NETWORK.sendToAll(new MiscPacket(0));
@@ -243,12 +242,7 @@ public class TastoolsCommandc extends CommandBase{
 			
 			//Opens the savestate folder
 			} else if(args.length==1&&args[0].equalsIgnoreCase("folder")){
-				try {
-					Desktop.getDesktop().open(new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + "savestates"));
-				} catch (IOException e) {
-					CommonProxy.logger.fatal("Something went wrong while opening ", new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + "savestates").getPath());
-					e.printStackTrace();
-				}
+				ModLoader.NETWORK.sendTo(new MiscPacket(2),(EntityPlayerMP)sender);
 			//Changes the pause menu
 			} else if(args.length==1&&args[0].equalsIgnoreCase("pausemenu")){
 				if (SavestateEvents.savestatepauseenabled) {

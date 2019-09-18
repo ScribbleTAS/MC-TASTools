@@ -104,7 +104,26 @@ public class SavestateHandlerServer {
 	public void setFlagandShutdown() {
 		if(FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			if (!isSaving) {
-				
+				File currentworldfolder = new File(FMLCommonHandler.instance().getSavesDirectory().getPath() + File.separator + ModLoader.getLevelname());
+				File targetsavefolder=null;
+				//getting latest savestate
+				int i=1;
+				while(i<=300) {
+					targetsavefolder = new File(FMLCommonHandler.instance().getSavesDirectory().getPath() + File.separator + "savestates"+ File.separator + ModLoader.getLevelname() + "-Savestate" + Integer.toString(i));
+					if (!targetsavefolder.exists()) {
+						if(i-1==0) {
+							CommonProxy.logger.info("Couldn't find a valid savestate, abort serverstop!");
+							return;
+						}
+						if(i>300) {
+							CommonProxy.logger.error("Too many savestates found. Aborting serverstop for safety reasons");
+							return;
+						}
+						targetsavefolder = new File(FMLCommonHandler.instance().getSavesDirectory().getPath() + File.separator + "savestates"+ File.separator + ModLoader.getLevelname() + "-Savestate" + Integer.toString(i-1));
+						break;
+					}
+					i++;
+				}
 				try {
 					int[] incr=getInfoValues(getInfoFile(ModLoader.getLevelname()));
 					incr[1]++;
@@ -258,14 +277,14 @@ public class SavestateHandlerServer {
 		File targetsavefolder=null;
 		//getting latest savestate
 		int i=1;
-		while(i<=256) {
+		while(i<=300) {
 			targetsavefolder = new File(FMLCommonHandler.instance().getSavesDirectory().getPath() + File.separator + "savestates"+ File.separator + ModLoader.getLevelname() + "-Savestate" + Integer.toString(i));
 			if (!targetsavefolder.exists()) {
 				if(i-1==0) {
 					CommonProxy.logger.info("Couldn't find a valid savestate, abort loading the savestate!");
 					return;
 				}
-				if(i>256) {
+				if(i>300) {
 					CommonProxy.logger.error("Too many savestates found. Aborting loading for safety reasons");
 					return;
 				}

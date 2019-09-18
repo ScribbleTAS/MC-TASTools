@@ -1,6 +1,11 @@
 package de.scribble.lp.TASTools.misc;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+
 import de.scribble.lp.TASTools.ClientProxy;
+import de.scribble.lp.TASTools.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -14,7 +19,6 @@ public class MiscPacketHandler implements IMessageHandler<MiscPacket, IMessage>{
 	public IMessage onMessage(MiscPacket message, MessageContext ctx) {
 		if(message.getMode()==0) {
 			new Util().reloadClientconfig();
-			Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("msg.misc.reload")); //Config reloaded!
 		}else if(message.getMode()==1) {
 			EntityPlayerSP sender=Minecraft.getMinecraft().player;
 			if(GuiOverlayLogo.potionenabled) {
@@ -27,6 +31,13 @@ public class MiscPacketHandler implements IMessageHandler<MiscPacket, IMessage>{
 				GuiOverlayLogo.potionenabled=true;
 				ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").set(true);
 				ClientProxy.config.save();
+			}
+		}else if(message.getMode()==2) {
+			try {
+				Desktop.getDesktop().open(new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + "savestates"));
+			} catch (IOException e) {
+				CommonProxy.logger.fatal("Something went wrong while opening ", new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + "savestates").getPath());
+				e.printStackTrace();
 			}
 		}
 		return null;

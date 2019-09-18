@@ -152,13 +152,8 @@ public class FreezeEvents {
 	}
 	@SubscribeEvent
 	public void pressKeybinding(InputEvent.KeyInputEvent ev) {
-		if (ClientProxy.FreezeKey.isPressed() && Minecraft.getMinecraft().player.canUseCommand(2, "dupe")) {
+		if (ClientProxy.FreezeKey.isPressed() && Minecraft.getMinecraft().player.canUseCommand(2, "freeze")) {
 			ModLoader.NETWORK.sendToServer(new FreezePacket(true,1));
-			if (!FreezeHandler.isClientFrozen()) {
-				FreezeHandler.startFreezeClient();
-			} else
-				FreezeHandler.stopFreezeClient();
-
 		}
 	}
 }

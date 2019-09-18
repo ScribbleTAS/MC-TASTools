@@ -1,5 +1,6 @@
 package de.scribble.lp.TASTools.freeze;
 
+import de.scribble.lp.TASTools.ModLoader;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -15,17 +16,22 @@ public class FreezePacketHandler implements IMessageHandler<FreezePacket, IMessa
 				if (msg.getMode() == 0) {
 					if (msg.startstop()) {
 						FreezeHandler.startFreezeServer();
+						ModLoader.NETWORK.sendToAll(new FreezePacket(true));
 					}
 
 					else if (!msg.startstop()) {
 						FreezeHandler.stopFreezeServer();
+						ModLoader.NETWORK.sendToAll(new FreezePacket(false));
 					}
 				}
 				else if(msg.getMode()==1) {
-					if(!FreezeHandler.isServerFrozen())
+					if(!FreezeHandler.isServerFrozen()) {
 						FreezeHandler.startFreezeServer();
+						ModLoader.NETWORK.sendToAll(new FreezePacket(true));
+					}
 					else {
 						FreezeHandler.stopFreezeServer();
+						ModLoader.NETWORK.sendToAll(new FreezePacket(false));
 					}
 				}
 			});

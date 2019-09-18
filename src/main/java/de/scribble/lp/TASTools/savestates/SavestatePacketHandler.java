@@ -27,7 +27,7 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 						if(server.getCurrentPlayerCount()==1) {
 							ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), (EntityPlayerMP) player);
 						}
-						else {
+						else if(server.getCurrentPlayerCount()>1){
 							ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), server.getPlayerList().getPlayers().get(0));
 						}
 					}
