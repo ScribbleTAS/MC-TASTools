@@ -1,9 +1,15 @@
 package de.scribble.lp.TASTools.misc;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
+import javax.annotation.Nullable;
+import javax.imageio.ImageIO;
 
 import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
@@ -12,11 +18,14 @@ import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ScreenShotHelper;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class Util {
+	public static boolean enableSavestateScreenshotting;
 	public String getLevelNamefromServer() {
 		String out=null;
 		File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath()+File.separator+"server.properties");
@@ -56,5 +65,68 @@ public class Util {
 		ModLoader.freezeenabledSP=ClientProxy.config.get("Freeze","Enabled", false, "Freezes the game when joining singleplayer").getBoolean();
 		SavestateEvents.savestatepauseenabled=ClientProxy.config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu").getBoolean();
 		GuiOverlayLogo.potionenabled=ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").getBoolean();
+		Util.enableSavestateScreenshotting=ClientProxy.config.get("Screenshot", "Enabled", false, "Take a screenshot before the savestate so you know where you left off. Does not work on servers.").getBoolean();
+	}
+	@SideOnly(Side.CLIENT)
+	public void saveScreenshotAt(File path, String name, BufferedImage image) {
+		File file = new File(path, name);
+		try {
+			file = file.getCanonicalFile();
+		} catch (IOException e) {
+			CommonProxy.logger.error("Screenshot name has an invalid name");
+			CommonProxy.logger.catching(e);
+		}
+		try {
+			ImageIO.write(image, "png", file);
+		} catch (IOException e) {
+			CommonProxy.logger.error("Something went wrong while writing the screenshot to a file");
+			CommonProxy.logger.catching(e);
+		}
+	}
+	@SideOnly(Side.CLIENT)
+	public BufferedImage makeAscreenShot() {
+		Minecraft mc = Minecraft.getMinecraft();
+		BufferedImage image=ScreenShotHelper.createScreenshot(mc.displayWidth, mc.displayHeight, mc.getFramebuffer());
+		return image;
+	}
+	@SideOnly(Side.CLIENT)
+	public BufferedImage createWorldIcon(@Nullable BufferedImage preImage) {
+		Minecraft mc = Minecraft.getMinecraft();
+		BufferedImage bufferedimage;
+		if(preImage==null) {
+			bufferedimage = ScreenShotHelper.createScreenshot(mc.displayWidth, mc.displayHeight, mc.getFramebuffer());
+		}else bufferedimage = preImage;
+
+        int i = bufferedimage.getWidth();
+        int j = bufferedimage.getHeight();
+        int k = 0;
+        int l = 0;
+
+        if (i > j)
+        {
+            k = (i - j) / 2;
+            i = j;
+        }
+        else
+        {
+            l = (j - i) / 2;
+        }
+
+        BufferedImage bufferedimage1 = new BufferedImage(64, 64, 1);
+		Graphics graphics = bufferedimage1.createGraphics();
+		graphics.drawImage(bufferedimage, 0, 0, 64, 64, k, l, k + i, l + i, (ImageObserver)null);
+		graphics.dispose();
+
+		return bufferedimage1;
+	}
+	@SideOnly(Side.CLIENT)
+	public void saveWorldIcon(BufferedImage image, File path) {
+		File location = new File(path, "icon.png");
+        try {
+			ImageIO.write(image, "png", location);
+		} catch (IOException e) {
+			CommonProxy.logger.error("Something went wrong while writing the worldIcon to a file");
+			CommonProxy.logger.catching(e);
+		}
 	}
 }

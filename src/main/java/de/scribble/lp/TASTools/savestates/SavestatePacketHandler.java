@@ -23,7 +23,13 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 						return;
 					}
 					if(message.isLoadSave()) {
-						new SavestateHandlerClient().saveState();
+						//new SavestateHandlerClient().saveState();
+						if(server.getCurrentPlayerCount()==1) {
+							ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), (EntityPlayerMP) player);
+						}
+						else if(server.getCurrentPlayerCount()>1){
+							ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), server.getPlayerList().getPlayers().get(0));
+						}
 					}
 					else {
 						if(server.getCurrentPlayerCount()==1) {
@@ -51,6 +57,9 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 				}else if (message.getMode()==1) {
 					if (!message.isLoadSave()) {
 						new SavestateHandlerClient().loadLastSavestate();
+					}
+					else {
+						new SavestateHandlerClient().saveState();
 					}
 				}
 			});

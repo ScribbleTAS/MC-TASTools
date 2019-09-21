@@ -3,7 +3,6 @@ package de.scribble.lp.TASTools.duping;
 import java.io.File;
 
 import de.scribble.lp.TASTools.CommonProxy;
-import de.scribble.lp.TASTools.ModLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.FMLCommonHandler;

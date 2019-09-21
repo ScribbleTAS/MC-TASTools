@@ -29,6 +29,8 @@ gui.savestate.ingamemenu=Mayk a Déjà-vu-point
 gui.savestate.savingscreen.msg=Mayking a Déjà-vu-point, plis hold ur butts!
 gui.savestate.savingscreen.credit=Idea n code stolen frum MightyPork and bspkrs' WurldStaytDéjà-vu-pointz!
 gui.savestate.loadingscreen.msg=Rofl-ing a Déjà-vu-point!
+msg.pausegui.enabled=§aStahp-Gui enabled
+msg.pausegui.disabled=§cStahp-Gui dizabled
 
 #usage (Do not translate this section)
 command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | logo | folder>
