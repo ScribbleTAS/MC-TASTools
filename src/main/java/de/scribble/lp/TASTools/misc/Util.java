@@ -96,7 +96,7 @@ public class Util {
 		if(preImage==null) {
 			bufferedimage = ScreenShotHelper.createScreenshot(mc.displayWidth, mc.displayHeight, mc.getFramebuffer());
 		}else bufferedimage = preImage;
-		
+
         int i = bufferedimage.getWidth();
         int j = bufferedimage.getHeight();
         int k = 0;
@@ -116,7 +116,7 @@ public class Util {
 		Graphics graphics = bufferedimage1.createGraphics();
 		graphics.drawImage(bufferedimage, 0, 0, 64, 64, k, l, k + i, l + i, (ImageObserver)null);
 		graphics.dispose();
-		
+
 		return bufferedimage1;
 	}
 	@SideOnly(Side.CLIENT)

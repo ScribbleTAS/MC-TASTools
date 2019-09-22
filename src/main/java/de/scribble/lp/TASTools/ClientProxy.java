@@ -26,7 +26,6 @@ public class ClientProxy extends CommonProxy{
 	public static KeyBinding FreezeKey = new KeyBinding("Freeze/Unfreeze Players", Keyboard.KEY_Y, "TASTools");
 	public static KeyBinding SavestateSaveKey = new KeyBinding("Create Savestate", Keyboard.KEY_J, "TASTools");
 	public static KeyBinding SavestateLoadKey = new KeyBinding("Load Latest Savestate", Keyboard.KEY_K, "TASTools");
-	public static KeyBinding PauseKey = new KeyBinding("ForcePause/Unpause the game", Keyboard.KEY_P, "TASTools");
 	
 	public static Configuration config;
 	

@@ -240,10 +240,10 @@ public class TastoolsCommandc extends CommandBase{
 				notifyCommandListener(sender, this, "msg.gui.multiplayerchange", new TextComponentString(args[1]));
 				ModLoader.NETWORK.sendTo(new MiscPacket(1), server.getPlayerList().getPlayerByUsername(args[1]));
 			
-			//Opens the savestate folder
+				//Opens the savestate folder
 			} else if(args.length==1&&args[0].equalsIgnoreCase("folder")){
 				ModLoader.NETWORK.sendTo(new MiscPacket(2),(EntityPlayerMP)sender);
-			//Changes the pause menu
+				//Changes the pause menu
 			} else if(args.length==1&&args[0].equalsIgnoreCase("pausemenu")){
 				if (SavestateEvents.savestatepauseenabled) {
 					sender.sendMessage(new TextComponentTranslation("msg.pausegui.disabled"));	//§cDisabled Velocity when joining the world

@@ -57,7 +57,6 @@ public class SavestateHandlerClient {
 	protected static BufferedImage worldIcon;
 	
 	
-	
 	public void saveState() {
 		if(!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			
@@ -67,17 +66,18 @@ public class SavestateHandlerClient {
 			
 			List<EntityPlayerMP> players=FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
 			if (!isSaving && !isLoading) {
+				isSaving = true;
 				// Check for worlds in the savestate folder
 				int i = 1;
 				while (i <= 300) {
 					if (i == 300) {
-						CommonProxy.logger.error(
-								"Couldn't make a savestate, there are too many savestates in the target directory");
+						CommonProxy.logger.error("Couldn't make a savestate, there are too many savestates in the target directory");
+						isSaving = false;
 						return;
 					}
 					if (i > 300) {
-						CommonProxy.logger.error(
-								"Aborting saving due to savestate count being greater than 300 for safety reasons");
+						CommonProxy.logger.error("Aborting saving due to savestate count being greater than 300 for safety reasons");
+						isSaving = false;
 						return;
 					}
 					targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir,
@@ -148,7 +148,7 @@ public class SavestateHandlerClient {
 				SavestateSaveEventsClient lol = new SavestateSaveEventsClient();
 				MinecraftForge.EVENT_BUS.register(lol);
 			}else {
-				CommonProxy.logger.error("Saving savestate is blocked by another action.");
+				CommonProxy.logger.error("Saving savestate is blocked by another action. If this is permanent, restart the game.");
 			}
 		}
 	}
@@ -167,10 +167,12 @@ public class SavestateHandlerClient {
 					if (!targetsavefolder.exists()) {
 						if(i-1==0) {
 							CommonProxy.logger.info("Couldn't find a valid savestate, abort loading the savestate!");
+							isLoading=false;
 							return;
 						}
 						if(i>256) {
 							CommonProxy.logger.error("Too many savestates found. Aborting loading for safety reasons");
+							isLoading=false;
 							return;
 						}
 						targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+Minecraft.getMinecraft().getIntegratedServer().getFolderName()+"-Savestate"+Integer.toString(i-1));
@@ -192,7 +194,7 @@ public class SavestateHandlerClient {
 	            this.mc.loadWorld((WorldClient)null);
 	            this.mc.displayGuiScreen(new GuiSavestateLoadingScreen());
 			}else {
-				CommonProxy.logger.error("Loading savestate is blocked by another action.");
+				CommonProxy.logger.error("Loading savestate is blocked by another action. If this is permanent, restart the game.");
 			}
 		}
 	}
@@ -293,6 +295,8 @@ public class SavestateHandlerClient {
     }
 
     public File getInfoFile(String worldname) {
+    	if(!new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates").exists()) new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates").mkdir();
+    	
     	File file = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+worldname+"-info.txt");
     	return file;
     }

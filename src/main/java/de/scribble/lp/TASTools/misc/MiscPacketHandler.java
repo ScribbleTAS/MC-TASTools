@@ -33,8 +33,10 @@ public class MiscPacketHandler implements IMessageHandler<MiscPacket, IMessage>{
 				ClientProxy.config.save();
 			}
 		}else if(message.getMode()==2) {
+			File file = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + "savestates");
 			try {
-				Desktop.getDesktop().open(new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + "savestates"));
+				if(!file.exists())file.mkdir();
+				Desktop.getDesktop().open(file);
 			} catch (IOException e) {
 				CommonProxy.logger.fatal("Something went wrong while opening ", new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + "savestates").getPath());
 				e.printStackTrace();

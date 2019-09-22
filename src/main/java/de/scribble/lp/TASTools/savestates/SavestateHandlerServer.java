@@ -220,6 +220,8 @@ public class SavestateHandlerServer {
 	}
 
 	public File getInfoFile(String worldname) {
+		if(!new File(FMLCommonHandler.instance().getSavesDirectory().getPath() + File.separator + "savestates").exists())new File(FMLCommonHandler.instance().getSavesDirectory().getPath() + File.separator + "savestates").mkdir();
+		
 		File file = new File(FMLCommonHandler.instance().getSavesDirectory().getPath() + File.separator + "savestates"
 				+ File.separator + ModLoader.getLevelname() + "-info.txt");
 		return file;

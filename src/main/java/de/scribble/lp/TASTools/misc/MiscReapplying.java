@@ -6,12 +6,12 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class MiscReapplying {
-	
+
 	private int timeuntilportal;
 
 	public int getPortalTime(File file){
 		try{
-			
+
 			BufferedReader Buff = new BufferedReader(new FileReader(file));
 			String s;
 			while (true){
@@ -23,7 +23,7 @@ public class MiscReapplying {
 				}
 				else if(s.startsWith("TimeUntilPortal")) {
 					String[] val=s.split("=");
-					
+
 					timeuntilportal=Integer.parseInt(val[1]);
 
 				}

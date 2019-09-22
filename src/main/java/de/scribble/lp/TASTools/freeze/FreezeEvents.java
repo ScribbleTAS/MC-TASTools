@@ -19,34 +19,26 @@ public class FreezeEvents {
 	@SubscribeEvent
 	public void onjoinServer(PlayerLoggedInEvent ev) {
 		EntityPlayerMP playerev = (EntityPlayerMP) ev.player;
-		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) { // Multiplayer
+		
+		/*======================================= Multiplayer =======================================*/
+		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) { 
 			if (FreezeHandler.isServerFrozen()) {
-
 				if (VelocityEvents.velocityenabledServer) { // If velocity in the server config is enabled
 					File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath()
-							+ File.separator + ev.player.getEntityWorld().getWorldInfo().getWorldName() + File.separator
+							+ File.separator + playerev.getEntityWorld().getWorldInfo().getWorldName() + File.separator
 							+ playerev.getName() + "_velocity.txt");
-
+					
 					if (file.exists()) {
 						// Apply the motion to the player, instead of his current motion
 						double[] bewegung = new ReapplyingVelocity().getVelocity(file); // German for motion lol
-						FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX, playerev.posY,
-								playerev.posZ, playerev.rotationPitch, playerev.rotationYaw, bewegung[0], bewegung[1],
-								bewegung[2]));
+						addPlayerToFreezeClock(playerev, bewegung);
 					} else {
-						FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX, playerev.posY,
-								playerev.posZ, playerev.rotationPitch, playerev.rotationYaw, playerev.motionX,
-								playerev.motionY, playerev.motionZ));
+						addPlayerToFreezeClock(playerev);
 					}
-					playerev.setEntityInvulnerable(true);
-					playerev.setNoGravity(true);
 				} else { // if velocityserver is disabled
-					FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX, playerev.posY,
-							playerev.posZ, playerev.rotationPitch, playerev.rotationYaw, 0, 0, 0));
-
-					playerev.setEntityInvulnerable(true);
-					playerev.setNoGravity(true);
+					addPlayerToFreezeClock(playerev);
 				}
+				//This will disable the mouse on the client
 				ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
 
 			}else { //Due to a strange bug, invulnerability and no gravity will get carried over even tho the server is shut down...
@@ -55,62 +47,54 @@ public class FreezeEvents {
 					playerev.setNoGravity(false);
 				}
 			}
-		}else { // Open to LAN
-				if (ModLoader.freezeenabledSP) {
-					List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance()
-							.getPlayerList().getPlayers();
-					if (playerMP.size() > 1) {
-						if (FreezeHandler.isServerFrozen()) {
-							if (VelocityEvents.velocityenabledClient) {
-								File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath()
-										+ File.separator + ev.player.getEntityWorld().getWorldInfo().getWorldName()
-										+ File.separator + playerev.getName() + "_velocity.txt");
+		/*======================================= Open to LAN =======================================*/
+		}else {
+			List<EntityPlayerMP> playerMP = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
+					.getPlayers();
+			if (playerMP.size() > 1) {
+				if (FreezeHandler.isServerFrozen()) {
+					if (VelocityEvents.velocityenabledClient) {
+						File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath()
+								+ File.separator + ev.player.getEntityWorld().getWorldInfo().getWorldName()
+								+ File.separator + playerev.getName() + "_velocity.txt");
 
-								if (file.exists()) {
-									double[] bewegung = new ReapplyingVelocity().getVelocity(file); // German for motion
-																									// lol
-									FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX,
-											playerev.posY, playerev.posZ, playerev.rotationPitch, playerev.rotationYaw,
-											bewegung[0], bewegung[1], bewegung[2]));
-								} else {
-									FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX,
-											playerev.posY, playerev.posZ, playerev.rotationPitch, playerev.rotationYaw,
-											0, 0, 0));
-								}
-								playerev.setEntityInvulnerable(true);
-								playerev.setNoGravity(true);
-								ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
-
-							} else { // if velocityclient is disabled
-
-								FreezeHandler.entity.add(new EntityDataStuff(playerev.getName(), playerev.posX,
-										playerev.posY, playerev.posZ, playerev.rotationPitch, playerev.rotationYaw,
-										playerev.motionX, playerev.motionY, playerev.motionZ));
-
-								playerev.setEntityInvulnerable(true);
-								playerev.setNoGravity(true);
-								ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
-							}
-						}
-					} else { // Singleplayer
-						if (VelocityEvents.velocityenabledClient) {
-							File file = new File(Minecraft.getMinecraft().mcDataDir,
-									"saves" + File.separator
-											+ Minecraft.getMinecraft().getIntegratedServer().getFolderName()
-											+ File.separator + "latest_velocity.txt");
-							if (file.exists()) {
-								double[] motion = new ReapplyingVelocity().getVelocity(file);
-								FreezeHandler.startFreezeSetMotionServer(motion[0], motion[1], motion[2]);
-							} else
-								FreezeHandler.startFreezeServer();
+						if (file.exists()) {
+							double[] bewegung = new ReapplyingVelocity().getVelocity(file); // German for motion lol
+							addPlayerToFreezeClock(playerev, bewegung);
 						} else {
-							FreezeHandler.startFreezeServer();
+							addPlayerToFreezeClock(playerev);
 						}
+						//This will disable the mouse on the client
+						ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
+
+					} else { // if velocityclient is disabled
+
+						addPlayerToFreezeClock(playerev);
+						//This will disable the mouse on the client
 						ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
 					}
 				}
+		/*====================================== Singleplayer =======================================*/
+			} else {
+				if(ModLoader.freezeenabledSP) {
+					if (VelocityEvents.velocityenabledClient) {
+						File file = new File(Minecraft.getMinecraft().mcDataDir,
+								"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
+										+ File.separator + "latest_velocity.txt");
+						if (file.exists()) {
+							double[] motion = new ReapplyingVelocity().getVelocity(file);
+							FreezeHandler.startFreezeSetMotionServer(motion[0], motion[1], motion[2]);
+						} else
+							FreezeHandler.startFreezeServer();
+					} else {
+						FreezeHandler.startFreezeServer();
+					}
+					ModLoader.NETWORK.sendTo(new FreezePacket(true), playerev);
+				}
 			}
+		/*===========================================================================================*/
 		}
+	}
 
 	@SubscribeEvent
 	public void onLeaveServer(PlayerLoggedOutEvent ev) {
@@ -121,26 +105,14 @@ public class FreezeEvents {
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			if (FreezeHandler.isServerFrozen()) {
 				
-				for (int o=0; o<FreezeHandler.entity.size();o++) {
-					if(FreezeHandler.entity.get(o).getPlayername().equals(playerEV.getName())) {
-						FreezeHandler.entity.remove(o);
-					}
-				}
-				playerEV.setEntityInvulnerable(false);
-				playerEV.setNoGravity(false);
+				removePlayerFromFreezeClock(playerEV);
 				ModLoader.NETWORK.sendTo(new FreezePacket(false), playerEV);
 			}
+		//LAN
 		}else{
 			if(playerMP.size()>1) {
 				if (FreezeHandler.isServerFrozen()) {
-					
-					for (int o=0; o<FreezeHandler.entity.size();o++) {
-						if(FreezeHandler.entity.get(o).getPlayername().equals(playerEV.getName())) {
-							FreezeHandler.entity.remove(o);
-						}
-					}
-					playerEV.setEntityInvulnerable(false);
-					playerEV.setNoGravity(false);
+					removePlayerFromFreezeClock(playerEV);
 					ModLoader.NETWORK.sendTo(new FreezePacket(false), playerEV);
 				}
 			}else {
@@ -154,6 +126,41 @@ public class FreezeEvents {
 	public void pressKeybinding(InputEvent.KeyInputEvent ev) {
 		if (ClientProxy.FreezeKey.isPressed() && Minecraft.getMinecraft().player.canUseCommand(2, "freeze")) {
 			ModLoader.NETWORK.sendToServer(new FreezePacket(true,1));
+
 		}
+	}
+	/**
+	 * Add a player to the freezeclock
+	 * @param player
+	 */
+	public void addPlayerToFreezeClock(EntityPlayerMP player) {
+		FreezeHandler.entity.add(new EntityDataStuff(player.getName(), player.posX, player.posY,
+				player.posZ, player.rotationPitch, player.rotationYaw, 0, 0, 0));
+
+		player.setEntityInvulnerable(true);
+		player.setNoGravity(true);
+	}
+	/**
+	 * Add a player + motion to the freeze clock
+	 * @param player
+	 * @param customMotion [0]=X, [1]=Y, [2]=Z
+	 */
+	public void addPlayerToFreezeClock(EntityPlayerMP player, double[] customMotion) {
+		FreezeHandler.entity.add(new EntityDataStuff(player.getName(), player.posX, player.posY,
+				player.posZ, player.rotationPitch, player.rotationYaw, customMotion[0], customMotion[1],
+				customMotion[2]));
+	}
+	/**
+	 * Remove a player from the freeze clock
+	 * @param player
+	 */
+	public void removePlayerFromFreezeClock(EntityPlayerMP player) {
+		for (int o=0; o<FreezeHandler.entity.size();o++) {
+			if(FreezeHandler.entity.get(o).getPlayername().equals(player.getName())) {
+				FreezeHandler.entity.remove(o);
+			}
+		}
+		player.setEntityInvulnerable(false);
+		player.setNoGravity(false);
 	}
 }
