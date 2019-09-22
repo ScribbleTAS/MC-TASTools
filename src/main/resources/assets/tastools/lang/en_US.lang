@@ -29,6 +29,8 @@ gui.savestate.ingamemenu=Make a Savestate
 gui.savestate.savingscreen.msg=Making a savestate, please wait!
 gui.savestate.savingscreen.credit=Idea and code from MightyPork and bspkrs' WorldStateCheckpoints!
 gui.savestate.loadingscreen.msg=Loading a savestate!
+msg.pausegui.enabled=§aPause-Gui enabled
+msg.pausegui.disabled=§cPause-Gui disabled
 
 #usage (Do not translate this section)
 command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | logo | folder>
