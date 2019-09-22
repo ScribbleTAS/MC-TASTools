@@ -81,14 +81,13 @@ public class ModLoader {
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			if(freezeenabledMP) {
 				FreezeHandler.startFreezeServer();
-				FreezeHandler.startFreezeClient();
 			}
 		}
 	}
 	@EventHandler
 	public void serverAboutToStart(FMLServerAboutToStartEvent ev) {
 		if(FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
-			levelname=new Util().getLevelNamefromServer();
+			levelname=new Util().getLevelNamefromServer().replace("\\", "");
 			stopit=CommonProxy.serverconfig.get("Savestate","LoadSavestate", false, "This is used for loading a Savestate. When entering /savestate load, this will be set to true, and the server will delete the current world and copy the latest savestate when starting.").getBoolean();
 			if (stopit) {
 				new SavestateHandlerServer().loadSavestateOnServerStart();
