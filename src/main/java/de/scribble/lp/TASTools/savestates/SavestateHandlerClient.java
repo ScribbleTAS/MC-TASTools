@@ -162,7 +162,7 @@ public class SavestateHandlerClient {
 				worldname=Minecraft.getMinecraft().getIntegratedServer().getFolderName();
 				//getting latest savestate
 				int i=1;
-				while(i<=256) {
+				while(i<=300) {
 					targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+Minecraft.getMinecraft().getIntegratedServer().getFolderName()+"-Savestate"+Integer.toString(i));
 					if (!targetsavefolder.exists()) {
 						if(i-1==0) {
@@ -170,7 +170,7 @@ public class SavestateHandlerClient {
 							isLoading=false;
 							return;
 						}
-						if(i>256) {
+						if(i>300) {
 							CommonProxy.logger.error("Too many savestates found. Aborting loading for safety reasons");
 							isLoading=false;
 							return;
