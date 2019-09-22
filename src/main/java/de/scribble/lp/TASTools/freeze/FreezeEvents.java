@@ -4,16 +4,22 @@ import java.io.File;
 import java.util.List;
 
 import de.scribble.lp.TASTools.ClientProxy;
+import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.velocity.ReapplyingVelocity;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class FreezeEvents {
 	@SubscribeEvent
@@ -127,6 +133,16 @@ public class FreezeEvents {
 		if (ClientProxy.FreezeKey.isPressed() && Minecraft.getMinecraft().player.canUseCommand(2, "freeze")) {
 			ModLoader.NETWORK.sendToServer(new FreezePacket(true,1));
 
+		}
+	}
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onMenus(GuiOpenEvent ev) {
+		if(ev.getGui() instanceof GuiMainMenu||ev.getGui() instanceof GuiMultiplayer) {
+			if(FreezeHandler.isClientFrozen()) {
+				CommonProxy.logger.info("Unfreezing the mouse");
+				FreezeHandler.stopFreezeClient();
+			}
 		}
 	}
 	/**

@@ -22,12 +22,12 @@ public class MiscPacketHandler implements IMessageHandler<MiscPacket, IMessage>{
 		}else if(message.getMode()==1) {
 			EntityPlayerSP sender=Minecraft.getMinecraft().player;
 			if(GuiOverlayLogo.potionenabled) {
-				sender.sendMessage(new TextComponentTranslation("msg.logo.disabled")); //§cDisabled Logo in HUD
+				sender.sendMessage(new TextComponentTranslation("msg.gui.disabled")); //§cDisabled Logo in HUD
 				GuiOverlayLogo.potionenabled=false;
 				ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").set(false);
 				ClientProxy.config.save();
 			}else if(!GuiOverlayLogo.potionenabled) {
-				sender.sendMessage(new TextComponentTranslation("msg.logo.enabled"));	//§aEnabled Logo in HUD
+				sender.sendMessage(new TextComponentTranslation("msg.gui.enabled"));	//§aEnabled Logo in HUD
 				GuiOverlayLogo.potionenabled=true;
 				ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").set(true);
 				ClientProxy.config.save();
