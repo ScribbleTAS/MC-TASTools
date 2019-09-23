@@ -23,7 +23,7 @@ public class DupeEvents {
 	
 	@SubscribeEvent
 	public void onCloseServer(PlayerEvent.PlayerLoggedOutEvent ev){
-		if((mc.currentScreen instanceof GuiIngameMenu||mc.currentScreen instanceof GuiSavestateIngameMenu)&&dupingenabled){
+		if((mc.currentScreen instanceof GuiIngameMenu||mc.currentScreen instanceof GuiSavestateIngameMenu)&&dupingenabled&&!mc.getIntegratedServer().getPublic()){
 			CommonProxy.logger.info("Start saving items/chests...");
 			new RecordingDupe().saveFile(ev.player);
 		}
@@ -31,7 +31,7 @@ public class DupeEvents {
 	
 	@SubscribeEvent
 	public void onOpenServer(PlayerEvent.PlayerLoggedInEvent ev){
-		if (dupingenabled&&!ev.player.worldObj.isRemote) {
+		if (dupingenabled&&!mc.getIntegratedServer().getPublic()) {
 			File file= new File(mc.mcDataDir, "saves" + File.separator +mc.getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
 			if (file.exists()){
 				CommonProxy.logger.info("Start refilling...");
