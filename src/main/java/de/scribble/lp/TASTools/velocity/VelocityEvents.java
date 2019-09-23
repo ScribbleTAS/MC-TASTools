@@ -29,7 +29,7 @@ public class VelocityEvents {
 					CommonProxy.logger.info("Start saving velocity...");
 					if (FreezeHandler.isServerFrozen()) {
 						new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(0).getMotionX(),
-								FreezeHandler.entity.get(0).getMotionY(), FreezeHandler.entity.get(0).getMotionZ(),
+								FreezeHandler.entity.get(0).getMotionY(), FreezeHandler.entity.get(0).getMotionZ(), FreezeHandler.entity.get(0).getFalldistance(),
 								file);
 					} else {
 						new SavingVelocity().saveVelocity(ev.player, file);
@@ -47,7 +47,9 @@ public class VelocityEvents {
 							if (FreezeHandler.entity.get(i).getPlayername().equals(ev.player.getName())) {
 								new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(i).getMotionX(),
 										FreezeHandler.entity.get(i).getMotionY(),
-										FreezeHandler.entity.get(i).getMotionZ(), file);
+										FreezeHandler.entity.get(i).getMotionZ(),
+										FreezeHandler.entity.get(i).getFalldistance(),
+										file);
 							}
 						}
 					} else {
@@ -65,7 +67,11 @@ public class VelocityEvents {
 				if(FreezeHandler.isServerFrozen()) {
 					for(int i=0;i<players.size();i++) {
 						if(FreezeHandler.entity.get(i).getPlayername().equals(ev.player.getName())) {
-							new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(i).getMotionX(), FreezeHandler.entity.get(i).getMotionY(), FreezeHandler.entity.get(i).getMotionZ(), file);
+							new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(i).getMotionX(), 
+									FreezeHandler.entity.get(i).getMotionY(), 
+									FreezeHandler.entity.get(i).getMotionZ(),
+									FreezeHandler.entity.get(i).getFalldistance(),
+									file);
 						}
 					}
 				}

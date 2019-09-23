@@ -10,8 +10,9 @@ public class EntityDataStuff {
 	private double motionX;
 	private double motionY;
 	private double motionZ;
+	private float falldistance;
 	
-	public EntityDataStuff(String playername, double posX, double posY , double posZ, float pitch, float yaw, double motionX,double motionY,double motionZ) {
+	public EntityDataStuff(String playername, double posX, double posY , double posZ, float pitch, float yaw, double motionX,double motionY,double motionZ, float falldistance) {
 		this.playername=playername;
 		this.posX=posX;
 		this.posY=posY;
@@ -21,6 +22,8 @@ public class EntityDataStuff {
 		this.motionX=motionX;
 		this.motionY=motionY;
 		this.motionZ=motionZ;
+		this.falldistance=falldistance;
+		
 	}
 	public String getPlayername() {
 		return playername;
@@ -36,7 +39,8 @@ public class EntityDataStuff {
 	}
 	public float getPitch() {
 		return pitch;
-	}public float getYaw() {
+	}
+	public float getYaw() {
 		return yaw;
 	}
 	public double getMotionX() {
@@ -44,7 +48,11 @@ public class EntityDataStuff {
 	}
 	public double getMotionY() {
 		return motionY;
-	}public double getMotionZ() {
+	}
+	public double getMotionZ() {
 		return motionZ;
+	}
+	public float getFalldistance() {
+		return falldistance;
 	}
 }

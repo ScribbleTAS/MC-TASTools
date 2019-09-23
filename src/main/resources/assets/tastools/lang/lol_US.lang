@@ -36,6 +36,8 @@ command.dupe.usage=/dupe
 command.dragon.usage=/dragon <phase>
 command.freeze.usage=/freeze
 command.savestate.usage=/savestate <save | load>
+msg.pausegui.enabled=§aStahp-Gui enabled
+msg.pausegui.disabled=§cStahp-Gui dizabled
 
 #misc
 msg.misc.info=TASBot overlurd verzion %s for Minceraft verzion %s initialized... beep boop...
