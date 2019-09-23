@@ -23,7 +23,7 @@ public class DupeEvents {
 	
 	@SubscribeEvent
 	public void onCloseServer(PlayerEvent.PlayerLoggedOutEvent ev){
-		if((mc.currentScreen instanceof GuiIngameMenu||mc.currentScreen instanceof GuiSavestateIngameMenu)&&dupingenabled&&mc.getIntegratedServer().getPublic()){
+		if((mc.currentScreen instanceof GuiIngameMenu||mc.currentScreen instanceof GuiSavestateIngameMenu)&&dupingenabled&&!mc.getIntegratedServer().getPublic()){
 			CommonProxy.logger.info("Start saving items/chests...");
 			new RecordingDupe().saveFile(ev.player);
 		}

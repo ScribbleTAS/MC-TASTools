@@ -112,7 +112,7 @@ public class SavestateHandlerServer {
 				File targetsavefolder=null;
 				//getting latest savestate
 				int i=1;
-				while(i<=256) {
+				while(i<=300) {
 					targetsavefolder = new File(FMLCommonHandler.instance().getSavesDirectory().getPath() + File.separator + "savestates"+ File.separator + ModLoader.getLevelname() + "-Savestate" + Integer.toString(i));
 					if (!targetsavefolder.exists()) {
 						if(i-1==0) {
@@ -282,7 +282,7 @@ public class SavestateHandlerServer {
 		File targetsavefolder=null;
 		//getting latest savestate
 		int i=1;
-		while(i<=256) {
+		while(i<=300) {
 			targetsavefolder = new File(FMLCommonHandler.instance().getSavesDirectory().getPath() + File.separator + "savestates"+ File.separator + ModLoader.getLevelname() + "-Savestate" + Integer.toString(i));
 			if (!targetsavefolder.exists()) {
 				if(i-1==0) {
