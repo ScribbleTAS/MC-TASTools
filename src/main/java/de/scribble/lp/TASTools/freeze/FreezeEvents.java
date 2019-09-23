@@ -111,26 +111,14 @@ public class FreezeEvents {
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			if (FreezeHandler.isServerFrozen()) {
 				
-				for (int o=0; o<FreezeHandler.entity.size();o++) {
-					if(FreezeHandler.entity.get(o).getPlayername().equals(playerEV.getName())) {
-						FreezeHandler.entity.remove(o);
-					}
-				}
-				playerEV.setEntityInvulnerable(false);
-				playerEV.setNoGravity(false);
+				removePlayerFromFreezeClock(playerEV);
 				ModLoader.NETWORK.sendTo(new FreezePacket(false), playerEV);
 			}
+		//LAN
 		}else{
 			if(playerMP.size()>1) {
 				if (FreezeHandler.isServerFrozen()) {
-					
-					for (int o=0; o<FreezeHandler.entity.size();o++) {
-						if(FreezeHandler.entity.get(o).getPlayername().equals(playerEV.getName())) {
-							FreezeHandler.entity.remove(o);
-						}
-					}
-					playerEV.setEntityInvulnerable(false);
-					playerEV.setNoGravity(false);
+					removePlayerFromFreezeClock(playerEV);
 					ModLoader.NETWORK.sendTo(new FreezePacket(false), playerEV);
 				}
 			}else {
