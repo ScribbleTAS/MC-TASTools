@@ -1,5 +1,6 @@
 package de.scribble.lp.TASTools.savestates;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,15 +16,12 @@ import javax.annotation.Nullable;
 
 import com.google.common.io.Files;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
+import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateSavingScreen;
@@ -31,12 +29,10 @@ import de.scribble.lp.TASTools.velocity.SavingVelocity;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldSettings;
-import net.minecraftforge.common.MinecraftForge;
 /**
  * This code is heavily 'inspired' from <br> bspkrs on github <br> https://github.com/bspkrs/WorldStateCheckpoints/blob/master/src/main/java/bspkrs/worldstatecheckpoints/CheckpointManager.java <br>
  * but it's more fitted to quickly load and save the savestates and removes extra gui overview. Oh, and no multithreadding, I have no idea how that works...
@@ -52,6 +48,8 @@ public class SavestateHandlerClient {
 	protected static WorldSettings settings;
 	protected static String foldername;
 	protected static String worldname;
+	protected static BufferedImage screenshot;
+	protected static String screenshotname;
 	
 	
 	public void saveState() {
@@ -64,15 +62,15 @@ public class SavestateHandlerClient {
 			if (!isSaving&&!isLoading) {
 				isSaving = true;
 				int i = 1;
-				while (i <= 256) {
-					if (i == 256) {
-						CommonProxy.logger.error(
-								"Couldn't make a savestate, there are too many savestates in the target directory");
+				while (i <= 300) {
+					if (i == 300) {
+						CommonProxy.logger.error("Couldn't make a savestate, there are too many savestates in the target directory");
+						isSaving = false;
 						return;
 					}
-					if (i > 256) {
-						CommonProxy.logger.error(
-								"Aborting saving due to savestate count being greater than 256 for safety reasons");
+					if (i > 300) {
+						CommonProxy.logger.error("Aborting saving due to savestate count being greater than 300 for safety reasons");
+						isSaving = false;
 						return;
 					}
 					targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir,
@@ -80,11 +78,15 @@ public class SavestateHandlerClient {
 									+ Minecraft.getMinecraft().getIntegratedServer().getFolderName() + "-Savestate"
 									+ Integer.toString(i));
 					if (!targetsavefolder.exists()) {
+						screenshotname="Savestate "+i+".png";	//Setting the name of the savestate as the ScreenshotName
 						break;
 					}
 					i++;
 				}
 				// Save the world
+				if(Util.enableSavestateScreenshotting) {
+					screenshot = new Util().makeAscreenShot();
+				}
 				ModLoader.NETWORK.sendToAll(new SavestatePacket(true));
 				File file = new File(Minecraft.getMinecraft().mcDataDir,
 						"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
@@ -111,7 +113,7 @@ public class SavestateHandlerClient {
 								for (int j = 0; j < FreezeHandler.entity.size(); j++) {
 									if (FreezeHandler.entity.get(j).getPlayername().equals(players.get(i1).getDisplayName())) {
 										new SavingVelocity().saveVelocityCustom(
-												FreezeHandler.entity.get(j).getMotionX(),
+												FreezeHandler.entity.get(i1).getMotionX(),
 												FreezeHandler.entity.get(i1).getMotionY(),
 												FreezeHandler.entity.get(i1).getMotionZ(),
 												FreezeHandler.entity.get(i1).getFalldistance(), file);
@@ -137,7 +139,7 @@ public class SavestateHandlerClient {
 				SavestateEvents2.tickspassed=0;
 				SavestateEvents2.clientsaving=true;
 			}else {
-				CommonProxy.logger.error("Saving savestate is blocked by another action.");
+				CommonProxy.logger.error("Saving savestate is blocked by another action. If this is permanent, restart the game.");
 			}
 		}
 	}
@@ -151,15 +153,17 @@ public class SavestateHandlerClient {
 				worldname=Minecraft.getMinecraft().getIntegratedServer().getFolderName();
 				//getting latest savestate
 				int i=1;
-				while(i<=256) {
+				while(i<=300) {
 					targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+Minecraft.getMinecraft().getIntegratedServer().getFolderName()+"-Savestate"+Integer.toString(i));
 					if (!targetsavefolder.exists()) {
 						if(i-1==0) {
 							CommonProxy.logger.info("Couldn't find a valid savestate, abort loading the savestate!");
+							isLoading=false;
 							return;
 						}
-						if(i>256) {
+						if(i>300) {
 							CommonProxy.logger.error("Too many savestates found. Aborting loading for safety reasons");
+							isLoading=false;
 							return;
 						}
 						targetsavefolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+Minecraft.getMinecraft().getIntegratedServer().getFolderName()+"-Savestate"+Integer.toString(i-1));
@@ -181,7 +185,7 @@ public class SavestateHandlerClient {
 				SavestateEvents2.clientloading=true;
 				
 			}else {
-				CommonProxy.logger.error("Loading savestate is blocked by another action.");
+				CommonProxy.logger.error("Loading savestate is blocked by another action. If this is permanent, restart the game.");
 			}
 		}
 	}
@@ -282,6 +286,8 @@ public class SavestateHandlerClient {
     }
 
     public File getInfoFile(String worldname) {
+    	if(!new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates").exists()) new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates").mkdir();
+
     	File file = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+worldname+"-info.txt");
     	return file;
     }

@@ -1,13 +1,7 @@
 package de.scribble.lp.TASTools.duping;
 
-import java.io.File;
-
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
-import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
@@ -19,7 +13,7 @@ public class DupeEvents2 {
 	
 	@SubscribeEvent
 	public void onCloseServer(WorldEvent.Unload ev){
-		if((mc.currentScreen instanceof GuiIngameMenu||mc.currentScreen instanceof GuiSavestateIngameMenu)&&DupeEvents.dupingenabled){
+		if((mc.currentScreen instanceof GuiIngameMenu||mc.currentScreen instanceof GuiSavestateIngameMenu)&&DupeEvents.dupingenabled&&!mc.getIntegratedServer().getPublic()){
 				if(ev.world.playerEntities.size()!=0){
 				CommonProxy.logger.info("Start saving items/chests...");
 				new RecordingDupe().saveFile((EntityPlayer) ev.world.playerEntities.get(0));

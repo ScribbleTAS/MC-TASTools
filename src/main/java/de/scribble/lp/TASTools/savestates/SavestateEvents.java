@@ -1,9 +1,6 @@
 package de.scribble.lp.TASTools.savestates;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
-import de.scribble.lp.TASTools.ClientProxy;
-import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;

@@ -14,6 +14,8 @@ import de.scribble.lp.TASTools.duping.DupeEvents2;
 import de.scribble.lp.TASTools.freeze.FreezeEvents2;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
+import de.scribble.lp.TASTools.misc.MiscEvents;
+import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
 import de.scribble.lp.TASTools.savestates.SavestateEvents2;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
@@ -45,11 +47,12 @@ public class ClientProxy extends CommonProxy{
 		config.load();
 		GuiKeystrokes.guienabled=config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").getBoolean();
 		String position=config.get("Keystrokes","CornerPos", "downLeft", "Sets the Keystroke to that specific corner. Options: downLeft,downRight,upRight,upLeft").getString();
-		DupeEvents.dupingenabled=config.get("Duping","Enabled", false, "Activates the duping on startup").getBoolean();
+		DupeEvents.dupingenabled=config.get("Duping","Enabled", true, "Activates the duping on startup").getBoolean();
 		VelocityEvents.velocityenabledClient=config.get("Velocity", "Enabled", true, "Activates velocity saving on startup").getBoolean();
 		ModLoader.freezeenabledSP=config.get("Freeze","Enabled", false, "Freezes the game when joining singleplayer").getBoolean();
 		SavestateEvents.savestatepauseenabled=config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu").getBoolean();
 		GuiOverlayLogo.potionenabled=config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").getBoolean();
+		Util.enableSavestateScreenshotting=config.get("Screenshot", "Enabled", false, "Take a screenshot before the savestate so you know where you left off. Does not work on servers.").getBoolean();
 		config.save();
 		
 		if (position.equals("downLeft")) {
@@ -89,6 +92,7 @@ public class ClientProxy extends CommonProxy{
 		MinecraftForge.EVENT_BUS.register(new SavestateEvents());
 		FMLCommonHandler.instance().bus().register(new SavestateEvents2());
 		MinecraftForge.EVENT_BUS.register(new VelocityEvents2());
+		MinecraftForge.EVENT_BUS.register(new MiscEvents());
 
 	}
 	

@@ -4,12 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.client.event.MouseEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
 
 public class FreezeHandler {
 	

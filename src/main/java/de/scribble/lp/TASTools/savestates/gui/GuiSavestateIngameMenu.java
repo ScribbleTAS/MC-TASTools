@@ -1,14 +1,11 @@
 package de.scribble.lp.TASTools.savestates.gui;
 
-import java.io.IOException;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.savestates.SavestatePacket;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiShareToLan;
@@ -16,7 +13,6 @@ import net.minecraft.client.gui.achievement.GuiAchievements;
 import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.realms.RealmsBridge;
 
 public class GuiSavestateIngameMenu extends GuiScreen
 	{

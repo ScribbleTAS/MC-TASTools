@@ -3,11 +3,9 @@ package de.scribble.lp.TASTools.enderdragon;
 import java.util.List;
 import java.util.Random;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 import de.scribble.lp.TASTools.CommonProxy;
-import ibxm.Player;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;

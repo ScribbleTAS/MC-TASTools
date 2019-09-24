@@ -29,6 +29,8 @@ gui.savestate.ingamemenu=Erstelle einen Sicherungspunkt
 gui.savestate.savingscreen.msg=Erstelle gerade einen Sicherungspunkt, bitte warten!
 gui.savestate.savingscreen.credit=Idee und Code von MightyPork und bspkrs' WorldStateCheckpoints!
 gui.savestate.loadingscreen.msg=Lädt einen Sicherungspunkt!
+msg.pausegui.enabled=§aPause-Gui eingeschaltet
+msg.pausegui.disabled=§cPause-Gui ausgeschaltet
 
 #usage (Do not translate this section)
 command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | logo | folder>

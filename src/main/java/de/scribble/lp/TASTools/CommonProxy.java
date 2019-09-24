@@ -25,7 +25,6 @@ import de.scribble.lp.TASTools.misc.MiscPacketHandler;
 import de.scribble.lp.TASTools.savestates.SavestatePacket;
 import de.scribble.lp.TASTools.savestates.SavestatePacketHandler;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
-import de.scribble.lp.TASTools.velocity.VelocityEvents2;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 

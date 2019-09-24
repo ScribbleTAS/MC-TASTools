@@ -2,7 +2,6 @@ package de.scribble.lp.TASTools;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
-import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.savestates.SavestatePacket;
 import net.minecraft.client.Minecraft;

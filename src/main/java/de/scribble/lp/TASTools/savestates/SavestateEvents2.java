@@ -7,7 +7,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import de.scribble.lp.TASTools.CommonProxy;
-import de.scribble.lp.TASTools.ModLoader;
+import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -39,7 +39,9 @@ public class SavestateEvents2 {
 						SavestateHandlerClient.isSaving=false;
 						return;
 					}
-					
+					if(Util.enableSavestateScreenshotting) {
+						new Util().saveScreenshotAt(SavestateHandlerClient.targetsavefolder, SavestateHandlerClient.screenshotname, SavestateHandlerClient.screenshot);
+					}
 					clientsaving=false;
 					SavestateHandlerClient.isSaving=false;
 					return;
@@ -50,7 +52,7 @@ public class SavestateEvents2 {
 	}
 	
 	@SubscribeEvent
-	public void onTick(TickEvent.ClientTickEvent ev) {
+	public void loadSavestate(TickEvent.ClientTickEvent ev) {
 		if (ev.phase == Phase.START) {
 			if (!mc.isIntegratedServerRunning()) {
 				if (tickspassed >= endtimer) {

@@ -22,7 +22,7 @@ public class DupeEvents {
 	
 	@SubscribeEvent
 	public void onOpenServer(PlayerLoggedInEvent ev){
-		if (dupingenabled) {
+		if (dupingenabled&&!mc.getIntegratedServer().getPublic()) {
 			File file= new File(mc.mcDataDir, "saves" + File.separator +mc.getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
 			if (file.exists()){
 				CommonProxy.logger.info("Start refilling...");

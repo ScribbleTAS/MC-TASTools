@@ -6,7 +6,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraftforge.event.world.WorldEvent;
 
 public class VelocityEvents2 {

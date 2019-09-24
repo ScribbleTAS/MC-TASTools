@@ -6,7 +6,6 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import de.scribble.lp.TASTools.ModLoader;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -23,7 +22,12 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 
 							if(MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile())){
 								if (message.isLoadSave()) {
-									new SavestateHandlerClient().saveState();
+									if(server.getCurrentPlayerCount()==1) {
+										ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), (EntityPlayerMP) player);
+									}
+									else if(server.getCurrentPlayerCount()>1){
+										ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), (EntityPlayerMP) server.getConfigurationManager().playerEntityList.get(0));
+									}
 								} else {
 									if(server.getConfigurationManager().getCurrentPlayerCount()==1) {
 										ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) player);
@@ -54,13 +58,14 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 							new SavestateHandlerClient().displayIngameMenu();
 						}
 					}
-					else if(message.getMode()==1) {
-						if (Minecraft.getMinecraft().theWorld.isRemote)new SavestateHandlerClient().loadLastSavestate();
+					else if (message.getMode() == 1) {
+						if (!message.isLoadSave()) {
+							new SavestateHandlerClient().loadLastSavestate();
+						} else {
+							new SavestateHandlerClient().saveState();
+						}
 					}
 				}
-				
-
-
 		return null;
 	}
 

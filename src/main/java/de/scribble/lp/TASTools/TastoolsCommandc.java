@@ -1,8 +1,5 @@
 package de.scribble.lp.TASTools;
 
-import java.awt.Desktop;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -12,12 +9,11 @@ import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
 import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
 import de.scribble.lp.TASTools.misc.MiscPacket;
 import de.scribble.lp.TASTools.misc.Util;
+import de.scribble.lp.TASTools.savestates.SavestateEvents;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -217,6 +213,9 @@ public class TastoolsCommandc extends CommandBase{
 					ClientProxy.config.load();
 					new Util().reloadClientconfig();
 					func_152374_a(sender, this,1, "msg.misc.reload", new Object()); //Config reloaded!
+				} else if(!server.isDedicatedServer() && server.getCurrentPlayerCount() > 1) {
+					ModLoader.NETWORK.sendTo(new MiscPacket(0),(EntityPlayerMP) sender);
+					func_152374_a(sender, this,1, "msg.misc.reload", new Object());
 				}else {
 					new Util().reloadServerconfig();
 					ModLoader.NETWORK.sendToAll(new MiscPacket(0));
@@ -245,11 +244,21 @@ public class TastoolsCommandc extends CommandBase{
 				func_152374_a(sender, this,1, "msg.gui.multiplayerchange", new ChatComponentText(args[1]));
 				ModLoader.NETWORK.sendTo(new MiscPacket(1), (EntityPlayerMP) playerlist.func_152612_a(args[1]));
 			} else if(args.length==1&&args[0].equalsIgnoreCase("folder")){
-				try {
-					Desktop.getDesktop().open(new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + "savestates"));
-				} catch (IOException e) {
-					CommonProxy.logger.fatal("Something went wrong while opening ", new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + "savestates").getPath());
-					e.printStackTrace();
+				ModLoader.NETWORK.sendTo(new MiscPacket(2),(EntityPlayerMP)sender);
+				//Changes the pause menu
+			} else if(args.length==1&&args[0].equalsIgnoreCase("pausemenu")){
+				if (SavestateEvents.savestatepauseenabled) {
+					sender.addChatMessage(new ChatComponentTranslation("msg.pausegui.disabled"));	//§cDisabled Velocity when joining the world
+					SavestateEvents.savestatepauseenabled = false;
+					ClientProxy.config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu")
+							.set(false);
+					ClientProxy.config.save();
+				} else if (!SavestateEvents.savestatepauseenabled) {
+					sender.addChatMessage(new ChatComponentTranslation("msg.pausegui.enabled"));		//§aEnabled Velocity when joining the world
+					SavestateEvents.savestatepauseenabled = true;
+					ClientProxy.config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu")
+							.set(true);
+					ClientProxy.config.save();
 				}
 			}
 			// Other than sender=Player starts here
@@ -308,7 +317,7 @@ public List addTabCompletionOptions(ICommandSender sender, String[] args) {
 	MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 	ServerConfigurationManager playerlist=server.getConfigurationManager();
 	if (args.length==1) {
-		return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","gui","reload","folder"});
+		return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","gui","reload","folder","pausemenu"});
 	}
 	else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
 		List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft"});

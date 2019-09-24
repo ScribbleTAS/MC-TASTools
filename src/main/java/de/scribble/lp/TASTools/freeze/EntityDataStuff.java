@@ -38,7 +38,8 @@ public class EntityDataStuff {
 	}
 	public float getPitch() {
 		return pitch;
-	}public float getYaw() {
+	}
+	public float getYaw() {
 		return yaw;
 	}
 	public double getMotionX() {
@@ -46,8 +47,8 @@ public class EntityDataStuff {
 	}
 	public double getMotionY() {
 		return motionY;
-		
-	}public double getMotionZ() {
+	}
+	public double getMotionZ() {
 		return motionZ;
 	}
 	public float getFalldistance() {
