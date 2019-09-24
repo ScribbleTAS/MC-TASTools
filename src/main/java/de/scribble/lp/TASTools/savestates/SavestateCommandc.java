@@ -31,7 +31,7 @@ public class SavestateCommandc extends CommandBase{
 		if (sender instanceof EntityPlayer) {
 			if (!server.isDedicatedServer()) {
 				if (args.length == 1 && args[0].equalsIgnoreCase("save")) {
-					new SavestateHandlerClient().saveState();
+					ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), (EntityPlayerMP) sender);
 				} else if (args.length == 1 && args[0].equalsIgnoreCase("load")) {
 					ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) sender);
 				}

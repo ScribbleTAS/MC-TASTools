@@ -26,7 +26,13 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 						public void run() {
 							if(MinecraftServer.getServer().getConfigurationManager().canSendCommands(player.getGameProfile())){
 								if (message.isLoadSave()) {
-									new SavestateHandlerClient().saveState();
+									//new SavestateHandlerClient().saveState();
+									if(server.getCurrentPlayerCount()==1) {
+										ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), (EntityPlayerMP) player);
+									}
+									else if(server.getCurrentPlayerCount()>1){
+										ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), server.getConfigurationManager().getPlayerList().get(0));
+									}
 								} else {
 									if(server.getConfigurationManager().getCurrentPlayerCount()==1) {
 										ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) player);
@@ -67,11 +73,14 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 							new SavestateHandlerClient().displayIngameMenu();
 						}
 					}
-					else if(message.getMode()==1) {
-						if (Minecraft.getMinecraft().theWorld.isRemote)new SavestateHandlerClient().loadLastSavestate();
+					else if (message.getMode() == 1) {
+						if (!message.isLoadSave()) {
+							new SavestateHandlerClient().loadLastSavestate();
+						} else {
+							new SavestateHandlerClient().saveState();
+						}
 					}
 				}
-				
 			});
 		}
 
