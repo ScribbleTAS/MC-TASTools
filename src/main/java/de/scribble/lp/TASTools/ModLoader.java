@@ -81,7 +81,6 @@ public class ModLoader {
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			if(freezeenabledMP) {
 				FreezeHandler.startFreezeServer();
-				FreezeHandler.startFreezeClient();
 			}
 		}
 	}

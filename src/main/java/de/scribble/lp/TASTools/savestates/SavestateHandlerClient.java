@@ -374,7 +374,10 @@ class SavestateSaveEventsClient extends SavestateHandlerClient{
 					isSaving=false;
 					return;
 				}
-				
+				if(Util.enableSavestateScreenshotting) {
+					new Util().saveWorldIcon(worldIcon, targetsavefolder);
+					new Util().saveScreenshotAt(targetsavefolder, screenshotname, screenshot);
+				}
 				ModLoader.NETWORK.sendToAll(new SavestatePacket(true));
 				MinecraftForge.EVENT_BUS.unregister(this);
 				isSaving=false;
