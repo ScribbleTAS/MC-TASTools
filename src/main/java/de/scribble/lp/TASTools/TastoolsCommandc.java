@@ -220,7 +220,7 @@ public class TastoolsCommandc extends CommandBase{
 
 			//gui logo singleplayer
 			} else if(args.length == 1 && args[0].equalsIgnoreCase("gui")) {
-				if(!isdedicated){
+				if(!isdedicated&&server.getCurrentPlayerCount() == 1){
 					if(GuiOverlayLogo.potionenabled) {
 						sender.addChatMessage(new TextComponentTranslation("msg.gui.disabled")); //§cDisabled Logo in HUD
 						GuiOverlayLogo.potionenabled=false;
@@ -244,19 +244,7 @@ public class TastoolsCommandc extends CommandBase{
 				ModLoader.NETWORK.sendTo(new MiscPacket(2),(EntityPlayerMP)sender);
 				//Changes the pause menu
 			} else if(args.length==1&&args[0].equalsIgnoreCase("pausemenu")){
-				if (SavestateEvents.savestatepauseenabled) {
-					sender.addChatMessage(new TextComponentTranslation("msg.pausegui.disabled"));	//§cDisabled Velocity when joining the world
-					SavestateEvents.savestatepauseenabled = false;
-					ClientProxy.config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu")
-							.set(false);
-					ClientProxy.config.save();
-				} else if (!SavestateEvents.savestatepauseenabled) {
-					sender.addChatMessage(new TextComponentTranslation("msg.pausegui.enabled"));		//§aEnabled Velocity when joining the world
-					SavestateEvents.savestatepauseenabled = true;
-					ClientProxy.config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu")
-							.set(true);
-					ClientProxy.config.save();
-				}
+				ModLoader.NETWORK.sendTo(new MiscPacket(3), (EntityPlayerMP)sender);
 			}
 			// Other than sender=Player starts here
 		} else {
