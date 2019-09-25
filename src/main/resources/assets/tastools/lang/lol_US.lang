@@ -33,7 +33,7 @@ msg.pausegui.enabled=§aStahp-Gui enabled
 msg.pausegui.disabled=§cStahp-Gui dizabled
 
 #usage (Do not translate this section)
-command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | logo | folder>
+command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | gui | pausemenu>
 command.dupe.usage=/dupe
 command.dragon.usage=/dragon <phase>
 command.freeze.usage=/freeze
