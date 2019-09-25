@@ -5,7 +5,7 @@
   "description": "Tools for MC-TASing",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
+  "url": "https://www.curseforge.com/minecraft/mc-mods/tastools",
   "updateUrl": "",
   "authorList": ["ScribbleLP"],
   "credits": "",
