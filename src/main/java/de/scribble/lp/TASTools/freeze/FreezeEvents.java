@@ -53,7 +53,6 @@ public class FreezeEvents {
 				if(!playerev.isSpectator()&&!playerev.capabilities.isCreativeMode) {
 					playerev.capabilities.disableDamage=false;
 				}
-				playerev.capabilities.isFlying=false;
 			}
 		/*======================================= Open to LAN =======================================*/
 		}else {
@@ -158,7 +157,6 @@ public class FreezeEvents {
 				player.posZ, player.rotationPitch, player.rotationYaw, 0, 0, 0, 0));
 
 		player.capabilities.disableDamage=true;
-		player.capabilities.isFlying=true;
 	}
 	/**
 	 * Add a player + motion to the freeze clock
@@ -170,7 +168,6 @@ public class FreezeEvents {
 				player.posZ, player.rotationPitch, player.rotationYaw, customMotion[0], customMotion[1],
 				customMotion[2], falldistance));
 		player.capabilities.disableDamage=true;
-		player.capabilities.isFlying=true;
 	}
 	/**
 	 * Remove a player from the freeze clock
@@ -185,6 +182,5 @@ public class FreezeEvents {
 		if(!player.capabilities.isCreativeMode||!player.isSpectator()) {
 			player.capabilities.disableDamage=false;
 		}
-		player.capabilities.isFlying=false;
 	}
 }

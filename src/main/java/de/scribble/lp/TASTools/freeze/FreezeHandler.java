@@ -39,7 +39,6 @@ public class FreezeHandler {
 								playerTemp.get(i).rotationPitch, playerTemp.get(i).rotationYaw,
 								playerTemp.get(i).motionX, playerTemp.get(i).motionY, playerTemp.get(i).motionZ, playerTemp.get(i).fallDistance));
 				playerTemp.get(i).capabilities.disableDamage=true;
-				playerTemp.get(i).capabilities.isFlying=true;
 			}
 		}
 		playerMP = playerTemp;
@@ -56,7 +55,6 @@ public class FreezeHandler {
 								playerTemp2.get(i).rotationPitch, playerTemp2.get(i).rotationYaw,
 								X, Y, Z, falldistance));
 				playerTemp2.get(i).capabilities.disableDamage=true;
-				playerTemp2.get(i).capabilities.isFlying=true;
 			}
 		}
 		playerMP = playerTemp2;
