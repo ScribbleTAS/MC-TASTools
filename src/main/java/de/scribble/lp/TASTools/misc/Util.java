@@ -17,6 +17,7 @@ import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
+import de.scribble.lp.TASTools.savestates.SavestateHandlerClient;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ScreenShotHelper;
@@ -66,6 +67,7 @@ public class Util {
 		SavestateEvents.savestatepauseenabled=ClientProxy.config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu").getBoolean();
 		GuiOverlayLogo.potionenabled=ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").getBoolean();
 		Util.enableSavestateScreenshotting=ClientProxy.config.get("Screenshot", "Enabled", false, "Take a screenshot before the savestate so you know where you left off. Does not work on servers.").getBoolean();
+		SavestateHandlerClient.endtimer=ClientProxy.config.get("TimeToSave","TimeInMillis", 1000,"Meh").getInt();
 	}
 	@SideOnly(Side.CLIENT)
 	public void saveScreenshotAt(File path, String name, BufferedImage image) {
