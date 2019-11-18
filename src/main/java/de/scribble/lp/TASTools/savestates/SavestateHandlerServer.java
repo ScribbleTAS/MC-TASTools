@@ -35,6 +35,7 @@ public class SavestateHandlerServer {
 	private boolean isSaving;
 	protected static File currentworldfolder;
 	protected static File targetsavefolder;
+	public static int endtimer;
 	
 	public void saveState() {
 		if(FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
@@ -95,8 +96,8 @@ public class SavestateHandlerServer {
 				}
 				FMLCommonHandler.instance().getMinecraftServerInstance().saveAllWorlds(false);
 				FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().saveAllPlayerData();
-				SavestateSaveEventsServer lol=new SavestateSaveEventsServer();
-				MinecraftForge.EVENT_BUS.register(lol);
+				SavestateSaveEventsServer saver=new SavestateSaveEventsServer();
+				saver.start();
 			}
 		}
 	}
@@ -305,26 +306,28 @@ public class SavestateHandlerServer {
 		}
 		CommonProxy.logger.info("Done");
 	}
-	class SavestateSaveEventsServer extends SavestateHandlerServer{
-		int tickspassed=0;
-		@SubscribeEvent
-		public void onTick(TickEvent ev) {
-			if (ev.phase==Phase.START) {
-				if (tickspassed>=20) {
-					try {
-						copyDirectory(currentworldfolder, targetsavefolder, new String[] {" "});
-						
-					} catch (IOException e) {
-						CommonProxy.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate save)");
-						e.printStackTrace();
-					}
-					isSaving=false;
-					MinecraftForge.EVENT_BUS.unregister(this);
-					ModLoader.NETWORK.sendToAll(new SavestatePacket());
-					return;
-				}
-				tickspassed++;
+	
+	private class SavestateSaveEventsServer extends Thread {
+
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(endtimer);
+			} catch (InterruptedException e1) {
+				CommonProxy.logger.catching(e1);
 			}
+			try {
+				copyDirectory(currentworldfolder, targetsavefolder, new String[] { " " });
+
+			} catch (IOException e) {
+				CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
+						+ targetsavefolder.getPath() + " for some reason (Savestate save)");
+				e.printStackTrace();
+			}
+			isSaving = false;
+			MinecraftForge.EVENT_BUS.unregister(this);
+			ModLoader.NETWORK.sendToAll(new SavestatePacket());
+			return;
 		}
 	}
 }

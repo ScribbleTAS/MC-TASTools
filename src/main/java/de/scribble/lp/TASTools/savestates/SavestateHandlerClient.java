@@ -18,6 +18,7 @@ import com.google.common.io.Files;
 
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
+import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.misc.Util;
@@ -39,7 +40,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 /**
  * This code is heavily 'inspired' from <br> bspkrs on github <br> https://github.com/bspkrs/WorldStateCheckpoints/blob/master/src/main/java/bspkrs/worldstatecheckpoints/CheckpointManager.java <br>
- * but it's more fitted to quickly load and save the savestates and removes extra gui overview. Oh, and no multithreadding, I have no idea how that works...
+ * but it's more fitted to quickly load and save the savestates and removes extra gui overview. Hey I changed this comment, and it actually supports multithreadding now...
  */
 public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
@@ -130,6 +131,8 @@ public class SavestateHandlerClient {
 								}
 							}
 						}
+					}else {
+						new DupeEvents().recordDupe(mc.player);
 					}
 				}
 				// Save the info file
@@ -144,7 +147,6 @@ public class SavestateHandlerClient {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
 				SavestateSaveEventsClient Saver = new SavestateSaveEventsClient();
 				Saver.start();
 			}else {
@@ -390,14 +392,13 @@ public class SavestateHandlerClient {
 				CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
 						+ targetsavefolder.getPath() + " for some reason (Savestate save)");
 				e.printStackTrace();
-			}
-			finally {
+			} finally {
 				isSaving = false;
 			}
 		}
 	}
 
-private class SavestateLoadEventsClient extends Thread{
+	private class SavestateLoadEventsClient extends Thread {
 		@Override
 		public void run() {
 			while (mc.isIntegratedServerRunning()) {

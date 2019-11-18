@@ -56,6 +56,12 @@ public class DupeEvents {
 		playa.setEntityInvulnerable(true);
 		MinecraftForge.EVENT_BUS.register(stopit);
 	}
+	public void recordDupe(EntityPlayer player) {
+		if(dupingenabled&&!mc.getIntegratedServer().getPublic()) {
+			CommonProxy.logger.info("Start saving...");
+			new RecordingDupe().saveFile(player);
+		}
+	}
 }
 class StopMoving extends DupeEvents{
 	Minecraft mc = Minecraft.getMinecraft();
