@@ -92,7 +92,6 @@ public class SavestateHandlerClient {
 					i++;
 				}
 				// Save the world
-				isSaving = true;
 				if(Util.enableSavestateScreenshotting) {
 					screenshot = new Util().makeAscreenShot();
 					worldIcon=new Util().createWorldIcon(screenshot);
@@ -103,11 +102,14 @@ public class SavestateHandlerClient {
 								+ File.separator + "latest_velocity.txt");
 				
 				//Normally works without this, but low tickrates make it so the player doesn't get saved
-				Minecraft.getMinecraft().getIntegratedServer().getPlayerList().saveAllPlayerData();
-				FMLCommonHandler.instance().getMinecraftServerInstance().saveAllWorlds(false);
+				
+				/*Minecraft.getMinecraft().getIntegratedServer().getPlayerList().saveAllPlayerData();
+				FMLCommonHandler.instance().getMinecraftServerInstance().saveAllWorlds(false);*/
+				
+				ModLoader.NETWORK.sendToServer(new SavestatePacket(false,2)); //Tell the server to save playerdata and chunks
+				
 				// For LAN-Servers
 				if (players.size() > 1) {
-					Minecraft.getMinecraft().getIntegratedServer().saveAllWorlds(false);
 					if (!FreezeHandler.isServerFrozen()) {
 						FreezeHandler.startFreezeServer();
 						ModLoader.NETWORK.sendToAll(new FreezePacket(true));

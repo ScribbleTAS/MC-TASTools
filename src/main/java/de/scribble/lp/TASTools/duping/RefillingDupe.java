@@ -69,7 +69,7 @@ public class RefillingDupe {
 								
 								/*Check if the player is too far away from the chest and prevents it from being refilled... A failsafe and cheat prevention*/
 								if(playerPos.distanceSq((double)foundchest.getPos().getX(), (double)foundchest.getPos().getY(), (double)foundchest.getPos().getZ())>50.0){
-										CommonProxy.logger.error("Chest at "+Integer.parseInt(coords[1])+" "+Integer.parseInt(coords[2])+" "+Integer.parseInt(coords[3])+" is too far away! Distance: "+playerPos.distanceSq((double)foundchest.getPos().getX(), (double)foundchest.getPos().getY(), (double)foundchest.getPos().getZ()));
+										CommonProxy.logger.warn("Duping: Chest at "+Integer.parseInt(coords[1])+" "+Integer.parseInt(coords[2])+" "+Integer.parseInt(coords[3])+" is too far away! Distance: "+playerPos.distanceSq((double)foundchest.getPos().getX(), (double)foundchest.getPos().getY(), (double)foundchest.getPos().getZ()));
 										continue;
 								}
 								while(true){
@@ -104,7 +104,7 @@ public class RefillingDupe {
 								}chestcounter++; //for logging
 							}
 							else{	//Message if there is no chest at the specified coordinates, can happen when using /dupe
-								CommonProxy.logger.error("Didn't find a chest at "+Integer.parseInt(coords[1])+" "+Integer.parseInt(coords[2])+" "+Integer.parseInt(coords[3])+".");
+								CommonProxy.logger.warn("Duping: Didn't find a chest at "+Integer.parseInt(coords[1])+" "+Integer.parseInt(coords[2])+" "+Integer.parseInt(coords[3])+".");
 								continue;
 							}
 						}
@@ -119,7 +119,7 @@ public class RefillingDupe {
 					
 					
 					if(playerPos.distanceSq((double)dupePos.getX(),(double)dupePos.getY(),(double)dupePos.getZ())>=50.0){						//abort if the player is too far away from the duping position, cheat prevention and failsafe when using /dupe
-						CommonProxy.logger.error("Player moved too far from initial duping position. Aborting EntityDupe! DupePosition: ("+dupePos.getX()+";"+dupePos.getY()+";"+dupePos.getZ()+") Distance: "+playerPos.distanceSq((double)dupePos.getX(),(double)dupePos.getY(),(double)dupePos.getZ()));
+						CommonProxy.logger.warn("Duping: Player moved too far from initial duping position. Aborting EntityDupe! DupePosition: ("+dupePos.getX()+";"+dupePos.getY()+";"+dupePos.getZ()+") Distance: "+playerPos.distanceSq((double)dupePos.getX(),(double)dupePos.getY(),(double)dupePos.getZ()));
 						continue;
 					}
 					if(!entitylist.isEmpty()){	//Kill all items in the surrounding area
@@ -167,9 +167,9 @@ public class RefillingDupe {
 			}
 			Buff.close();
 			if(chestcounter==0&&itemcounter==0){
-				CommonProxy.logger.info("Nothing refilled");
+				CommonProxy.logger.info("Duping: Nothing refilled");
 			}else{
-				CommonProxy.logger.info("Refilled "+chestcounter+" chest(s) with "+chestitemcounter+" item(s) and spawned "+ itemcounter+ " item(s) on the ground.");
+				CommonProxy.logger.info("Duping: Refilled "+chestcounter+" chest(s) with "+chestitemcounter+" item(s) and spawned "+ itemcounter+ " item(s) on the ground.");
 			}
 		}catch (IOException e) {
 			e.printStackTrace();

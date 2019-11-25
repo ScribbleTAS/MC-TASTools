@@ -1,5 +1,6 @@
 package de.scribble.lp.TASTools.savestates;
 
+import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -17,33 +18,41 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 		if (ctx.side== Side.SERVER) {
 			EntityPlayerMP player=ctx.getServerHandler().player;
 			MinecraftServer server=FMLCommonHandler.instance().getMinecraftServerInstance();
-			if (!server.isDedicatedServer()) {
-				ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
-					if (!player.canUseCommand(2, "savestate")) {
-						return;
-					}
-					if(message.isLoadSave()) {
-						//new SavestateHandlerClient().saveState();
-						if(server.getCurrentPlayerCount()==1) {
-							ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), (EntityPlayerMP) player);
+			if(message.getMode()==0) {
+				if (!server.isDedicatedServer()) {
+					ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
+						if (!player.canUseCommand(2, "savestate")) {
+							return;
 						}
-						else if(server.getCurrentPlayerCount()>1){
-							ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), server.getPlayerList().getPlayers().get(0));
-						}
-					}
-					else {
-						if(server.getCurrentPlayerCount()==1) {
-							ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) player);
+						if(message.isLoadSave()) {
+							//new SavestateHandlerClient().saveState();
+							if(server.getCurrentPlayerCount()==1) {
+								ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), (EntityPlayerMP) player);
+							}
+							else if(server.getCurrentPlayerCount()>1){
+								ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), server.getPlayerList().getPlayers().get(0));
+							}
 						}
 						else {
-							ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), server.getPlayerList().getPlayers().get(0));
+							if(server.getCurrentPlayerCount()==1) {
+								ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) player);
+							}
+							else {
+								ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), server.getPlayerList().getPlayers().get(0));
+							}
 						}
-					}
-				});
-			}else {
+					});
+				}else {
+					ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
+						if(message.isLoadSave())new SavestateHandlerServer().saveState();
+						else new SavestateHandlerServer().setFlagandShutdown();
+					});
+				}
+			}else if(message.getMode()==1) {
 				ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
-					if(message.isLoadSave())new SavestateHandlerServer().saveState();
-					else new SavestateHandlerServer().setFlagandShutdown();
+					CommonProxy.logger.debug("Saving worlds and playerdata on the integrated Server");
+					server.saveAllWorlds(false);
+					server.getPlayerList().saveAllPlayerData();
 				});
 			}
 		} else if (ctx.side == Side.CLIENT) {

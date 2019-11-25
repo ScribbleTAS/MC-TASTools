@@ -22,8 +22,7 @@ public class DupeEvents {
 	@SubscribeEvent
 	public void onCloseServer(PlayerEvent.PlayerLoggedOutEvent ev){
 		if(dupingenabled&&!mc.getIntegratedServer().getPublic()) {
-			CommonProxy.logger.info("Start saving...");
-			new RecordingDupe().saveFile(ev.player);
+			recordDupe(ev.player);
 		}
 	}
 	
@@ -32,7 +31,7 @@ public class DupeEvents {
 		if (dupingenabled&&!mc.getIntegratedServer().getPublic()) {
 			File file= new File(mc.mcDataDir, "saves" + File.separator +mc.getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
 			if (file.exists()){
-				CommonProxy.logger.info("Start refilling...");
+				CommonProxy.logger.debug("Start refilling dupe (DupeEvents)");
 				new RefillingDupe().refill(file, ev.player);
 			}
 		}
@@ -58,7 +57,7 @@ public class DupeEvents {
 	}
 	public void recordDupe(EntityPlayer player) {
 		if(dupingenabled&&!mc.getIntegratedServer().getPublic()) {
-			CommonProxy.logger.info("Start saving...");
+			CommonProxy.logger.info("Start saving dupe(DupeEvents)");
 			new RecordingDupe().saveFile(player);
 		}
 	}

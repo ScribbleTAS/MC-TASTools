@@ -67,7 +67,7 @@ public class Util {
 		SavestateEvents.savestatepauseenabled=ClientProxy.config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu").getBoolean();
 		GuiOverlayLogo.potionenabled=ClientProxy.config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").getBoolean();
 		Util.enableSavestateScreenshotting=ClientProxy.config.get("Screenshot", "Enabled", false, "Take a screenshot before the savestate so you know where you left off. Does not work on servers.").getBoolean();
-		SavestateHandlerClient.endtimer=ClientProxy.config.get("TimeToSave","TimeInMillis", 1000,"Meh").getInt();
+		SavestateHandlerClient.endtimer=ClientProxy.config.get("TimeToSave","TimeInMillis", 1000,"Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that").getInt();
 	}
 	@SideOnly(Side.CLIENT)
 	public void saveScreenshotAt(File path, String name, BufferedImage image) {
