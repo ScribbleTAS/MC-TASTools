@@ -11,7 +11,6 @@ import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMultiplayer;
-import net.minecraft.client.gui.GuiScreenServerList;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;

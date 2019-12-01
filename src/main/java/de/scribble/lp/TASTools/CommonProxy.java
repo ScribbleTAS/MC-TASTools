@@ -62,7 +62,7 @@ public class CommonProxy {
 			ModLoader.freezeenabledMP=serverconfig.get("Freeze","Enabled", false, "Freezes the game when starting the Server").getBoolean();
 			VelocityEvents.velocityenabledServer=serverconfig.get("Velocity","Enabled",true,"Saves and applies Velocity when joining/leaving the server").getBoolean();
 			ModLoader.stopit=serverconfig.get("Savestate","LoadSavestate", false, "This is used for loading a Savestate. When entering /savestate load, this will be set to true, and the server will delete the current world and copy the latest savestate when starting.").getBoolean();
-			SavestateHandlerServer.endtimer=serverconfig.get("TimeToSave","TimeInMillis", 1000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that").getInt();
+			SavestateHandlerServer.endtimer=serverconfig.get("TimeToSave","TimeInMillis", 5000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that").getInt();
 			serverconfig.save();
 			//Generate a folder for the savestates
 			new File(FMLCommonHandler.instance().getSavesDirectory().getPath()+File.separator+"savestates").mkdir();

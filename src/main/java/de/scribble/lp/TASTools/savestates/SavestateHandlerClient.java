@@ -35,9 +35,6 @@ import net.minecraft.world.WorldSettings;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 /**
  * This code is heavily 'inspired' from <br> bspkrs on github <br> https://github.com/bspkrs/WorldStateCheckpoints/blob/master/src/main/java/bspkrs/worldstatecheckpoints/CheckpointManager.java <br>
  * but it's more fitted to quickly load and save the savestates and removes extra gui overview. Hey I changed this comment, and it actually supports multithreadding now...
@@ -46,7 +43,7 @@ public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
 	private static boolean isSaving=false;
 	private static boolean isLoading=false;
-	public static int endtimer=1000;
+	public static int endtimer;
 	
 	private File currentworldfolder;
 	private File targetsavefolder=null;
@@ -101,12 +98,8 @@ public class SavestateHandlerClient {
 						"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
 								+ File.separator + "latest_velocity.txt");
 				
-				//Normally works without this, but low tickrates make it so the player doesn't get saved
 				
-				/*Minecraft.getMinecraft().getIntegratedServer().getPlayerList().saveAllPlayerData();
-				FMLCommonHandler.instance().getMinecraftServerInstance().saveAllWorlds(false);*/
-				
-				ModLoader.NETWORK.sendToServer(new SavestatePacket(false,2)); //Tell the server to save playerdata and chunks
+				ModLoader.NETWORK.sendToServer(new SavestatePacket(false,1)); //Tell the server to save playerdata and chunks
 				
 				// For LAN-Servers
 				if (players.size() > 1) {

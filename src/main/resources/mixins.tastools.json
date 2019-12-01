@@ -5,6 +5,5 @@
     "refmap": "mixins.tastools.refmap.json",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
-        
     ]
 }

@@ -5,6 +5,9 @@ import de.scribble.lp.TASTools.ModLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.IProgressUpdate;
+import net.minecraft.world.MinecraftException;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -51,7 +54,22 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 			}else if(message.getMode()==1) {
 				ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
 					CommonProxy.logger.debug("Saving worlds and playerdata on the integrated Server");
-					server.saveAllWorlds(false);
+					for (int i = 0; i < server.worlds.length; ++i)
+		            {
+		                if (server.worlds[i] != null)
+		                {
+		                    WorldServer worldserver = server.worlds[i];
+		                    boolean flag = worldserver.disableLevelSaving;
+		                    worldserver.disableLevelSaving = false;
+		                    try {
+								worldserver.saveAllChunks(true, (IProgressUpdate)null);
+							} catch (MinecraftException e) {
+								CommonProxy.logger.debug("Something went wrong while Saving Chunks (SavestatePacketHandler)");
+								CommonProxy.logger.catching(e);
+							}
+		                    worldserver.disableLevelSaving = flag;
+		                }
+		            }
 					server.getPlayerList().saveAllPlayerData();
 				});
 			}
