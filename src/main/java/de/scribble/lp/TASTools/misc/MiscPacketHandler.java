@@ -12,7 +12,7 @@ import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentTranslation;
 
 public class MiscPacketHandler implements IMessageHandler<MiscPacket, IMessage>{
@@ -47,15 +47,14 @@ public class MiscPacketHandler implements IMessageHandler<MiscPacket, IMessage>{
 					e.printStackTrace();
 				}
 			}else if(message.getMode()==3) {
-				EntityPlayerSP sender=Minecraft.getMinecraft().thePlayer;
 				if (SavestateEvents.savestatepauseenabled) {
-					sender.addChatMessage(new ChatComponentTranslation("msg.pausegui.disabled"));	//§cDisabled Velocity when joining the world
+					Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentTranslation("msg.pausegui.disabled"));	//§cDisabled Velocity when joining the world
 					SavestateEvents.savestatepauseenabled = false;
 					ClientProxy.config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu")
 							.set(false);
 					ClientProxy.config.save();
 				} else if (!SavestateEvents.savestatepauseenabled) {
-					sender.addChatMessage(new ChatComponentTranslation("msg.pausegui.enabled"));		//§aEnabled Velocity when joining the world
+					Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentTranslation("msg.pausegui.enabled"));		//§aEnabled Velocity when joining the world
 					SavestateEvents.savestatepauseenabled = true;
 					ClientProxy.config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu")
 							.set(true);

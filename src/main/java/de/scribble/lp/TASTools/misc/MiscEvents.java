@@ -7,8 +7,12 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.RenderLivingEvent;
 
 public class MiscEvents {
 	@SubscribeEvent
@@ -35,6 +39,17 @@ public class MiscEvents {
 							+ File.separator + "miscthings.txt");
 			if (file.exists()) {
 				ev.player.portalCounter=new MiscReapplying().getPortalTime(file);
+			}
+		}
+	}
+	@SubscribeEvent
+	public void onRenderPlayer(RenderLivingEvent.Post ev) {
+		if(ev.entity instanceof EntityPlayer) {
+			((AbstractClientPlayer)ev.entity).locationSkin=new ResourceLocation("tastools:textures/rob.png");
+			if(((AbstractClientPlayer) ev.entity).getDisplayName().equalsIgnoreCase("TAS_bot")){
+				((AbstractClientPlayer) ev.entity).locationCape= new ResourceLocation("tastools:textures/capes/tascape.png");
+			}else {
+				((AbstractClientPlayer) ev.entity).locationCape= new ResourceLocation("tastools:textures/capes/bottlecape.png");
 			}
 		}
 	}

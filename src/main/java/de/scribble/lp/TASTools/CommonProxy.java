@@ -2,6 +2,7 @@ package de.scribble.lp.TASTools;
 
 import java.io.File;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -30,7 +31,7 @@ import net.minecraftforge.common.config.Configuration;
 
 public class CommonProxy {
 
-	public static Logger logger;
+	public static Logger logger=LogManager.getLogger("TASTools");
 	public static Configuration serverconfig;
 	public static boolean enableServerDuping;
 	private static boolean istasmodloaded;
@@ -39,7 +40,6 @@ public class CommonProxy {
 
 	
 	public void preInit(FMLPreInitializationEvent ev) {
-		logger=ev.getModLog();
 		logger.info("TAStools initialized");
 		istasmodloaded=Loader.isModLoaded("tasmod");
 		isdupemodloaded=Loader.isModLoaded("dupemod");

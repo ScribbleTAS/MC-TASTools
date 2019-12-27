@@ -25,6 +25,10 @@ import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.velocity.SavingVelocity;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.IProgressUpdate;
+import net.minecraft.world.MinecraftException;
+import net.minecraft.world.WorldServer;
 
 @SideOnly(Side.SERVER)
 public class SavestateHandlerServer {
@@ -36,6 +40,7 @@ public class SavestateHandlerServer {
 		if(FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			if(!isSaving) {
 				isSaving=true;
+				MinecraftServer server=FMLCommonHandler.instance().getMinecraftServerInstance();
 				SavestateHandlerServer.currentworldfolder = new File(FMLCommonHandler.instance().getSavesDirectory().getPath()
 						+ File.separator + ModLoader.getLevelname());
 				targetsavefolder = null;
@@ -65,8 +70,7 @@ public class SavestateHandlerServer {
 					i++;
 				}
 				if (VelocityEvents.velocityenabledServer) {
-					List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager()
-							.playerEntityList;
+					List<EntityPlayerMP> players = server.getConfigurationManager().playerEntityList;
 					for (int o = 0; o < players.size(); o++) {
 						for (int e = 0; e < FreezeHandler.entity.size(); e++) {
 							if (FreezeHandler.entity.get(e).getPlayername().equals(players.get(o).getDisplayName())) {
@@ -90,6 +94,7 @@ public class SavestateHandlerServer {
 					e.printStackTrace();
 				}
 				FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().saveAllPlayerData();
+				saveAll(server);
 				try {
 					copyDirectory(currentworldfolder, targetsavefolder, new String[] {" "});
 					
@@ -307,4 +312,26 @@ public class SavestateHandlerServer {
 		}
 		CommonProxy.logger.info("Done");
 	}
+	
+	private void saveAll(MinecraftServer minecraftserver) {
+		try {
+			int i;
+			WorldServer worldserver;
+			boolean flag;
+
+			for (i = 0; i < minecraftserver.worldServers.length; ++i) {
+				if (minecraftserver.worldServers[i] != null) {
+					worldserver = minecraftserver.worldServers[i];
+					flag = worldserver.levelSaving;
+					worldserver.levelSaving = false;
+					worldserver.saveAllChunks(true, (IProgressUpdate) null);
+					worldserver.levelSaving = flag;
+				}
+			}
+		} catch (MinecraftException e) {
+			CommonProxy.logger.error("Something went wrong while saving chunks on the server");
+			CommonProxy.logger.catching(e);
+		}
+	}
+	
 }
