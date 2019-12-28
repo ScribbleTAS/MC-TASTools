@@ -24,7 +24,7 @@ public class SavestateEvents2 {
 	 * Used when making a savestate. Wait's 20 ticks before it does
 	 * 
 	 */
-	@SubscribeEvent
+	/*@SubscribeEvent
 	public void makeSavestate(TickEvent.ClientTickEvent ev) {
 		if (ev.phase==Phase.START) {
 			if (clientsaving) {
@@ -78,5 +78,5 @@ public class SavestateEvents2 {
 				tickspassed++;
 			}
 		}
-	}
+	}*/
 }

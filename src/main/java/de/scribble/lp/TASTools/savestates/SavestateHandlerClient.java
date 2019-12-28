@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.io.Files;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
@@ -50,6 +51,8 @@ public class SavestateHandlerClient {
 	protected static String worldname;
 	protected static BufferedImage screenshot;
 	protected static String screenshotname;
+	
+	public static long endtimer;
 	
 	
 	public void saveState() {
@@ -135,9 +138,8 @@ public class SavestateHandlerClient {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				//If I learn this stuff correctly, then I swear  I will change and update everything but for now this will do, sry
-				SavestateEvents2.tickspassed=0;
-				SavestateEvents2.clientsaving=true;
+				SavestateSaveEventsClient Saver = new SavestateSaveEventsClient();
+				Saver.start();
 			}else {
 				CommonProxy.logger.error("Saving savestate is blocked by another action. If this is permanent, restart the game.");
 			}
@@ -179,11 +181,19 @@ public class SavestateHandlerClient {
 					e.printStackTrace();
 				}
 				FMLCommonHandler.instance().firePlayerLoggedOut((EntityPlayer) FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList.get(0));
-				Minecraft.getMinecraft().loadWorld((WorldClient)null);
-				mc.displayGuiScreen(new GuiSavestateLoadingScreen());
-				SavestateEvents2.tickspassed=0;
-				SavestateEvents2.clientloading=true;
 				
+				Minecraft.getMinecraft().loadWorld((WorldClient) null);
+
+				SavestateLoadEventsClient Loader = new SavestateLoadEventsClient();
+				Loader.start();
+				try {
+					Loader.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
+				isLoading = false;
+
 			}else {
 				CommonProxy.logger.error("Loading savestate is blocked by another action. If this is permanent, restart the game.");
 			}
@@ -348,6 +358,61 @@ public class SavestateHandlerClient {
 			mc.displayGuiScreen(new GuiIngameMenu());
 		} else {
 			mc.displayGuiScreen(new GuiSavestateIngameMenu());
+		}
+	}
+	private class SavestateSaveEventsClient extends Thread {
+
+		@Override
+		public void run() {
+			try {
+				currentThread().sleep(endtimer);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+			try {
+				copyDirectory(currentworldfolder, targetsavefolder, new String[] { " " });
+				if (Util.enableSavestateScreenshotting) {
+					new Util().saveScreenshotAt(targetsavefolder, screenshotname, screenshot);
+				}
+				ModLoader.NETWORK.sendToAll(new SavestatePacket(true));
+				isSaving = false;
+
+			} catch (IOException e) {
+				CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
+						+ targetsavefolder.getPath() + " for some reason (Savestate save)");
+				e.printStackTrace();
+			} finally {
+				isSaving = false;
+			}
+		}
+	}
+	
+	private class SavestateLoadEventsClient extends Thread {
+		@Override
+		public void run() {
+			while (mc.isIntegratedServerRunning()) {
+				try {
+					currentThread().sleep(2);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			mc.displayGuiScreen(new GuiSavestateLoadingScreen());
+			deleteDirContents(currentworldfolder, new String[] { " " });
+			try {
+				copyDirectory(targetsavefolder, currentworldfolder, new String[] { " " });
+				try {
+					currentThread().sleep(endtimer);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			} catch (IOException e) {
+				CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
+						+ targetsavefolder.getPath() + " for some reason (Savestate load)");
+				e.printStackTrace();
+			} finally {
+				isLoading = false;
+			}
 		}
 	}
 }

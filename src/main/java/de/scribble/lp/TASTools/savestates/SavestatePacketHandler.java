@@ -15,39 +15,41 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 	@Override
 	public IMessage onMessage(final SavestatePacket message, MessageContext ctx) {
 
-		if (ctx.side== Side.SERVER) {
+		if (ctx.side == Side.SERVER) {
 			final MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-			final EntityPlayer player =ctx.getServerHandler().playerEntity;
-				if (!ctx.getServerHandler().playerEntity.mcServer.isDedicatedServer()) {
+			final EntityPlayer player = ctx.getServerHandler().playerEntity;
+			if (!ctx.getServerHandler().playerEntity.mcServer.isDedicatedServer()) {
 
-							if(MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile())){
-								if (message.isLoadSave()) {
-									if(server.getCurrentPlayerCount()==1) {
-										ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), (EntityPlayerMP) player);
-									}
-									else if(server.getCurrentPlayerCount()>1){
-										ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), (EntityPlayerMP) server.getConfigurationManager().playerEntityList.get(0));
-									}
-								} else {
-									if(server.getConfigurationManager().getCurrentPlayerCount()==1) {
-										ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) player);
-									}
-									else {
-										ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) server.getConfigurationManager().playerEntityList.get(0));
-									}
-								}
-							}
-
-				}else {
-
-							if(MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile())){
-								if (message.getMode()==0) {
-									if(message.isLoadSave())new SavestateHandlerServer().saveState();
-									else new SavestateHandlerServer().setFlagandShutdown();
-								}
-							}
-
+				if (MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile())) {
+					if (message.isLoadSave()) {
+						if (server.getCurrentPlayerCount() == 1) {
+							ModLoader.NETWORK.sendTo(new SavestatePacket(true, 1), (EntityPlayerMP) player);
+						
+						} else if (server.getCurrentPlayerCount() > 1) {
+							ModLoader.NETWORK.sendTo(new SavestatePacket(true, 1),(EntityPlayerMP) server.getConfigurationManager().playerEntityList.get(0));
+						}
+					
+					} else {
+						if (server.getConfigurationManager().getCurrentPlayerCount() == 1) {
+							ModLoader.NETWORK.sendTo(new SavestatePacket(false, 1), (EntityPlayerMP) player);
+						} else {
+							ModLoader.NETWORK.sendTo(new SavestatePacket(false, 1),(EntityPlayerMP) server.getConfigurationManager().playerEntityList.get(0));
+						}
+					}
 				}
+
+			} else {
+
+				if (MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile())) {
+					if (message.getMode() == 0) {
+						if (message.isLoadSave())
+							new SavestateHandlerServer().saveState();
+						else
+							new SavestateHandlerServer().setFlagandShutdown();
+					}
+				}
+
+			}
 			
 		} else if (ctx.side == Side.CLIENT) {
 
