@@ -9,6 +9,7 @@ import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
 import de.scribble.lp.TASTools.misc.MiscPacket;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
+import de.scribble.lp.TASTools.savestates.SavestateHandlerClient;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -258,6 +259,27 @@ public class TastoolsCommandc extends CommandBase{
 							.set(true);
 					ClientProxy.config.save();
 				}
+			} else if(args[0].equalsIgnoreCase("savestatetime")) {
+				if (args.length==1) {
+					sender.sendMessage(new TextComponentString("Set the time it takes to savestate here. Increase the time when playing on big worlds! Usage: /tastools savestatetime <timeinMillis>"));
+					return;
+				}else if(args.length==2) {
+					if(Integer.parseInt(args[1])>50000) {
+						sender.sendMessage(new TextComponentString("The number is too high! If your world doesn't save correctly with a time below 50000 please contact the author"));
+						return;
+					}else if(Integer.parseInt(args[1])<0) {
+						sender.sendMessage(new TextComponentString("Please put in positive numbers!"));
+						return;
+					}else if(Integer.parseInt(args[1])<1000) {
+						sender.sendMessage(new TextComponentString("Warning! A time lower than 1000 can cause issues with savestating! The suggested value is 5000"));
+					}
+					ClientProxy.config.get("Savestatetime","TimeInMillis", 5000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that")
+					.set(Integer.parseInt(args[1]));
+					SavestateHandlerClient.endtimer=Integer.parseInt(args[1]);
+					ClientProxy.config.save();
+					sender.sendMessage(new TextComponentString("Successfully set the time to "+args[1]));
+				}
+				
 			}
 			// Other than sender=Player starts here
 		} else {
@@ -314,7 +336,7 @@ public class TastoolsCommandc extends CommandBase{
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
 		if (args.length==1) {
-			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","gui","reload","folder","pausemenu"});
+			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","gui","reload","folder","pausemenu","savestatetime"});
 		}
 		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
 			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft"});

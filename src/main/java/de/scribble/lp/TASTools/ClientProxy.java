@@ -27,6 +27,7 @@ public class ClientProxy extends CommonProxy{
 	public static KeyBinding FreezeKey = new KeyBinding("Freeze/Unfreeze Players", Keyboard.KEY_Y, "TASTools");
 	public static KeyBinding SavestateSaveKey = new KeyBinding("Create Savestate", Keyboard.KEY_J, "TASTools");
 	public static KeyBinding SavestateLoadKey = new KeyBinding("Load Latest Savestate", Keyboard.KEY_K, "TASTools");
+	public static KeyBinding TestingKey = new KeyBinding("A keybind for quickly testing things", Keyboard.KEY_H, "TASTools");
 	
 	public static Configuration config;
 	
@@ -36,6 +37,8 @@ public class ClientProxy extends CommonProxy{
 		ClientRegistry.registerKeyBinding(FreezeKey);
 		ClientRegistry.registerKeyBinding(SavestateSaveKey);
 		ClientRegistry.registerKeyBinding(SavestateLoadKey);
+		ClientRegistry.registerKeyBinding(TestingKey);
+		
 		config = new Configuration(ev.getSuggestedConfigurationFile());
 		config.load();
 		GuiKeystrokes.guienabled=config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").getBoolean();
@@ -46,7 +49,19 @@ public class ClientProxy extends CommonProxy{
 		SavestateEvents.savestatepauseenabled=config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu").getBoolean();
 		GuiOverlayLogo.potionenabled=config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").getBoolean();
 		Util.enableSavestateScreenshotting=config.get("Screenshot", "Enabled", false, "Take a screenshot before the savestate so you know where you left off. Does not work on servers.").getBoolean();
-		SavestateHandlerClient.endtimer=config.get("TimeToSave","TimeInMillis", 5000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that").getInt();
+		int savestatetime=config.get("Savestatetime","TimeInMillis", 5000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that").getInt();
+		if (savestatetime>50000) {
+			logger.warn("Savestatetime in config is too high! Correcting it to 50000");
+			config.get("Savestatetime","TimeInMillis", 5000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that")
+			.set(50000);
+			savestatetime=50000;
+		}else if(savestatetime<0) {
+			logger.warn("Savestatetime in config is negative! Correcting it to the default");
+			config.get("Savestatetime","TimeInMillis", 5000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that")
+			.set(5000);
+			savestatetime=5000;
+		}
+		SavestateHandlerClient.endtimer=savestatetime;
 		config.save();
 		
 		if (position.equals("downLeft")) {

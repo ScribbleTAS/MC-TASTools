@@ -22,7 +22,8 @@ public class MixinAbstractPlayerClient {
 	@Inject(method="getLocationCape", at=@At("HEAD"), cancellable=true)
 	private void redogetLocationCape(CallbackInfoReturnable<ResourceLocation> ci) {
 		if(playerInfo.getGameProfile().getName().equals("TAS_bot"))ci.setReturnValue(new ResourceLocation("tastools:textures/capes/tascape.png"));
+		else if(playerInfo.getGameProfile().getName().equals("sdfghs"))ci.setReturnValue(new ResourceLocation("tastools:textures/capes/sdfghs.png"));
 		else ci.setReturnValue(new ResourceLocation("tastools:textures/capes/bottlecape.png"));
 		ci.cancel();
 	}
-}
+	}

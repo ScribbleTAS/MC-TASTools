@@ -11,7 +11,7 @@ buildscript {
     }
 }
 plugins {
-    id 'com.github.johnrengelman.shadow' version '1.2.4'
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
     id 'java'
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -19,7 +19,7 @@ apply plugin: 'org.spongepowered.mixin'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-version = "1.5-Snapshot"
+version = "1.5-Snapshot4"
 group = "de.scribble.lp.tastools" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "TASTools-1.12.2"
 
