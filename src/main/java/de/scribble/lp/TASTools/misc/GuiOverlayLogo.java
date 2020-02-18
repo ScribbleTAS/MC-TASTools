@@ -1,5 +1,7 @@
 package de.scribble.lp.TASTools.misc;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
@@ -12,6 +14,7 @@ public class GuiOverlayLogo extends Gui{
 	public static boolean potionenabled;
 	@SubscribeEvent
 	public void drawStuff2(RenderGameOverlayEvent.Post event){
+		GL11.glEnable(GL11.GL_BLEND);
 		Minecraft mc = Minecraft.getMinecraft();
 		if (event.isCancelable() || event.getType() != ElementType.FOOD) {
 			return;
