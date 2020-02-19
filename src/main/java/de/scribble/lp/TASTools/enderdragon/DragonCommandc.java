@@ -77,12 +77,6 @@ public class DragonCommandc extends CommandBase{
 					dragons.get(i).getPhaseManager().getPhase(PhaseList.STRAFE_PLAYER).setTarget((EntityPlayer)sender);
 					dragons.get(i).getPhaseManager().setPhase(PhaseList.STRAFE_PLAYER);
 				}
-			} else if (args.length == 1 && args[0].equalsIgnoreCase("strafe_player_attack")) {
-				for (int i = 0; i < dragons.size(); i++) {
-					dragons.get(i).getPhaseManager().getPhase(PhaseList.STRAFE_PLAYER).setTarget((EntityPlayer)sender);
-					dragons.get(i).getPhaseManager().getPhase(PhaseList.STRAFE_PLAYER).fireballCharge=5;
-					dragons.get(i).getPhaseManager().setPhase(PhaseList.STRAFE_PLAYER);
-				}
 			}
 			
 		}

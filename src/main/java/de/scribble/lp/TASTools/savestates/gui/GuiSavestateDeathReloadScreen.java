@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.annotation.Nullable;
 
+import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.savestates.SavestatePacket;
 import net.minecraft.client.Minecraft;
@@ -40,7 +41,7 @@ public class GuiSavestateDeathReloadScreen extends GuiScreen{
         if (this.mc.world.getWorldInfo().isHardcoreModeEnabled())
         {
             this.buttonList.add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 72, I18n.format("deathScreen.spectate")));
-            this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 96, I18n.format("deathScreen." + (this.mc.isIntegratedServerRunning() ? "deleteWorld" : "leaveServer"))));
+            this.buttonList.add(new GuiButton(1, this.width / 2 - 100, this.height / 4 + 96, I18n.format("Break the game!")));
             this.buttonList.add(new GuiButton(2, this.width / 2 - 100, this.height / 4 + 120, I18n.format("Reload the savestate")));
         }
         else
@@ -87,6 +88,7 @@ public class GuiSavestateDeathReloadScreen extends GuiScreen{
 
                 if (this.mc.world.getWorldInfo().isHardcoreModeEnabled())
                 {
+                	CommonProxy.logger.warn("Hello dear player, you just clicked the 'Delete World' option! And you may realise that this didn't work as planned... That is not TASTools fault tho, this is the actual Minecraft code... I could fix this, but then it's not vanilla anymore and maybe there is a use for this...");
                     this.mc.displayGuiScreen(new GuiMainMenu());
                 }
                 else
@@ -95,6 +97,7 @@ public class GuiSavestateDeathReloadScreen extends GuiScreen{
                     this.mc.displayGuiScreen(guiyesno);
                     guiyesno.setButtonDelay(20);
                 }
+                return;
                 //This is the new button!
             case 2:
             	if (Minecraft.getMinecraft().isIntegratedServerRunning()) {
@@ -102,9 +105,9 @@ public class GuiSavestateDeathReloadScreen extends GuiScreen{
     			}else {
     				ModLoader.NETWORK.sendToServer(new SavestatePacket(false));
     			}
+            	return;
         }
     }
-
     public void confirmClicked(boolean result, int id)
     {
         if (result)

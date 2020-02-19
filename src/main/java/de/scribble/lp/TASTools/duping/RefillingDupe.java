@@ -8,12 +8,14 @@ import java.util.List;
 
 import de.scribble.lp.TASTools.CommonProxy;
 import net.minecraft.client.Minecraft;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTException;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -69,7 +71,7 @@ public class RefillingDupe {
 								
 								/*Check if the player is too far away from the chest and prevents it from being refilled... A failsafe and cheat prevention*/
 								if(playerPos.distanceSq((double)foundchest.getPos().getX(), (double)foundchest.getPos().getY(), (double)foundchest.getPos().getZ())>50.0){
-										CommonProxy.logger.warn("Duping: Chest at "+Integer.parseInt(coords[1])+" "+Integer.parseInt(coords[2])+" "+Integer.parseInt(coords[3])+" is too far away! Distance: "+playerPos.distanceSq((double)foundchest.getPos().getX(), (double)foundchest.getPos().getY(), (double)foundchest.getPos().getZ()));
+										CommonProxy.logger.error("Chest at "+Integer.parseInt(coords[1])+" "+Integer.parseInt(coords[2])+" "+Integer.parseInt(coords[3])+" is too far away! Distance: "+playerPos.distanceSq((double)foundchest.getPos().getX(), (double)foundchest.getPos().getY(), (double)foundchest.getPos().getZ()));
 										continue;
 								}
 								while(true){
@@ -86,25 +88,34 @@ public class RefillingDupe {
 										ItemStack properties= new ItemStack(Item.getItemById(Integer.parseInt(items[2])),
 																								Integer.parseInt(items[4]),
 																								Integer.parseInt(items[5]));
-										
-										/*Split items[7] into enchantmentID and enchantmentLvl*/
+										/*
 										if(!items[7].equals("[]")){
 											enchantments=items[7].split("(\\[\\{lvl:)|(s,id:)|(s\\},\\{lvl:)|(s\\})");
 											for(int index=1;index<=(enchantments.length-2)/2;index++){
 												properties.addEnchantment(Enchantment.getEnchantmentByID(Integer.parseInt(enchantments[2*index])), Integer.parseInt(enchantments[2*index-1]));
 											}
 										}
-										/*Add the custom name if available*/
 										if(!items[6].equals("null")){
 											properties.setStackDisplayName(items[6]);
+										}*/
+										
+										/*Adding NBT to the item*/
+										NBTTagCompound newnbttag= new NBTTagCompound();
+										try {
+											newnbttag = JsonToNBT.getTagFromJson(items[6]);
+										} catch (NBTException e) {
+											CommonProxy.logger.error("Something happened while trying to convert String to NBT");
+											CommonProxy.logger.catching(e);
 										}
+										properties.stackTagCompound=newnbttag;
+										
 										foundchest.setInventorySlotContents(Integer.parseInt(items[1]), properties);	//Set the item into the slot
 										chestitemcounter++; //for logging
 									}
 								}chestcounter++; //for logging
 							}
 							else{	//Message if there is no chest at the specified coordinates, can happen when using /dupe
-								CommonProxy.logger.warn("Duping: Didn't find a chest at "+Integer.parseInt(coords[1])+" "+Integer.parseInt(coords[2])+" "+Integer.parseInt(coords[3])+".");
+								CommonProxy.logger.error("Didn't find a chest at "+Integer.parseInt(coords[1])+" "+Integer.parseInt(coords[2])+" "+Integer.parseInt(coords[3])+".");
 								continue;
 							}
 						}
@@ -119,7 +130,7 @@ public class RefillingDupe {
 					
 					
 					if(playerPos.distanceSq((double)dupePos.getX(),(double)dupePos.getY(),(double)dupePos.getZ())>=50.0){						//abort if the player is too far away from the duping position, cheat prevention and failsafe when using /dupe
-						CommonProxy.logger.warn("Duping: Player moved too far from initial duping position. Aborting EntityDupe! DupePosition: ("+dupePos.getX()+";"+dupePos.getY()+";"+dupePos.getZ()+") Distance: "+playerPos.distanceSq((double)dupePos.getX(),(double)dupePos.getY(),(double)dupePos.getZ()));
+						CommonProxy.logger.error("Player moved too far from initial duping position. Aborting EntityDupe! DupePosition: ("+dupePos.getX()+";"+dupePos.getY()+";"+dupePos.getZ()+") Distance: "+playerPos.distanceSq((double)dupePos.getX(),(double)dupePos.getY(),(double)dupePos.getZ()));
 						continue;
 					}
 					if(!entitylist.isEmpty()){	//Kill all items in the surrounding area
@@ -137,7 +148,7 @@ public class RefillingDupe {
 							ItemStack Overflow= new ItemStack(Item.getItemById(Integer.parseInt(props[5])), //Create the ItemStack
 									Integer.parseInt(props[7]),
 									Integer.parseInt(props[8]));
-							
+							/*
 							if(!props[10].equals("[]")){	//add Enchantments
 								enchantments=props[10].split("(\\[\\{lvl:)|(s,id:)|(s\\},\\{lvl:)|(s\\})");
 								for(int index=1;index<=(enchantments.length-2)/2;index++){
@@ -146,17 +157,27 @@ public class RefillingDupe {
 							}
 							if(!props[9].equals("null")){ //set customName
 								Overflow.setStackDisplayName(props[9]);
+							}*/
+							//Adding NBT to the item
+							NBTTagCompound newnbttag= new NBTTagCompound();
+							try {
+								newnbttag = JsonToNBT.getTagFromJson(props[11]);
+							} catch (NBTException e) {
+								CommonProxy.logger.error("Something happened while trying to convert String to NBT");
+								CommonProxy.logger.catching(e);
 							}
-							/*Create the EntityItem. The variable name is stupid, I know*/
+							Overflow.stackTagCompound=newnbttag;
+							
 							EntityItem newitem=new EntityItem(world, Double.parseDouble(props[2]), Double.parseDouble(props[3]), Double.parseDouble(props[4]), Overflow);
 							world.spawnEntity(newitem);
 							
 							//Apply the age
-							newitem.age=Integer.parseInt(props[11]);
+							newitem.age=Integer.parseInt(props[9]);
 							
 							//Apply the pickupdelay
-							newitem.pickupDelay=Integer.parseInt(props[12]);
-
+							newitem.pickupDelay=Integer.parseInt(props[10]);
+							
+							
 							newitem.motionX=0;	//set the motion to zero so it doesn't fly around
 							newitem.motionY=0;
 							newitem.motionZ=0;
@@ -167,9 +188,9 @@ public class RefillingDupe {
 			}
 			Buff.close();
 			if(chestcounter==0&&itemcounter==0){
-				CommonProxy.logger.info("Duping: Nothing refilled");
+				CommonProxy.logger.info("Nothing refilled");
 			}else{
-				CommonProxy.logger.info("Duping: Refilled "+chestcounter+" chest(s) with "+chestitemcounter+" item(s) and spawned "+ itemcounter+ " item(s) on the ground.");
+				CommonProxy.logger.info("Refilled "+chestcounter+" chest(s) with "+chestitemcounter+" item(s) and spawned "+ itemcounter+ " item(s) on the ground.");
 			}
 		}catch (IOException e) {
 			e.printStackTrace();

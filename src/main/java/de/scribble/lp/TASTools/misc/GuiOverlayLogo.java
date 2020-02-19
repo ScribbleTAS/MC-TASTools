@@ -14,7 +14,7 @@ public class GuiOverlayLogo extends Gui{
 	public static boolean potionenabled;
 	@SubscribeEvent
 	public void drawStuff2(RenderGameOverlayEvent.Post event){
-		GL11.glEnable(GL11.GL_BLEND);
+		
 		Minecraft mc = Minecraft.getMinecraft();
 		if (event.isCancelable() || event.getType() != ElementType.FOOD) {
 			return;
@@ -23,6 +23,7 @@ public class GuiOverlayLogo extends Gui{
 		int posY = event.getResolution().getScaledHeight();
 		if(!mc.player.isCreative()&&!mc.player.isSpectator()) {
 		mc.renderEngine.bindTexture(potion);
+		GL11.glEnable(GL11.GL_BLEND);
 			if (potionenabled) {
 				drawTexturedModalRect(posX - 6, posY - 50, 0, 0, 13, 20);
 			} else {
@@ -30,5 +31,6 @@ public class GuiOverlayLogo extends Gui{
 				drawTexturedModalRect(posX + 89, posY - 25, 13, 0, 2, 2);
 			}
 		}
+		GL11.glDisable(GL11.GL_BLEND);
 	}
 }

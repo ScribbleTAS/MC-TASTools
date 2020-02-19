@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -55,13 +56,7 @@ public class RecordingDupe {
 						for(int i=0; i<foundchest.getSizeInventory();i++){
 							ItemStack item = foundchest.getStackInSlot(i);
 							if (Item.getIdFromItem(item.getItem())!=0){
-								if(item.hasDisplayName()){
-									//sendMessage("Slot;"+i+";"+Item.getIdFromItem(item.getItem())+";("+item.getUnlocalizedName()+");"+item.getCount()+";"+item.getItemDamage()+";"+item.getDisplayName()+";"+item.getEnchantmentTagList()+"\n");
-									output.append("\t\tSlot;"+i+";"+Item.getIdFromItem(item.getItem())+";("+item.getUnlocalizedName()+");"+item.getCount()+";"+item.getItemDamage()+";"+item.getDisplayName()+";"+item.getEnchantmentTagList()+"\n");
-								}else{
-									//sendMessage("Slot;"+i+";"+Item.getIdFromItem(item.getItem())+";("+item.getUnlocalizedName()+");"+item.getCount()+";"+item.getItemDamage()+";null;"+item.getEnchantmentTagList()+"\n");
-									output.append("\t\tSlot;"+i+";"+Item.getIdFromItem(item.getItem())+";("+item.getUnlocalizedName()+");"+item.getCount()+";"+item.getItemDamage()+";null;"+item.getEnchantmentTagList()+"\n");
-								}
+								output.append("\t\tSlot;"+i+";"+Item.getIdFromItem(item.getItem())+";("+item.getUnlocalizedName()+");"+item.getCount()+";"+item.getItemDamage()+";"+isStackCompound(item.stackTagCompound)+"\n");
 							}
 						}
 						output.append("\t\t-\n");
@@ -81,11 +76,7 @@ public class RecordingDupe {
 		if(!entitylist.isEmpty()){
 			itemcounter=entitylist.size();
 			for(int i=0;i<entitylist.size();i++){
-				if(entitylist.get(i).getItem().hasDisplayName()){
-					output.append("\tItem;"+i+";"+entitylist.get(i).posX+";"+entitylist.get(i).posY+";"+entitylist.get(i).posZ+";"+Item.getIdFromItem(entitylist.get(i).getItem().getItem())+";("+entitylist.get(i).getItem().getUnlocalizedName()+");"+entitylist.get(i).getItem().getCount()+";"+entitylist.get(i).getItem().getItemDamage()+";"+entitylist.get(i).getItem().getDisplayName()+";"+entitylist.get(i).getItem().getEnchantmentTagList()+";"+entitylist.get(i).getAge()+";"+entitylist.get(i).pickupDelay+"\n");
-				}else{
-					output.append("\tItem;"+i+";"+entitylist.get(i).posX+";"+entitylist.get(i).posY+";"+entitylist.get(i).posZ+";"+Item.getIdFromItem(entitylist.get(i).getItem().getItem())+";("+entitylist.get(i).getItem().getUnlocalizedName()+");"+entitylist.get(i).getItem().getCount()+";"+entitylist.get(i).getItem().getItemDamage()+";null;"+entitylist.get(i).getItem().getEnchantmentTagList()+";"+entitylist.get(i).getAge()+";"+entitylist.get(i).pickupDelay+"\n");
-				}
+				output.append("\tItem;"+i+";"+entitylist.get(i).posX+";"+entitylist.get(i).posY+";"+entitylist.get(i).posZ+";"+Item.getIdFromItem(entitylist.get(i).getItem().getItem())+";("+entitylist.get(i).getItem().getUnlocalizedName()+");"+entitylist.get(i).getItem().getCount()+";"+entitylist.get(i).getItem().getItemDamage()+";"+entitylist.get(i).getAge()+";"+entitylist.get(i).pickupDelay+";"+isStackCompound(entitylist.get(i).getItem().stackTagCompound)+"\n");
 			}
 		}
 		output.append("\t-\n");
@@ -109,5 +100,9 @@ public class RecordingDupe {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	private String isStackCompound(NBTTagCompound isNull) {
+		if(isNull==null)return "null";
+		else return isNull.toString();
 	}
 }
