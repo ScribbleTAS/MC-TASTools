@@ -9,6 +9,7 @@ import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
 import de.scribble.lp.TASTools.misc.MiscPacket;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
+import de.scribble.lp.TASTools.savestates.SavestateHandlerClient;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -207,13 +208,13 @@ public class TastoolsCommandc extends CommandBase{
 			} else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
 				if (!server.isDedicatedServer() && server.getCurrentPlayerCount() == 1) {
 					ClientProxy.config.load();
-					new Util().reloadClientconfig();
+					Util.reloadClientconfig(ClientProxy.config);
 					notifyCommandListener(sender, this, "msg.misc.reload", new Object()); // Config reloaded!
 				} else if(!server.isDedicatedServer() && server.getCurrentPlayerCount() > 1) {
 					ModLoader.NETWORK.sendTo(new MiscPacket(0),(EntityPlayerMP) sender);
 					notifyCommandListener(sender, this, "msg.misc.reload", new Object());
 				} else {
-					new Util().reloadServerconfig();
+					Util.reloadServerconfig(CommonProxy.serverconfig);
 					ModLoader.NETWORK.sendToAll(new MiscPacket(0));
 					notifyCommandListener(sender, this, "msg.misc.reload", new Object()); // Config reloaded!
 				}
@@ -258,6 +259,34 @@ public class TastoolsCommandc extends CommandBase{
 							.set(true);
 					ClientProxy.config.save();
 				}
+			}else if(args.length==1&&args[0].equalsIgnoreCase("gameover")) {
+				SavestateEvents.reloadgameoverenabled=!SavestateEvents.reloadgameoverenabled;
+				ClientProxy.config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu")
+				.set(SavestateEvents.reloadgameoverenabled);
+				ClientProxy.config.save();
+				String msg= SavestateEvents.reloadgameoverenabled ? "msg.gameover.enabled":"msg.gameover.disabled"; 
+				sender.sendMessage(new TextComponentTranslation(msg));
+			} else if(args[0].equalsIgnoreCase("savestatetime")) {
+				if (args.length==1) {
+					sender.sendMessage(new TextComponentTranslation("command.savestatetime.info")); //Set the time it takes to savestate here. Increase the time when playing on big worlds! Usage: /tastools savestatetime <timeinMillis>
+					return;
+				}else if(args.length==2) {
+					if(Integer.parseInt(args[1])>50000) {
+						sender.sendMessage(new TextComponentTranslation("command.savestatetime.toomuch")); //§cThe number is too high! If your world doesn't save correctly with a time below 50000 please contact the author
+						return;
+					}else if(Integer.parseInt(args[1])<0) {
+						sender.sendMessage(new TextComponentTranslation("command.savestatetime.toolow")); //Please put in positive numbers!
+						return;
+					}else if(Integer.parseInt(args[1])<1000) {
+						sender.sendMessage(new TextComponentTranslation("command.savestatetime.warn")); //Warning! A time lower than 1000 can cause issues with savestating! The suggested value is between 1000 and 5000
+					}
+					ClientProxy.config.get("Savestatetime","TimeInMillis", 5000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that")
+					.set(Integer.parseInt(args[1]));
+					SavestateHandlerClient.endtimer=Integer.parseInt(args[1]);
+					ClientProxy.config.save();
+					sender.sendMessage(new TextComponentTranslation("command.savestatetime.success",args[1]));
+				}
+				
 			}
 			// Other than sender=Player starts here
 		} else {
@@ -314,7 +343,7 @@ public class TastoolsCommandc extends CommandBase{
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
 		if (args.length==1) {
-			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","gui","reload","folder","pausemenu"});
+			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","gui","reload","folder","pausemenu","gameover","savestatetime"});
 		}
 		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
 			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft"});

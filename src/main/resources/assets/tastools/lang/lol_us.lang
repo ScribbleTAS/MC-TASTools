@@ -31,13 +31,22 @@ gui.savestate.savingscreen.credit=Idea n code stolen frum MightyPork and bspkrs'
 gui.savestate.loadingscreen.msg=Rofl-ing a Déjà-vu-point!
 msg.pausegui.enabled=§aStahp-Gui enabled
 msg.pausegui.disabled=§cStahp-Gui dizabled
+msg.gameover.enabled=§aSadKitteh-Gui enabled
+msg.gameover.disabled=§cSadKitteh-Gui dizabled
 
 #usage (Do not translate this section)
-command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | logo | folder>
+command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | gui | pausemenu>
 command.dupe.usage=/dupe
 command.dragon.usage=/dragon <phase>
 command.freeze.usage=/freeze
 command.savestate.usage=/savestate <save | load>
+
+#savestatetime
+command.savestatetime.info=§aPut the tiem to mayk a Déjà-vu-point hear! Put more when plaiing in big wurlds! Do it liek dis: /tastools savestatetime <timeinMillis>
+command.savestatetime.toomuch=§cNumber iz too powerful! If dis still breaks wurlds wis a tiem under 50000, plis contact teh cat owner (the author)
+command.savestatetime.toolow=§cPlis don't go not not negative!
+command.savestatetime.warn=§6W A R N I N G! A tiem lowa then 1000 is not big PP cus' stuff breaks with Déjà-vu-points! Maybe feed da cat and do 1000 to 5000
+command.savestatetime.success=§aSet the tiem to %s
 
 #misc
 msg.misc.info=TASBot overlurd verzion %s for Minceraft verzion %s initialized... beep boop...
