@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 
 public class SavestateEvents {
 	public static boolean savestatepauseenabled;
+	public static boolean reloadgameoverenabled;
 	private boolean flag=false;
 	@SubscribeEvent
 	public void GuiOpen(GuiOpenEvent ev) {
@@ -25,7 +26,7 @@ public class SavestateEvents {
 				Minecraft.getMinecraft().displayGuiScreen(new GuiSavestateIngameMenu());
 			}
 		} else if (ev.getGui() instanceof GuiGameOver) {
-			if(savestatepauseenabled) {
+			if(reloadgameoverenabled) {
 				if(!flag) {
 					flag=true;
 					ev.setCanceled(true);

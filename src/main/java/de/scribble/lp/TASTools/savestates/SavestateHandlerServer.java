@@ -322,7 +322,6 @@ public class SavestateHandlerServer {
 				e.printStackTrace();
 			}
 			isSaving = false;
-			MinecraftForge.EVENT_BUS.unregister(this);
 			ModLoader.NETWORK.sendToAll(new SavestatePacket());
 			return;
 		}

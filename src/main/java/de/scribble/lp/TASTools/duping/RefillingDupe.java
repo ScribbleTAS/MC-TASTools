@@ -104,8 +104,9 @@ public class RefillingDupe {
 										try {
 											newnbttag = JsonToNBT.getTagFromJson(items[6]);
 										} catch (NBTException e) {
-											CommonProxy.logger.error("Something happened while trying to convert String to NBT");
+											CommonProxy.logger.error("Something happened while trying to convert String to NBT ._.");
 											CommonProxy.logger.catching(e);
+											file.delete();
 										}
 										properties.stackTagCompound=newnbttag;
 										
@@ -165,6 +166,7 @@ public class RefillingDupe {
 							} catch (NBTException e) {
 								CommonProxy.logger.error("Something happened while trying to convert String to NBT");
 								CommonProxy.logger.catching(e);
+								file.delete();
 							}
 							Overflow.stackTagCompound=newnbttag;
 							
@@ -172,7 +174,13 @@ public class RefillingDupe {
 							world.spawnEntity(newitem);
 							
 							//Apply the age
+							try {
 							newitem.age=Integer.parseInt(props[9]);
+							}catch (NumberFormatException e) {
+								CommonProxy.logger.fatal("Input String in latest_dupe.txt is not a number. To fix this restart the game!");
+								CommonProxy.logger.catching(e);
+								file.delete();
+							}
 							
 							//Apply the pickupdelay
 							newitem.pickupDelay=Integer.parseInt(props[10]);
@@ -193,7 +201,8 @@ public class RefillingDupe {
 				CommonProxy.logger.info("Refilled "+chestcounter+" chest(s) with "+chestitemcounter+" item(s) and spawned "+ itemcounter+ " item(s) on the ground.");
 			}
 		}catch (IOException e) {
-			e.printStackTrace();
+			CommonProxy.logger.fatal("Something went wrong while getting a buffer");
+			CommonProxy.logger.catching(e);
 		}
 	}
 }

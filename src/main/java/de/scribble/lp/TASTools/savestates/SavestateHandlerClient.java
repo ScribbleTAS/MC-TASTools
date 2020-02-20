@@ -380,7 +380,6 @@ public class SavestateHandlerClient {
 					new Util().saveScreenshotAt(targetsavefolder, screenshotname, screenshot);
 				}
 				ModLoader.NETWORK.sendToAll(new SavestatePacket(true));
-				MinecraftForge.EVENT_BUS.unregister(this);
 				isSaving = false;
 
 			} catch (IOException e) {
@@ -411,7 +410,6 @@ public class SavestateHandlerClient {
 				CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
 						+ targetsavefolder.getPath() + " for some reason (Savestate load)");
 				e.printStackTrace();
-				MinecraftForge.EVENT_BUS.unregister(this);
 				isLoading = false;
 				return;
 			}
