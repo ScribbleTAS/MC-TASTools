@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, IMessage>{
-
+	private boolean stop=false;
 	@Override
 	public IMessage onMessage(SavestatePacket message, MessageContext ctx) {
 		if (ctx.side== Side.SERVER) {
@@ -91,7 +91,6 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 				}
 			});
 		}
-
 		return null;
 	}
 

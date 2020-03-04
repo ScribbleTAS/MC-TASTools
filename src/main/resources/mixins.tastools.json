@@ -7,7 +7,7 @@
     "mixins": [
     ],
     "client": [
-	   "MixinAbstractPlayerClient",
+	   "MixinAbstractClientPlayer",
        "MixinGuiScreen",
        "MixinGuiToast"
     ]

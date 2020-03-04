@@ -11,7 +11,7 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ResourceLocation;
 
 @Mixin(AbstractClientPlayer.class)
-public class MixinAbstractPlayerClient {
+public class MixinAbstractClientPlayer {
 	private static final ResourceLocation bottlecape = new ResourceLocation("tastools:textures/capes/bottlecape.png");
 	private static final ResourceLocation scribblecape = new ResourceLocation("tastools:textures/capes/scribblecape.png");
 	private static final ResourceLocation creepercape = new ResourceLocation("tastools:textures/capes/sdfghs.png");

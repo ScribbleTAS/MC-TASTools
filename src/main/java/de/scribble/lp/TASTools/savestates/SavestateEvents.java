@@ -11,8 +11,10 @@ import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiYesNo;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
 public class SavestateEvents {
 	public static boolean savestatepauseenabled;
@@ -42,21 +44,19 @@ public class SavestateEvents {
 	@SubscribeEvent
 	public void pressKeybinding(InputEvent.KeyInputEvent ev){
 		if (ClientProxy.SavestateSaveKey.isPressed()) {
-			if (Minecraft.getMinecraft().isIntegratedServerRunning()) {
-				ModLoader.NETWORK.sendToServer(new SavestatePacket(true));
-			}else {
-				ModLoader.NETWORK.sendToServer(new SavestatePacket(true));
-			}
+			ModLoader.NETWORK.sendToServer(new SavestatePacket(true));
 		}
 		if (ClientProxy.SavestateLoadKey.isPressed()) {
-			if (Minecraft.getMinecraft().isIntegratedServerRunning()) {
-				ModLoader.NETWORK.sendToServer(new SavestatePacket(false));
-			}else {
-				ModLoader.NETWORK.sendToServer(new SavestatePacket(false));
-			}
+			ModLoader.NETWORK.sendToServer(new SavestatePacket(false));
 		}
 		if (ClientProxy.TestingKey.isPressed()) {
 			//Minecraft.getMinecraft().displayGuiScreen(new GuiSavestateDeathReloadScreen(null));
+		}
+	}
+	@SubscribeEvent
+	public void onJoinWorld(PlayerLoggedInEvent ev) {
+		if(!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
+			SavestateHandlerClient.isLoading=SavestateHandlerClient.isSaving=false;
 		}
 	}
 }
