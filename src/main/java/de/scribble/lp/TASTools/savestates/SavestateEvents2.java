@@ -8,8 +8,10 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.misc.Util;
+import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -24,7 +26,7 @@ public class SavestateEvents2 {
 	 * Used when making a savestate. Wait's 20 ticks before it does
 	 * 
 	 */
-	/*@SubscribeEvent
+	@SubscribeEvent
 	public void makeSavestate(TickEvent.ClientTickEvent ev) {
 		if (ev.phase==Phase.START) {
 			if (clientsaving) {
@@ -43,6 +45,7 @@ public class SavestateEvents2 {
 						new Util().saveScreenshotAt(SavestateHandlerClient.targetsavefolder, SavestateHandlerClient.screenshotname, SavestateHandlerClient.screenshot);
 					}
 					clientsaving=false;
+					Minecraft.getMinecraft().displayGuiScreen(new GuiSavestateIngameMenu());
 					SavestateHandlerClient.isSaving=false;
 					return;
 				}
@@ -55,7 +58,7 @@ public class SavestateEvents2 {
 	public void loadSavestate(TickEvent.ClientTickEvent ev) {
 		if (ev.phase == Phase.START) {
 			if (!mc.isIntegratedServerRunning()) {
-				if (tickspassed >= endtimer) {
+				if (tickspassed >= 20) {
 					if (!(mc.currentScreen instanceof GuiSavestateLoadingScreen)) {
 						SavestateHandlerClient.isLoading=false;
 						return;
@@ -78,5 +81,5 @@ public class SavestateEvents2 {
 				tickspassed++;
 			}
 		}
-	}*/
+	}
 }

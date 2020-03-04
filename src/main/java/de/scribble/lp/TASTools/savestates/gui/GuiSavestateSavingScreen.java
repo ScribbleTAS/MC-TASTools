@@ -16,7 +16,7 @@ public class GuiSavestateSavingScreen extends GuiScreen{
 		int width = scaled.getScaledWidth();
 		int height = scaled.getScaledHeight();
 		
-		drawCenteredString(fontRendererObj,I18n.format("gui.savestate.savingscreen.msg"),width / 2,height / 4 + 34 + -16, 0xFFFFFF); //Making a savestate, please wait!
+		drawCenteredString(fontRendererObj,I18n.format("Please press ESC to continue! The pause menu will open and the game might lag..."),width / 2,height / 4 + 34 + -16, 0xFFFFFF); //Making a savestate, please wait!
 		drawCenteredString(fontRendererObj, I18n.format("gui.savestate.savingscreen.credit"), width / 2, height / 4 + 165 -16, 0xFFB238);	//Idea and code from MightyPork and bspkrs' WorldStateCheckpoints!
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
@@ -25,4 +25,5 @@ public class GuiSavestateSavingScreen extends GuiScreen{
 	public boolean doesGuiPauseGame() {
 		return true;
 	}
+	
 }

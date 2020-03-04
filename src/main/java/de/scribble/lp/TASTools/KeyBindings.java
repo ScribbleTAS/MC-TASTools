@@ -4,6 +4,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.savestates.SavestatePacket;
+import de.scribble.lp.TASTools.savestates.gui.GuiSavestateSavingScreen;
 import net.minecraft.client.Minecraft;
 
 public class KeyBindings {
@@ -14,6 +15,7 @@ public class KeyBindings {
 			ModLoader.NETWORK.sendToServer(new FreezePacket(true, 1));
 		}
 		if (ClientProxy.SavestateSaveKey.isPressed()) {
+			Minecraft.getMinecraft().displayGuiScreen(new GuiSavestateSavingScreen());
 			ModLoader.NETWORK.sendToServer(new SavestatePacket(true));
 		}
 		if (ClientProxy.SavestateLoadKey.isPressed()) {

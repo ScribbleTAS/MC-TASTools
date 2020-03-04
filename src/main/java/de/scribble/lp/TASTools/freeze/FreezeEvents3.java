@@ -18,10 +18,8 @@ public class FreezeEvents3 {
 		if (unloadstop&&ev.world.isRemote) {
 			CommonProxy.logger.debug("WorldUnload Event triggered in Freeze Events");
 			unloadstop = false;
-			{
-				FreezeHandler.stopFreezeServerNoUpdate();
-				ModLoader.NETWORK.sendTo(new FreezePacket(false), (EntityPlayerMP) FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList.get(0));
-			}
+			FreezeHandler.stopFreezeServerNoUpdate();
+			ModLoader.NETWORK.sendTo(new FreezePacket(false), (EntityPlayerMP) FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList.get(0));
 		}
 	}
 }
