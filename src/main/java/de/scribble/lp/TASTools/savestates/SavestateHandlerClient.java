@@ -380,8 +380,6 @@ public class SavestateHandlerClient {
 					new Util().saveScreenshotAt(targetsavefolder, screenshotname, screenshot);
 				}
 				ModLoader.NETWORK.sendToAll(new SavestatePacket(true));
-				isSaving = false;
-
 			} catch (IOException e) {
 				CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
 						+ targetsavefolder.getPath() + " for some reason (Savestate save)");
@@ -410,8 +408,9 @@ public class SavestateHandlerClient {
 				CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
 						+ targetsavefolder.getPath() + " for some reason (Savestate load)");
 				e.printStackTrace();
-				isLoading = false;
 				return;
+			} finally {
+				isLoading = false;
 			}
 		}
 	}
