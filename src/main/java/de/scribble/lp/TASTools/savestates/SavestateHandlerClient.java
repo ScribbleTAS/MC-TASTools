@@ -41,8 +41,8 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
  */
 public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
-	private static boolean isSaving=false;
-	private static boolean isLoading=false;
+	public static boolean isSaving=false;
+	public static boolean isLoading=false;
 	public static int endtimer;
 	
 	private File currentworldfolder;
@@ -183,6 +183,7 @@ public class SavestateHandlerClient {
 					saveInfo(getInfoFile(worldname), incr);
 				} catch (IOException e) {
 					e.printStackTrace();
+					isLoading = false;
 				}
 				this.mc.ingameGUI.getChatGUI().clearChatMessages(true);
 				FMLCommonHandler.instance().firePlayerLoggedOut(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers().get(0));
@@ -195,12 +196,13 @@ public class SavestateHandlerClient {
 					Loader.join();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
+					isLoading = false;
 				}
 	            
 	            MiscEvents.ignorerespawntimerClient=true; //Make it so the Player is vulnerable after a savestate
 	            
+	            isLoading = false;
 	            FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
-				isLoading = false;
 			}else {
 				CommonProxy.logger.error("Loading savestate is blocked by another action. If this is permanent, restart the game.");
 			}
@@ -401,6 +403,7 @@ public class SavestateHandlerClient {
 					currentThread().sleep(2);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
+					isLoading = false;
 				}
 			}
 			mc.displayGuiScreen(new GuiSavestateLoadingScreen());
