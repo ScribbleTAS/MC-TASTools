@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 public class SavestateEvents {
 	public static boolean savestatepauseenabled;
 	public static boolean reloadgameoverenabled;
+
 	private boolean flag=false;
 	@SubscribeEvent
 	public void GuiOpen(GuiOpenEvent ev) {

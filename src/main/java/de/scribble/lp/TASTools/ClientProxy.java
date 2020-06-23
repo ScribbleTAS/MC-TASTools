@@ -10,8 +10,6 @@ import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
 import de.scribble.lp.TASTools.misc.MiscEvents;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
-import de.scribble.lp.TASTools.savestates.SavestateHandlerClient;
-import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
@@ -69,5 +67,4 @@ public class ClientProxy extends CommonProxy{
 	public void postInit(FMLPostInitializationEvent ev) {
 		super.postInit(ev);
 	}
-
 }

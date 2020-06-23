@@ -21,6 +21,7 @@ import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
+import de.scribble.lp.TASTools.misc.MiscEvents;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
@@ -32,7 +33,6 @@ import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldSettings;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 /**
@@ -196,6 +196,9 @@ public class SavestateHandlerClient {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+	            
+	            MiscEvents.ignorerespawntimerClient=true; //Make it so the Player is vulnerable after a savestate
+	            
 	            FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
 				isLoading = false;
 			}else {

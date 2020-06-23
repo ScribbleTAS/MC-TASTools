@@ -20,13 +20,9 @@ public class MixinAbstractClientPlayer {
 	private static final ResourceLocation vaughcape = new ResourceLocation("tastools:textures/capes/vaugh.png");
 	private static final ResourceLocation admira23MattyBcape = new ResourceLocation("tastools:textures/capes/hiscribble.png");
 	private static final ResourceLocation caeccape = new ResourceLocation("tastools:textures/capes/caec.png");
+	private static final ResourceLocation uneasecape = new ResourceLocation("tastools:textures/capes/unease.png");
 	@Shadow
 	NetworkPlayerInfo playerInfo;
-	@Inject(method="getLocationSkin", at=@At("HEAD"), cancellable=true)
-	private void redogetLocationSkin(CallbackInfoReturnable<ResourceLocation> ci) {
-		ci.setReturnValue(new ResourceLocation("tastools:textures/rob.png"));
-		ci.cancel();
-	}
 	@Inject(method="getLocationCape", at=@At("HEAD"), cancellable=true)
 	private void redogetLocationCape(CallbackInfoReturnable<ResourceLocation> ci) {
 		if(playerInfo.getGameProfile().getId().toString().equals("f3112feb-00c1-4de8-9829-53b940342996"))ci.setReturnValue(scribblecape); //ScribbleLP
@@ -35,7 +31,7 @@ public class MixinAbstractClientPlayer {
 		else if(playerInfo.getGameProfile().getId().toString().equals("a962e219-c16e-4c3b-b38b-b675d10f92ee"))ci.setReturnValue(wellcape); //mcmaxmcmc
 		else if(playerInfo.getGameProfile().getId().toString().equals("e5687c44-65c3-4e76-a233-2550a5597ddc"))ci.setReturnValue(vaughcape); //vaugh gaming
 		else if(playerInfo.getGameProfile().getId().toString().equals("839474a8-ba49-468b-9246-ed80c78383aa"))ci.setReturnValue(admira23MattyBcape); //Curcuit_Block
-		else if(playerInfo.getGameProfile().getId().toString().equals("8d461cc7-a7a2-4cd5-a7af-91a84d6a8466"))ci.setReturnValue(caeccape);
+		else if(playerInfo.getGameProfile().getId().toString().equals("8d461cc7-a7a2-4cd5-a7af-91a84d6a8466"))ci.setReturnValue(caeccape); //Caec
 		else ci.setReturnValue(bottlecape); //Everyone else
 		ci.cancel();
 	}
