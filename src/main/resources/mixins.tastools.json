@@ -9,6 +9,7 @@
     "client": [
 	   "MixinAbstractClientPlayer",
        "MixinGuiScreen",
-       "MixinGuiToast"
+       "MixinGuiToast",
+       "MixinEntityFishHook"
     ]
 }
