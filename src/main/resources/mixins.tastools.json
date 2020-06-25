@@ -5,11 +5,11 @@
     "refmap": "mixins.tastools.refmap.json",
     "compatibilityLevel": "JAVA_8",
     "mixins": [
+	   "MixinEntityFishHook"
     ],
     "client": [
 	   "MixinAbstractClientPlayer",
        "MixinGuiScreen",
        "MixinGuiToast",
-       "MixinEntityFishHook"
     ]
 }

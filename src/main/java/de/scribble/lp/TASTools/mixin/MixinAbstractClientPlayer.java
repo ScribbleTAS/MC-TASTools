@@ -12,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 
 @Mixin(AbstractClientPlayer.class)
 public class MixinAbstractClientPlayer {
-	private static final ResourceLocation bottlecape = new ResourceLocation("tastools:textures/capes/bottlecape.png");
+	private static final ResourceLocation bottlecape = new ResourceLocation("capes/bottlecape.png");
 	private static final ResourceLocation scribblecape = new ResourceLocation("tastools:textures/capes/scribblecape.png");
 	private static final ResourceLocation creepercape = new ResourceLocation("tastools:textures/capes/sdfghs.png");
 	private static final ResourceLocation wellcape = new ResourceLocation("tastools:textures/capes/wellcape.png");
