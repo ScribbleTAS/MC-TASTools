@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import de.scribble.lp.TASTools.CommonProxy;
+import de.scribble.lp.TASTools.fishmanip.FishManipEvents;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -59,10 +60,11 @@ public abstract class MixinEntityFishHook extends Entity{
 	@Inject(method="catchingFish", at = @At("HEAD"), cancellable = true)
     private void redoCatchingFish(BlockPos playerPos, CallbackInfo ci)
     {
+		boolean fishrig_active=FishManipEvents.fishrigger.isActive();
         WorldServer worldserver = (WorldServer)this.world;
         int i = 1;
         BlockPos blockpos = playerPos.up();
-        if (CommonProxy.fishrigger.isActive()){
+        if (fishrig_active){
         	if (this.world.isRainingAt(blockpos))
 	        {
 	            ++i;
@@ -169,7 +171,7 @@ public abstract class MixinEntityFishHook extends Entity{
             {
                 this.fishApproachAngle = MathHelper.nextFloat(this.rand, 0.0F, 360.0F);
                 
-                if(CommonProxy.fishrigger.isActive()) {
+                if(fishrig_active) {
                 	this.ticksCatchableDelay=20;
                 }else {
                 	this.ticksCatchableDelay = MathHelper.getInt(this.rand, 20, 80);
@@ -178,7 +180,7 @@ public abstract class MixinEntityFishHook extends Entity{
         }
         else
         {
-        	if(CommonProxy.fishrigger.isActive()) {
+        	if(fishrig_active) {
             	this.ticksCatchableDelay=100;
             }else {
             	this.ticksCaughtDelay = MathHelper.getInt(this.rand, 100, 600);
@@ -205,8 +207,8 @@ public abstract class MixinEntityFishHook extends Entity{
             else if (this.ticksCatchable > 0)
             {
             	List<ItemStack> result = new ArrayList<ItemStack>();
-            	if (CommonProxy.fishrigger.isActive()) {
-            		result.add(CommonProxy.fishrigger.getItemFromTop());
+            	if (FishManipEvents.fishrigger.isActive()) {
+            		result.add(FishManipEvents.fishrigger.getItemFromTop());
             	}else {
             		LootContext.Builder lootcontext$builder = new LootContext.Builder((WorldServer)this.world);
                 	lootcontext$builder.withLuck((float)this.luck + this.angler.getLuck()).withPlayer(this.angler).withLootedEntity(this); // Forge: add player & looted entity to LootContext

@@ -15,7 +15,7 @@ public class FileStuff {
 	
 	public static void writeThings(StringBuilder output, File file, String logmessage){
 		try {
-			CommonProxy.logger.info(logmessage);
+			CommonProxy.logger.debug(logmessage);
 			Files.write(output.toString().getBytes(), file);
 		} catch (IOException e) {
 			e.printStackTrace();

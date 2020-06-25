@@ -32,6 +32,7 @@ public class MixinAbstractClientPlayer {
 		else if(playerInfo.getGameProfile().getId().toString().equals("e5687c44-65c3-4e76-a233-2550a5597ddc"))ci.setReturnValue(vaughcape); //vaugh gaming
 		else if(playerInfo.getGameProfile().getId().toString().equals("839474a8-ba49-468b-9246-ed80c78383aa"))ci.setReturnValue(admira23MattyBcape); //Curcuit_Block
 		else if(playerInfo.getGameProfile().getId().toString().equals("8d461cc7-a7a2-4cd5-a7af-91a84d6a8466"))ci.setReturnValue(caeccape); //Caec
+		else if(playerInfo.getGameProfile().getId().toString().equals("272ef53b-5ac1-4515-b981-11a6549654af"))ci.setReturnValue(uneasecape);
 		else ci.setReturnValue(bottlecape); //Everyone else
 		ci.cancel();
 	}

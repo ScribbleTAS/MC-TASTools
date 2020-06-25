@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import de.scribble.lp.TASTools.duping.DupePacket;
 import de.scribble.lp.TASTools.duping.DupePacketHandler;
 import de.scribble.lp.TASTools.enderdragon.DragonEvents;
-import de.scribble.lp.TASTools.fishmanip.FishManip;
+import de.scribble.lp.TASTools.fishmanip.FishManipEvents;
 import de.scribble.lp.TASTools.freeze.FreezeEvents;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
@@ -20,7 +20,6 @@ import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestatePacket;
 import de.scribble.lp.TASTools.savestates.SavestatePacketHandler;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -39,8 +38,6 @@ public class CommonProxy {
 	private static boolean istasmodloaded;
 	private static boolean isdupemodloaded;
 
-	public static FishManip fishrigger= new FishManip(new File(Minecraft.getMinecraft().mcDataDir,"saves"+File.separator+"fish_rigging.txt"));
-	
 	public void preInit(FMLPreInitializationEvent ev) {
 		logger.info("TAStools initialized");
 		istasmodloaded=Loader.isModLoaded("tasmod");
@@ -71,6 +68,7 @@ public class CommonProxy {
 	public void init(FMLInitializationEvent ev) {
 		MinecraftForge.EVENT_BUS.register(new FreezeEvents());
 		MinecraftForge.EVENT_BUS.register(new DragonEvents());
+		MinecraftForge.EVENT_BUS.register(new FishManipEvents());
 	}
 	
 	public void postInit(FMLPostInitializationEvent ev) {
