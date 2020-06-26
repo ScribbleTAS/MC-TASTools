@@ -16,7 +16,7 @@ public class CustomPlayerInfo {
 	@SubscribeEvent
 	  public void onPlayerJoin(EntityJoinWorldEvent event)
 	  {
-	    if(event.getEntity() instanceof EntityPlayer)
+	    if ((event.getWorld().isRemote) && ((event.getEntity() instanceof EntityPlayer)))
 	    {
 	      EntityPlayer player = (EntityPlayer)event.getEntity();
 	      String uuid = player.getGameProfile().toString();
@@ -26,20 +26,11 @@ public class CustomPlayerInfo {
 	
 	public static ResourceLocation getResourceLocation(EntityLivingBase entitylivingbaseIn){
 		String playerUUID = entitylivingbaseIn.getUniqueID().toString();
-		if(hasCape(entitylivingbaseIn)) {
+		if(!playerUUID.contentEquals("bottlecape")) {
 			return new ResourceLocation(cacheLocation+CapeDownloader.getCapeName(playerUUID));
 		}else {
 			return bottlecape;
 		}
-//		return new ResourceLocation(cacheLocation+CapeDownloader.getCapeName(playerUUID));
 	}
 	
-	private static Boolean hasCape(EntityLivingBase entitylivingbaseIn)
-	  {
-	    Boolean hashMapResult = (Boolean)playersCape.get(((EntityPlayer) entitylivingbaseIn).getGameProfile().getId().toString().replace("-", ""));
-	    if (hashMapResult == null) {
-	      return false;
-	    }
-	    return hashMapResult;
-	  }
 }
