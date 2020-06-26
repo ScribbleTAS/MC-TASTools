@@ -19,15 +19,16 @@ public class CustomPlayerInfo {
 	    if ((event.getWorld().isRemote) && ((event.getEntity() instanceof EntityPlayer)))
 	    {
 	      EntityPlayer player = (EntityPlayer)event.getEntity();
-	      String uuid = player.getGameProfile().toString();
+	      String uuid = player.getGameProfile().getId().toString();
 	      CapeDownloader.download(uuid, cacheLocation);
 	    }
 	  }
 	
 	public static ResourceLocation getResourceLocation(EntityLivingBase entitylivingbaseIn){
 		String playerUUID = entitylivingbaseIn.getUniqueID().toString();
-		if(!playerUUID.contentEquals("bottlecape")) {
-			return new ResourceLocation(cacheLocation+CapeDownloader.getCapeName(playerUUID));
+		String cape=CapeDownloader.getCapeName(playerUUID);
+		if(!cape.contentEquals("bottlecape")) {
+			return new ResourceLocation(cacheLocation+cape);
 		}else {
 			return bottlecape;
 		}

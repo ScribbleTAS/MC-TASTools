@@ -57,7 +57,7 @@ public class CapeDownloader
 		case "272ef53b-5ac1-4515-b981-11a6549654af":
 			return "uneasecape.png";
 		default:
-			return "wellcape.png"; // Everyone else
+			return "bottlecape"; // Everyone else
 		}
 	}
 	private static boolean rExists(ResourceLocation resourceLocation) {
