@@ -12,12 +12,10 @@ import com.google.common.collect.Maps;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.misc.FileStuff;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTException;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class FishManip {
 	private File fileLocation;
@@ -265,7 +263,7 @@ public class FishManip {
 							if (testEnch.canApply(testStack)&&testEnch.getMaxLevel()>=lvl&&testEnch.getMinLevel()<=lvl) {
 								isCorrect=true;
 							}else {
-								if(values.containsValue("book")){
+								if(values.containsValue("book")&&testEnch.getMaxLevel()>=lvl&&testEnch.getMinLevel()<=lvl){
 									isCorrect=true;
 								}else {
 									isCorrect=false;
@@ -384,9 +382,26 @@ public class FishManip {
 	
 	private ItemStack addEnchantments(ItemStack toEnchant, Map<String, String> values) {
 		int b=0;
+		String tag="";
 		while(values.containsKey("enchantment"+b)) {
-			toEnchant.addEnchantment(Enchantment.getEnchantmentByLocation(values.get("enchantment"+b)), Integer.parseInt(values.get("level"+b)));
+			if(!values.containsValue("book")) {
+				toEnchant.addEnchantment(Enchantment.getEnchantmentByLocation(values.get("enchantment"+b)), Integer.parseInt(values.get("level"+b)));
+			}else {
+				if (b==0) {
+					tag=tag+"{lvl:"+values.get("level"+b)+"s,id:"+Enchantment.getEnchantmentID(Enchantment.getEnchantmentByLocation(values.get("enchantment"+b)))+"s}";
+				}else {
+					tag=tag+",{lvl:"+values.get("level"+b)+"s,id:"+Enchantment.getEnchantmentID(Enchantment.getEnchantmentByLocation(values.get("enchantment"+b)))+"s}";
+				}
+			}
 			b++;
+		}
+		if(values.containsValue("book")) {
+			try {
+				toEnchant.stackTagCompound=JsonToNBT.getTagFromJson("{StoredEnchantments:["+tag+"]}");
+			} catch (NBTException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return toEnchant;
 	}

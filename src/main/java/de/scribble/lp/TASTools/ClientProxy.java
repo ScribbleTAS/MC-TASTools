@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.lwjgl.input.Keyboard;
 
+import de.scribble.lp.TASTools.cape.CustomPlayerInfo;
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
@@ -62,6 +63,7 @@ public class ClientProxy extends CommonProxy{
 		MinecraftForge.EVENT_BUS.register(new GuiOverlayLogo());
 		MinecraftForge.EVENT_BUS.register(new SavestateEvents());
 		MinecraftForge.EVENT_BUS.register(new MiscEvents());
+		MinecraftForge.EVENT_BUS.register(new CustomPlayerInfo());
 	}
 	
 	public void postInit(FMLPostInitializationEvent ev) {

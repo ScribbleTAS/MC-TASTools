@@ -8,8 +8,9 @@
 	   "MixinEntityFishHook"
     ],
     "client": [
-	   "MixinAbstractClientPlayer",
        "MixinGuiScreen",
        "MixinGuiToast",
+	   "MixinLayerCape",
+	   "MixinLayerElytra"
     ]
 }
