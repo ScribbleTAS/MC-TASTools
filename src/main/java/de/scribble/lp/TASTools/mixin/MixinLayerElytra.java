@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import de.scribble.lp.TASTools.cape.CustomPlayerInfo;
+import de.scribble.lp.TASTools.cape.CapeDownloader;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelElytra;
 import net.minecraft.client.renderer.GlStateManager;
@@ -33,7 +33,7 @@ public class MixinLayerElytra {
     public void redoDoRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale, CallbackInfo ci)
     {
         ItemStack itemstack = entitylivingbaseIn.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-        ResourceLocation rl = CustomPlayerInfo.getResourceLocation(entitylivingbaseIn);
+        ResourceLocation rl = CapeDownloader.getResourceLocation(entitylivingbaseIn);
         if (itemstack.getItem() == Items.ELYTRA)
         {
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
