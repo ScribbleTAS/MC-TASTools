@@ -78,7 +78,7 @@ public class CapeDownloader {
 		URL url;
 		Map<String, String> uuids=Maps.<String, String>newHashMap();
 		try {
-			url=new URL("https://gist.githubusercontent.com/ScribbleLP/2833204a86c689a90a177b5b99bf68d0/raw/d2603502814215fb2ecfbf8562a3f4449501ea71/capenames.txt");
+			url=new URL("https://raw.githubusercontent.com/ScribbleLP/MC-TASTools/1.12.2/capes/capenames.txt");
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();
 			return "bottlecape";
