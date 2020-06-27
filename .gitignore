@@ -23,5 +23,8 @@ run
 *.bat
 gradlew
 gradle.properties
-*.txt
-
+forge-1.12-14.21.1.2443-changelog.txt
+CREDITS-fml.txt
+MinecraftForge-Credits.txt
+README.txt
+LICENSE-new.txt
