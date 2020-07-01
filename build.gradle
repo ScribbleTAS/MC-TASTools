@@ -20,7 +20,7 @@ apply plugin: 'org.spongepowered.mixin'
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 
-version = "1.5-Snapshot7"
+version = "1.5-Snapshot13"
 group = "de.scribble.lp.tastools" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "TASTools-1.12"
 

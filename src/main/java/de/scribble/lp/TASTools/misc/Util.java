@@ -11,8 +11,6 @@ import java.io.IOException;
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 
-import com.typesafe.config.Config;
-
 import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
@@ -68,6 +66,7 @@ public class Util {
 		VelocityEvents.velocityenabledServer=serverconfig.get("Velocity","Enabled",true,"Saves and applies Velocity when joining/leaving the server").getBoolean();
 		ModLoader.stopit=serverconfig.get("Savestate","LoadSavestate", false, "This is used for loading a Savestate. When entering /savestate load, this will be set to true, and the server will delete the current world and copy the latest savestate when starting.").getBoolean();
 		SavestateHandlerServer.endtimer=serverconfig.get("TimeToSave","TimeInMillis", 5000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that").getInt();
+		MiscEvents.ignorerespawntimerServer=serverconfig.get("IgnoreRespawnTimer","Ignore", false, "Disables the 60 ticks of invulnerability when joining the server").getBoolean();
 		CommonProxy.serverconfig.save();
 	}
 	@SideOnly(Side.CLIENT)

@@ -4,14 +4,13 @@ import java.io.File;
 
 import org.lwjgl.input.Keyboard;
 
+import de.scribble.lp.TASTools.cape.CapeDownloader;
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
 import de.scribble.lp.TASTools.misc.MiscEvents;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
-import de.scribble.lp.TASTools.savestates.SavestateHandlerClient;
-import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
@@ -64,10 +63,10 @@ public class ClientProxy extends CommonProxy{
 		MinecraftForge.EVENT_BUS.register(new GuiOverlayLogo());
 		MinecraftForge.EVENT_BUS.register(new SavestateEvents());
 		MinecraftForge.EVENT_BUS.register(new MiscEvents());
+		MinecraftForge.EVENT_BUS.register(new CapeDownloader());
 	}
 	
 	public void postInit(FMLPostInitializationEvent ev) {
 		super.postInit(ev);
 	}
-
 }

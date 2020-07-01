@@ -40,7 +40,7 @@ public class ModLoader {
 	public static boolean freezeenabledSP;
 	public static boolean freezeenabledMP;
 	
-	public static String levelname;
+	private static String levelname;
 	public static boolean stopit;
 	
 	public static final String VERSION="${version}";		//If you want to know how I did this, check the build.gradle file under minceraft and "replace"

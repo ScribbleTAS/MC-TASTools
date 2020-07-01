@@ -266,7 +266,7 @@ public class TastoolsCommandc extends CommandBase{
 				ClientProxy.config.save();
 				String msg= SavestateEvents.reloadgameoverenabled ? "msg.gameover.enabled":"msg.gameover.disabled"; 
 				sender.sendMessage(new TextComponentTranslation(msg));
-			} else if(args[0].equalsIgnoreCase("savestatetime")) {
+			} else if(args.length!=0&&args[0].equalsIgnoreCase("savestatetime")) {
 				if (args.length==1) {
 					sender.sendMessage(new TextComponentTranslation("command.savestatetime.info")); //Set the time it takes to savestate here. Increase the time when playing on big worlds! Usage: /tastools savestatetime <timeinMillis>
 					return;

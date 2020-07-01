@@ -21,6 +21,7 @@ import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
+import de.scribble.lp.TASTools.misc.MiscEvents;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
@@ -32,7 +33,6 @@ import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldSettings;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 /**
@@ -41,8 +41,8 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
  */
 public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
-	private static boolean isSaving=false;
-	private static boolean isLoading=false;
+	public static boolean isSaving=false;
+	public static boolean isLoading=false;
 	public static int endtimer;
 	
 	private File currentworldfolder;
@@ -183,6 +183,7 @@ public class SavestateHandlerClient {
 					saveInfo(getInfoFile(worldname), incr);
 				} catch (IOException e) {
 					e.printStackTrace();
+					isLoading = false;
 				}
 				this.mc.ingameGUI.getChatGUI().clearChatMessages(true);
 				FMLCommonHandler.instance().firePlayerLoggedOut(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers().get(0));
@@ -195,9 +196,13 @@ public class SavestateHandlerClient {
 					Loader.join();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
+					isLoading = false;
 				}
+	            
+	            MiscEvents.ignorerespawntimerClient=true; //Make it so the Player is vulnerable after a savestate
+	            
+	            isLoading = false;
 	            FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
-				isLoading = false;
 			}else {
 				CommonProxy.logger.error("Loading savestate is blocked by another action. If this is permanent, restart the game.");
 			}
@@ -380,8 +385,6 @@ public class SavestateHandlerClient {
 					new Util().saveScreenshotAt(targetsavefolder, screenshotname, screenshot);
 				}
 				ModLoader.NETWORK.sendToAll(new SavestatePacket(true));
-				isSaving = false;
-
 			} catch (IOException e) {
 				CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
 						+ targetsavefolder.getPath() + " for some reason (Savestate save)");
@@ -400,6 +403,7 @@ public class SavestateHandlerClient {
 					currentThread().sleep(2);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
+					isLoading = false;
 				}
 			}
 			mc.displayGuiScreen(new GuiSavestateLoadingScreen());
@@ -410,8 +414,9 @@ public class SavestateHandlerClient {
 				CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
 						+ targetsavefolder.getPath() + " for some reason (Savestate load)");
 				e.printStackTrace();
-				isLoading = false;
 				return;
+			} finally {
+				isLoading = false;
 			}
 		}
 	}

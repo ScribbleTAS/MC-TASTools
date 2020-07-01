@@ -13,6 +13,7 @@ import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -178,5 +179,10 @@ public class FreezeEvents {
 		}
 		player.setEntityInvulnerable(false);
 		player.setNoGravity(false);
+	}
+	
+	@SubscribeEvent
+	public void onPlayerCreated(NameFormat ev) {
+		ev.setDisplayname("[TAS]"+" "+ev.getDisplayname());
 	}
 }
