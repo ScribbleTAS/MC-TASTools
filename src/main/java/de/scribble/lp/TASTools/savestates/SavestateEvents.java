@@ -20,28 +20,29 @@ public class SavestateEvents {
 	public static boolean savestatepauseenabled;
 	public static boolean reloadgameoverenabled;
 
-	private boolean flag=false;
-	@SubscribeEvent
-	public void GuiOpen(GuiOpenEvent ev) {
-		if(ev.getGui() instanceof GuiIngameMenu) {
-			if(savestatepauseenabled) {
-				ev.setCanceled(true);
-				Minecraft.getMinecraft().displayGuiScreen(new GuiSavestateIngameMenu());
-			}
-		} else if (ev.getGui() instanceof GuiGameOver) {
-			if(reloadgameoverenabled) {
-				if(!flag) {
-					flag=true;
-					ev.setCanceled(true);
-					Minecraft.getMinecraft().displayGuiScreen(new GuiSavestateDeathReloadScreen(null));
-				}else {
-					flag=false;
-				}
-			}
-		} else if(ev.getGui() instanceof GuiMainMenu||ev.getGui() instanceof GuiYesNo||ev.getGui() instanceof GuiSavestateLoadingScreen) {
-			flag=false;
-		}
-	}
+//	private boolean flag=false;
+//	@SubscribeEvent
+//	public void GuiOpen(GuiOpenEvent ev) {
+//		if(ev.getGui() instanceof GuiIngameMenu) {
+//			if(savestatepauseenabled) {
+//				ev.setCanceled(true);
+//				Minecraft.getMinecraft().displayGuiScreen(new GuiSavestateIngameMenu());
+//			}
+//		} 
+//		if (ev.getGui() instanceof GuiGameOver) {
+//			if(reloadgameoverenabled) {
+//				if(!flag) {
+//					flag=true;
+//					ev.setCanceled(true);
+//					Minecraft.getMinecraft().displayGuiScreen(new GuiSavestateDeathReloadScreen(null));
+//				}else {
+//					flag=false;
+//				}
+//			}
+//		} else if(ev.getGui() instanceof GuiMainMenu||ev.getGui() instanceof GuiYesNo||ev.getGui() instanceof GuiSavestateLoadingScreen) {
+//			flag=false;
+//		}
+//	}
 	@SubscribeEvent
 	public void pressKeybinding(InputEvent.KeyInputEvent ev){
 		if (ClientProxy.SavestateSaveKey.isPressed()) {

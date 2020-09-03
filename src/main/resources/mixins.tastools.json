@@ -12,6 +12,8 @@
        "MixinGuiToast",
 	   "MixinLayerCape",
 	   "MixinLayerElytra",
-	   "MixinGuiWinGame"
+	   "MixinGuiWinGame",
+	   "MixinGuiIngameMenu",
+	   "MixinGuiGameOver"
     ]
 }
