@@ -17,8 +17,6 @@ public class MiscEvents {
 	public static boolean ignorerespawntimerClient=false;
 	public static boolean ignorerespawntimerServer=false;
 	
-	public static ResourceLocation resource=new ResourceLocation("tastools:textures/shields/bottleshield.png");
-	public static ResourceLocation resourcenormal=new ResourceLocation("tastools:textures/shields/normal.png");
 	@SubscribeEvent
 	public void onMainMenu(GuiOpenEvent ev) {
 		if(ev.getGui() instanceof GuiMainMenu) {
