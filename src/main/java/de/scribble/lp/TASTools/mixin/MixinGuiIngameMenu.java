@@ -183,5 +183,6 @@ public class MixinGuiIngameMenu extends GuiScreen{
 	                break;
 	        }
 		}
+		ci.cancel();
 	}
 }

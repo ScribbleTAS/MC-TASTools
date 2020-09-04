@@ -5,7 +5,9 @@ import java.io.File;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -14,6 +16,9 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 public class MiscEvents {
 	public static boolean ignorerespawntimerClient=false;
 	public static boolean ignorerespawntimerServer=false;
+	
+	public static ResourceLocation resource=new ResourceLocation("tastools:textures/shields/bottleshield.png");
+	public static ResourceLocation resourcenormal=new ResourceLocation("tastools:textures/shields/normal.png");
 	@SubscribeEvent
 	public void onMainMenu(GuiOpenEvent ev) {
 		if(ev.getGui() instanceof GuiMainMenu) {

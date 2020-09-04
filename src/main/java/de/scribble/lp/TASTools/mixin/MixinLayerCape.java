@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import de.scribble.lp.TASTools.cape.CapeDownloader;
+import de.scribble.lp.TASTools.shield.ShieldDownloader;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
@@ -26,7 +26,7 @@ public class MixinLayerCape {
 	@Inject(method="doRenderLayer",at=@At("HEAD"),cancellable=true)
 	public void redodoRenderLayer(AbstractClientPlayer entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale, CallbackInfo ci)
     {
-		ResourceLocation rl = CapeDownloader.getResourceLocation(entitylivingbaseIn);
+		ResourceLocation rl = ShieldDownloader.getResourceLocation(entitylivingbaseIn);
         if (entitylivingbaseIn.hasPlayerInfo() && !entitylivingbaseIn.isInvisible() && rl != null)
         {
             ItemStack itemstack = entitylivingbaseIn.getItemStackFromSlot(EntityEquipmentSlot.CHEST);

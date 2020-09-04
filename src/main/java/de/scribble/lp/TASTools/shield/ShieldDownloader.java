@@ -1,4 +1,4 @@
-package de.scribble.lp.TASTools.cape;
+package de.scribble.lp.TASTools.shield;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -24,11 +24,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class CapeDownloader {
-	public static HashMap<String, Boolean> playersCape = new HashMap();
-	private static final ResourceLocation bottlecape = new ResourceLocation("tastools:textures/capes/bottlecape.png");
-	private static final String cacheLocation = "capestt/";
-	private static String capename;
+public class ShieldDownloader {
+	private static final ResourceLocation bottleshield = new ResourceLocation("tastools:textures/shields/bottleshield.png");
+	private static final String cacheLocation = "shieldstt/";
+	private static String shieldname;
 	
 	@SubscribeEvent
 	  public void onPlayerJoin(EntityJoinWorldEvent event)
@@ -37,27 +36,27 @@ public class CapeDownloader {
 	    {
 	      EntityPlayer player = (EntityPlayer)event.getEntity();
 	      String uuid = player.getGameProfile().getId().toString();
-	      capename=getCapeName(uuid);
+	      shieldname=getShieldName(uuid);
 	      download(uuid, cacheLocation);
 	    }
 	  }
 	
 	public static ResourceLocation getResourceLocation(EntityLivingBase entitylivingbaseIn){
 		String playerUUID = entitylivingbaseIn.getUniqueID().toString();
-		if(!capename.contentEquals("bottlecape")) {
-			return new ResourceLocation(cacheLocation+capename);
+		if(!shieldname.contentEquals("bottleshield")) {
+			return new ResourceLocation(cacheLocation+shieldname);
 		}else {
-			return bottlecape;
+			return bottleshield;
 		}
 	}
 	
 	public static void download(String uuid, String location) {
 		
-		if ((capename != null) && (!capename.isEmpty())) {
-			String url = "https://raw.githubusercontent.com/ScribbleLP/MC-TASTools/1.12.2/capes/"
-					+ capename;
+		if ((shieldname != null) && (!shieldname.isEmpty())) {
+			String url = "https://raw.githubusercontent.com/ScribbleLP/MC-TASTools/1.12.2/shields/"
+					+ shieldname;
 			TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
-			ResourceLocation cachedLocation = new ResourceLocation(location + capename);
+			ResourceLocation cachedLocation = new ResourceLocation(location + shieldname);
 			if (!rExists(cachedLocation)) {
 				IImageBuffer iib = new IImageBuffer() {
 					public BufferedImage parseUserSkin(BufferedImage var1) {
@@ -68,31 +67,31 @@ public class CapeDownloader {
 					}
 
 				};
-				ThreadDownloadImageData downloadedCape = new ThreadDownloadImageData(null, url, null, iib);
-				textureManager.loadTexture(cachedLocation, downloadedCape);
+				ThreadDownloadImageData downloadedShield = new ThreadDownloadImageData(null, url, null, iib);
+				textureManager.loadTexture(cachedLocation, downloadedShield);
 			}
 		}
 	}
-	public static String getCapeName(String uuid){
+	public static String getShieldName(String uuid){
 		File feil=new File(Minecraft.getMinecraft().mcDataDir+File.separator+"playerstt.txt");
 		URL url;
 		Map<String, String> uuids=Maps.<String, String>newHashMap();
 		try {
-			url=new URL("https://raw.githubusercontent.com/ScribbleLP/MC-TASTools/1.12.2/capes/capenames.txt");
+			url=new URL("https://raw.githubusercontent.com/ScribbleLP/MC-TASTools/1.12.2/shields/shieldnames.txt");
 		} catch (MalformedURLException e1) {
 			e1.printStackTrace();
-			return "bottlecape";
+			return "bottleshield";
 		}
 		try {
 			uuids = mapNames(FileStuff.readThingsFromURL(url, feil));
 		} catch (IOException e) {
 			e.printStackTrace();
-			return "bottlecape";
+			return "bottleshield";
 		}
 		if(uuids.containsKey(uuid)) {
 			return uuids.get(uuid);
 		}else {
-			return "bottlecape"; // Everyone else
+			return "bottleshield"; // Everyone else
 		}
 	}
 	

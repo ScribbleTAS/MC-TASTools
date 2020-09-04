@@ -10,10 +10,9 @@
     "client": [
        "MixinGuiScreen",
        "MixinGuiToast",
-	   "MixinLayerCape",
-	   "MixinLayerElytra",
 	   "MixinGuiWinGame",
 	   "MixinGuiIngameMenu",
-	   "MixinGuiGameOver"
+	   "MixinGuiGameOver",
+	   "MixinTileEntityItemStackRenderer"
     ]
 }
