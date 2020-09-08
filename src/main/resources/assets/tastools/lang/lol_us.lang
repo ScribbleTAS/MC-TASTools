@@ -33,9 +33,12 @@ msg.pausegui.enabled=§aStahp-Gui enabled
 msg.pausegui.disabled=§cStahp-Gui dizabled
 msg.gameover.enabled=§aSadKitteh-Gui enabled
 msg.gameover.disabled=§cSadKitteh-Gui dizabled
+#flintrig
+msg.flintrig.enable=§aNao oanly sharpy rocks
+msg.flintrig.disable=§cNao 10 percent tschance of sharpy rocks
 
 #usage (Do not translate this section)
-command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | gui | pausemenu>
+command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | gui | pausemenu | gameover | savestatetime | flintrig>
 command.dupe.usage=/dupe
 command.dragon.usage=/dragon <phase>
 command.freeze.usage=/freeze

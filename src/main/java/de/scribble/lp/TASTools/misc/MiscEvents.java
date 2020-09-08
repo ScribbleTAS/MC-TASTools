@@ -5,9 +5,7 @@ import java.io.File;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -21,7 +19,7 @@ public class MiscEvents {
 	public void onMainMenu(GuiOpenEvent ev) {
 		if(ev.getGui() instanceof GuiMainMenu) {
 			((GuiMainMenu) ev.getGui()).minceraftRoll=0;
-			((GuiMainMenu) ev.getGui()).splashText="Well, someone is using TASTools!";
+			((GuiMainMenu) ev.getGui()).splashText="TaS iS cHeAtInG !!1";
 		}
 	}
 	@SubscribeEvent

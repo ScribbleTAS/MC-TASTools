@@ -13,6 +13,6 @@
 	   "MixinGuiWinGame",
 	   "MixinGuiIngameMenu",
 	   "MixinGuiGameOver",
-	   "MixinTileEntityItemStackRenderer"
+	   "MixinRenderItem"
     ]
 }

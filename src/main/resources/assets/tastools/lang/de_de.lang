@@ -33,9 +33,12 @@ msg.pausegui.enabled=§aPause-Gui eingeschaltet
 msg.pausegui.disabled=§cPause-Gui ausgeschaltet
 msg.gameover.enabled=§aGameOver-Gui eingechaltet
 msg.gameover.disabled=§cGameOver-Gui ausgeschaltet											  
+#flintrig
+msg.flintrig.enable=§aNun wird nur Feuerstein gedroppt
+msg.flintrig.disable=§cWieder normal
 
 #usage (Do not translate this section)
-command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | gui | pausemenu>
+command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | gui | pausemenu | gameover | savestatetime | flintrig>
 command.dupe.usage=/dupe
 command.dragon.usage=/dragon <phase>
 command.freeze.usage=/freeze

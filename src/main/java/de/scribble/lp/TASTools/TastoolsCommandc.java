@@ -3,6 +3,7 @@ package de.scribble.lp.TASTools;
 import java.util.List;
 
 import de.scribble.lp.TASTools.duping.DupeEvents;
+import de.scribble.lp.TASTools.flintrig.FlintRig;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
 import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
@@ -21,7 +22,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.config.Configuration;
-import scala.tools.nsc.settings.MutableSettings.EnableSettings;
 
 public class TastoolsCommandc extends CommandBase{
 
@@ -145,6 +145,8 @@ public class TastoolsCommandc extends CommandBase{
 				gameover(sender);
 			} else if(args.length!=0&&args[0].equalsIgnoreCase("savestatetime")) {
 				savestatetime(args, sender);
+			} else if(args.length!=0&&args[0].equalsIgnoreCase("flintrig")) {
+				flintRig(sender);
 			}
 			// Other than sender=Player starts here
 		} else {
@@ -176,7 +178,7 @@ public class TastoolsCommandc extends CommandBase{
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
 		if (args.length==1) {
-			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","gui","reload","folder","pausemenu","gameover","savestatetime"});
+			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","gui","reload","folder","pausemenu","gameover","savestatetime", "flintrig"});
 		}
 		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
 			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft"});
@@ -395,6 +397,14 @@ public class TastoolsCommandc extends CommandBase{
 			CommonProxy.serverconfig.get("Velocity", "Enabled", true,
 					"Saves and applies Velocity when joining/leaving the server").set(true);
 			CommonProxy.serverconfig.save();
+		}
+	}
+	private void flintRig(ICommandSender sender) {
+		FlintRig.enable = !FlintRig.enable;
+		if (FlintRig.enable) {
+			sender.sendMessage(new TextComponentTranslation("msg.flintrig.enable"));	//§aNow only flintdrops
+		} else {
+			sender.sendMessage(new TextComponentTranslation("msg.flintrig.disable"));	//§cBack to normal
 		}
 	}
 }

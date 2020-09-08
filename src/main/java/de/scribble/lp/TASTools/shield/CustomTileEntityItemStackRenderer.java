@@ -1,18 +1,11 @@
-package de.scribble.lp.TASTools.mixin;
+package de.scribble.lp.TASTools.shield;
 
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.authlib.GameProfile;
 
-import de.scribble.lp.TASTools.misc.MiscEvents;
-import de.scribble.lp.TASTools.shield.ShieldDownloader;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockShulkerBox;
@@ -20,11 +13,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelShield;
 import net.minecraft.client.renderer.BannerTextures;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySkullRenderer;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,33 +30,26 @@ import net.minecraft.tileentity.TileEntityEnderChest;
 import net.minecraft.tileentity.TileEntityShulkerBox;
 import net.minecraft.tileentity.TileEntitySkull;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 
-@Mixin(TileEntityItemStackRenderer.class)
-public class MixinTileEntityItemStackRenderer {
-	@Shadow
-	private static TileEntityShulkerBox[] SHULKER_BOXES;
-	@Shadow
-    private static TileEntityItemStackRenderer instance;
-	@Shadow
-    private TileEntityChest chestBasic;
-	@Shadow
-    private TileEntityChest chestTrap;
-	@Shadow
-    private TileEntityEnderChest enderChest;
-	@Shadow
-    private TileEntityBanner banner;
-	@Shadow
-    private TileEntityBed bed;
-	@Shadow
-    private TileEntitySkull skull;
-	@Shadow
-    private ModelShield modelShield;
-	
-	
-	
-	@Inject(method="renderByItem(Lnet/minecraft/item/ItemStack;F)V",at=@At("HEAD"), cancellable = true)
-    public void redoRenderByItem(ItemStack p_192838_1_, float partialTicks, CallbackInfo ci)
+public class CustomTileEntityItemStackRenderer {
+	private static final TileEntityShulkerBox[] SHULKER_BOXES = new TileEntityShulkerBox[16];
+    public static CustomTileEntityItemStackRenderer instance;
+    private final TileEntityChest chestBasic = new TileEntityChest(BlockChest.Type.BASIC);
+    private final TileEntityChest chestTrap = new TileEntityChest(BlockChest.Type.TRAP);
+    private final TileEntityEnderChest enderChest = new TileEntityEnderChest();
+    private final TileEntityBanner banner = new TileEntityBanner();
+    private final TileEntityBed bed = new TileEntityBed();
+    private final TileEntitySkull skull = new TileEntitySkull();
+    private final ModelShield modelShield = new ModelShield();
+
+    private ShieldDownloader shieldD= new ShieldDownloader();
+    
+    public void renderByItem(ItemStack itemStackIn, EntityLivingBase entity)
+    {
+        this.renderByItem(itemStackIn, 1.0F, entity);
+    }
+
+    public void renderByItem(ItemStack p_192838_1_, float partialTicks, EntityLivingBase entity)
     {
         Item item = p_192838_1_.getItem();
 
@@ -85,8 +72,13 @@ public class MixinTileEntityItemStackRenderer {
             }
             else
             {
-                Minecraft.getMinecraft().getTextureManager().bindTexture(ShieldDownloader.getResourceLocation(Minecraft.getMinecraft().player));
+            	if(entity!=null) {
+            		Minecraft.getMinecraft().getTextureManager().bindTexture(shieldD.getResourceLocation(entity));
+            	}else {
+            		Minecraft.getMinecraft().getTextureManager().bindTexture(BannerTextures.SHIELD_BASE_TEXTURE);
+            	}
             }
+
             GlStateManager.pushMatrix();
             GlStateManager.scale(1.0F, -1.0F, -1.0F);
             this.modelShield.render();
@@ -139,6 +131,15 @@ public class MixinTileEntityItemStackRenderer {
         {
             TileEntityRendererDispatcher.instance.render(this.chestBasic, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks);
         }
-        ci.cancel();
+    }
+
+    static
+    {
+        for (EnumDyeColor enumdyecolor : EnumDyeColor.values())
+        {
+            SHULKER_BOXES[enumdyecolor.getMetadata()] = new TileEntityShulkerBox(enumdyecolor);
+        }
+
+        instance = new CustomTileEntityItemStackRenderer();
     }
 }

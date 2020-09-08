@@ -2,15 +2,6 @@ package de.scribble.lp.TASTools.savestates;
 
 import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.ModLoader;
-import de.scribble.lp.TASTools.savestates.gui.GuiSavestateDeathReloadScreen;
-import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
-import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGameOver;
-import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.client.gui.GuiYesNo;
-import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
