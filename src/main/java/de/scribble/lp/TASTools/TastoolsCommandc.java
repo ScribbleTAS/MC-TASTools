@@ -131,21 +131,28 @@ public class TastoolsCommandc extends CommandBase{
 			if(args.length == 1 && args[0].equalsIgnoreCase("reload")) {
 				reloadConfig(server, sender);
 			//gui logo singleplayer
-			} else if(args.length == 1 && args[0].equalsIgnoreCase("gui")) {
+			} 
+			if(args.length == 1 && args[0].equalsIgnoreCase("gui")) {
 				guilogoSP(isdedicated, sender);
-			} else if (args.length==2&&args[0].equalsIgnoreCase("gui")&&server.getPlayerList().getPlayers().contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
+			} 
+			if (args.length==2&&args[0].equalsIgnoreCase("gui")&&server.getPlayerList().getPlayers().contains(server.getPlayerList().getPlayerByUsername(args[1]))) {
 				guilogoMP(args, server, sender);
 				//Opens the savestate folder
-			} else if(args.length==1&&args[0].equalsIgnoreCase("folder")){
+			} 
+			if(args.length==1&&args[0].equalsIgnoreCase("folder")){
 				ModLoader.NETWORK.sendTo(new MiscPacket(2),(EntityPlayerMP)sender);
 				//Changes the pause menu
-			} else if(args.length==1&&args[0].equalsIgnoreCase("pausemenu")){
+			} 
+			if(args.length==1&&args[0].equalsIgnoreCase("pausemenu")){
 				pausemenu(sender);
-			} else if(args.length==1&&args[0].equalsIgnoreCase("gameover")) {
+			} 
+			if(args.length==1&&args[0].equalsIgnoreCase("gameover")) {
 				gameover(sender);
-			} else if(args.length!=0&&args[0].equalsIgnoreCase("savestatetime")) {
+			} 
+			if(args.length!=0&&args[0].equalsIgnoreCase("savestatetime")) {
 				savestatetime(args, sender);
-			} else if(args.length!=0&&args[0].equalsIgnoreCase("flintrig")) {
+			} 
+			if(args.length!=0&&args[0].equalsIgnoreCase("flintrig")) {
 				flintRig(sender);
 			}
 			// Other than sender=Player starts here
@@ -353,20 +360,25 @@ public class TastoolsCommandc extends CommandBase{
 			sender.sendMessage(new TextComponentTranslation("command.savestatetime.info")); //Set the time it takes to savestate here. Increase the time when playing on big worlds! Usage: /tastools savestatetime <timeinMillis>
 			return;
 		}else if(args.length==2) {
-			if(Integer.parseInt(args[1])>50000) {
-				sender.sendMessage(new TextComponentTranslation("command.savestatetime.toomuch")); //§cThe number is too high! If your world doesn't save correctly with a time below 50000 please contact the author
-				return;
-			}else if(Integer.parseInt(args[1])<0) {
-				sender.sendMessage(new TextComponentTranslation("command.savestatetime.toolow")); //Please put in positive numbers!
-				return;
-			}else if(Integer.parseInt(args[1])<1000) {
-				sender.sendMessage(new TextComponentTranslation("command.savestatetime.warn")); //Warning! A time lower than 1000 can cause issues with savestating! The suggested value is between 1000 and 5000
+			try {
+				int i= Integer.parseInt(args[1]);
+				if(i>50000) {
+					sender.sendMessage(new TextComponentTranslation("command.savestatetime.toomuch")); //§cThe number is too high! If your world doesn't save correctly with a time below 50000 please contact the author
+					return;
+				}else if(i<0) {
+					sender.sendMessage(new TextComponentTranslation("command.savestatetime.toolow")); //Please put in positive numbers!
+					return;
+				}else if(i<1000) {
+					sender.sendMessage(new TextComponentTranslation("command.savestatetime.warn")); //Warning! A time lower than 1000 can cause issues with savestating! The suggested value is between 1000 and 5000
+				}
+				ClientProxy.config.get("Savestatetime","TimeInMillis", 5000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that")
+				.set(i);
+				SavestateHandlerClient.savetimer=i;
+				ClientProxy.config.save();
+				sender.sendMessage(new TextComponentTranslation("command.savestatetime.success",args[1]));
+			}catch(NumberFormatException e) {
+				sender.sendMessage(new TextComponentTranslation("command.savestatetime.waytoohigh", args[1]));
 			}
-			ClientProxy.config.get("Savestatetime","TimeInMillis", 5000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that")
-			.set(Integer.parseInt(args[1]));
-			SavestateHandlerClient.savetimer=Integer.parseInt(args[1]);
-			ClientProxy.config.save();
-			sender.sendMessage(new TextComponentTranslation("command.savestatetime.success",args[1]));
 		}
 	}
 	private void freezeCB() {

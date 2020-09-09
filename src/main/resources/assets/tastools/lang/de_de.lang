@@ -45,11 +45,12 @@ command.freeze.usage=/freeze
 command.savestate.usage=/savestate <save | load>
 
 #savestatetime
-command.savestatetime.info=§aSetze die Zeit, die es braucht, um einen SIcherungspunkt zu erstellen hier. Erhöhe die Zeit, wenn du in großen Welten spielst! Benutzung: /tastools savestatetime <ZeitinMillisekunden>
+command.savestatetime.info=§aSetze die Zeit, die es braucht, um einen Sicherungspunkt zu erstellen hier. Erhöhe die Zeit, wenn du in großen Welten spielst! Benutzung: /tastools savestatetime <Zeit in Millisekunden>
 command.savestatetime.toomuch=§cDie Nummer ist zu groß! Wenn deine Welt nicht richtig speichert mit einer Zeit über 50000, dann kontaktiere bitte den Autor
 command.savestatetime.toolow=§cBitte positive Nummern eingeben!
-command.savestatetime.warn=§6Warnung! Eine Zeit unter 1000 kann Probleme beim Sicherungspunkt erstellen bringen! Der Wert liegt normalerweise zwischen 1000 und 5000
-command.savestatetime.success=§aDie Zeit wurde erfolgreich auf %s gesetzt
+command.savestatetime.warn=§6Warnung! Eine Zeit unter 1000 kann Probleme beim Sicherungspunkt-Erstellen bringen! Der Wert liegt normalerweise zwischen 1000 und 5000
+command.savestatetime.success=§aDie Zeit wurde erfolgreich auf %s §agesetzt
+command.savestatetime.waytoohigh=§4Diese Nummer ist so groß, die ist nichmal mehr ein Integer! Das ist viel zu groß!
 
 #misc
 msg.misc.info=TASTools Version %s für Minecraft Version %s

@@ -51,6 +51,7 @@ command.savestatetime.toomuch=§cThe number is too high! If your world doesn't s
 command.savestatetime.toolow=§cPlease put in positive numbers!
 command.savestatetime.warn=§6Warning! A time lower than 1000 can cause issues with savestating! The suggested value is between 1000 and 5000
 command.savestatetime.success=§aSuccessfully set the time to %s
+command.savestatetime.waytoohigh=§4Your number is so big, it's not even an integer anymore! This is way to high!
 
 #misc
 msg.misc.info=TASTools version %s for Minecraft version %s

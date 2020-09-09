@@ -7,7 +7,7 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class FlintRig {
-	  public static boolean enable = true;
+	  public static boolean enable = false;
 	  
 	  @SubscribeEvent
 	  public void onGravelBreak(BlockEvent.HarvestDropsEvent ev)
