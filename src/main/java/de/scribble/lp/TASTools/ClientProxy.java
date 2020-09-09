@@ -36,7 +36,7 @@ public class ClientProxy extends CommonProxy{
 		ClientRegistry.registerKeyBinding(FreezeKey);
 		ClientRegistry.registerKeyBinding(SavestateSaveKey);
 		ClientRegistry.registerKeyBinding(SavestateLoadKey);
-		ClientRegistry.registerKeyBinding(TestingKey);
+		//ClientRegistry.registerKeyBinding(TestingKey);
 		
 		config = new Configuration(ev.getSuggestedConfigurationFile());
 		Util.reloadClientconfig(config);
