@@ -51,8 +51,8 @@ public class FreezeEvents {
 			}else { //Due to a strange bug, invulnerability and no gravity will get carried over even tho the server is shut down...
 				if(!playerev.isSpectator()&&!playerev.isCreative()) {
 					playerev.setEntityInvulnerable(false);
-					playerev.setNoGravity(false);
 				}
+				playerev.setNoGravity(false);
 			}
 		/*======================================= Open to LAN =======================================*/
 		}else {

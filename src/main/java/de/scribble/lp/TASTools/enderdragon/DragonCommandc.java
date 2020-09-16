@@ -85,7 +85,7 @@ public class DragonCommandc extends CommandBase{
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
 		if (args.length==1) {
-			return getListOfStringsMatchingLastWord(args, new String[] {"dying","holding_pattern","hover","landing","landing_approach","sitting_attacking","sitting_flaming","sitting_scanning","takeoff","strafe_player","strafe_player_attack"});
+			return getListOfStringsMatchingLastWord(args, new String[] {"dying","holding_pattern","hover","landing","landing_approach","sitting_attacking","sitting_flaming","sitting_scanning","takeoff","strafe_player"});
 		}
 		return super.getTabCompletions(server, sender, args, targetPos);
 	}

@@ -11,6 +11,7 @@ import de.scribble.lp.TASTools.misc.MiscPacket;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
 import de.scribble.lp.TASTools.savestates.SavestateHandlerClient;
+import de.scribble.lp.TASTools.savestates.SavestateHandlerServer;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -150,7 +151,7 @@ public class TastoolsCommandc extends CommandBase{
 				gameover(sender);
 			} 
 			if(args.length!=0&&args[0].equalsIgnoreCase("savestatetime")) {
-				savestatetime(args, sender);
+				savestatetime(args, sender, server);
 			} 
 			if(args.length!=0&&args[0].equalsIgnoreCase("flintrig")) {
 				flintRig(sender);
@@ -355,7 +356,7 @@ public class TastoolsCommandc extends CommandBase{
 		String msg= SavestateEvents.reloadgameoverenabled ? "msg.gameover.enabled":"msg.gameover.disabled"; 
 		sender.sendMessage(new TextComponentTranslation(msg));
 	}
-	private void savestatetime(String[] args, ICommandSender sender) {
+	private void savestatetime(String[] args, ICommandSender sender, MinecraftServer server) {
 		if (args.length==1) {
 			sender.sendMessage(new TextComponentTranslation("command.savestatetime.info")); //Set the time it takes to savestate here. Increase the time when playing on big worlds! Usage: /tastools savestatetime <timeinMillis>
 			return;
@@ -371,11 +372,18 @@ public class TastoolsCommandc extends CommandBase{
 				}else if(i<1000) {
 					sender.sendMessage(new TextComponentTranslation("command.savestatetime.warn")); //Warning! A time lower than 1000 can cause issues with savestating! The suggested value is between 1000 and 5000
 				}
-				ClientProxy.config.get("Savestatetime","TimeInMillis", 5000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that")
-				.set(i);
-				SavestateHandlerClient.savetimer=i;
-				ClientProxy.config.save();
-				sender.sendMessage(new TextComponentTranslation("command.savestatetime.success",args[1]));
+				if (!server.isDedicatedServer()) {
+					ClientProxy.config.get("Savestatetime","TimeInMillis", 5000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that")
+					.set(i);
+					SavestateHandlerClient.savetimer=i;
+					ClientProxy.config.save();
+					sender.sendMessage(new TextComponentTranslation("command.savestatetime.success",args[1]));
+				}else {
+					CommonProxy.serverconfig.get("TimeToSave","TimeInMillis", 5000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that").set(i);
+					SavestateHandlerServer.endtimer=i;
+					CommonProxy.serverconfig.save();
+					sender.sendMessage(new TextComponentTranslation("command.savestatetime.success",args[1]));
+				}
 			}catch(NumberFormatException e) {
 				sender.sendMessage(new TextComponentTranslation("command.savestatetime.waytoohigh", args[1]));
 			}
@@ -411,12 +419,16 @@ public class TastoolsCommandc extends CommandBase{
 			CommonProxy.serverconfig.save();
 		}
 	}
-	private void flintRig(ICommandSender sender) {
+	private void flintRig(ICommandSender sender) throws CommandException {
 		FlintRig.enable = !FlintRig.enable;
-		if (FlintRig.enable) {
-			sender.sendMessage(new TextComponentTranslation("msg.flintrig.enable"));	//§aNow only flintdrops
+		if (sender.canUseCommand(2, "Heck")) {
+			if (FlintRig.enable) {
+				sender.sendMessage(new TextComponentTranslation("msg.flintrig.enable"));	//§aNow only flintdrops
+			} else {
+				sender.sendMessage(new TextComponentTranslation("msg.flintrig.disable"));	//§cBack to normal
+			}
 		} else {
-			sender.sendMessage(new TextComponentTranslation("msg.flintrig.disable"));	//§cBack to normal
+			throw new CommandException("You do not have the permission to use this command!", new Object());
 		}
 	}
 }

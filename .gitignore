@@ -22,7 +22,6 @@ eclipse
 run
 *.bat
 gradlew
-gradle.properties
 forge-1.12-14.21.1.2443-changelog.txt
 CREDITS-fml.txt
 MinecraftForge-Credits.txt
