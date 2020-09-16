@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
@@ -31,7 +32,7 @@ public class RecordingDupe {
 		BlockPos playerPos = new net.minecraft.util.BlockPos(player);
 		
 		output.append("Chest:\n");
-		
+		/*Search for chests around the player*/
 		for(int x=-5; x<=5; x++){				//x
 			for(int y=-5; y<=5; y++){			//y
 				for(int z=-5; z<=5; z++){		//z
@@ -41,18 +42,12 @@ public class RecordingDupe {
 						chestcounter++;
 						//sendMessage(foundchest.getPos().toString().substring(9,foundchest.getPos().toString().length()-1));
 
-						output.append("\t"+foundchest.getPos().toString().substring(9,foundchest.getPos().toString().length()-1)+"\n");
+						output.append("\t"+foundchest.getPos().toString().substring(9,foundchest.getPos().toString().length()-1)+"\n"); //add a chest to the list
 						
 						for(int i=0; i<foundchest.getSizeInventory();i++){
 							ItemStack item = foundchest.getStackInSlot(i);
-							if(item != null){
-								if(item.hasDisplayName()){
-									//sendMessage("Slot;"+i+";"+Item.getIdFromItem(item.getItem())+";("+item.getUnlocalizedName()+");"+item.getCount()+";"+item.getItemDamage()+";"+item.getDisplayName()+";"+item.getEnchantmentTagList()+"\n");
-									output.append("\t\tSlot;"+i+";"+Item.getIdFromItem(item.getItem())+";("+item.getUnlocalizedName()+");"+item.stackSize+";"+item.getItemDamage()+";"+item.getDisplayName()+";"+item.getEnchantmentTagList()+"\n");
-								}else{
-									//sendMessage("Slot;"+i+";"+Item.getIdFromItem(item.getItem())+";("+item.getUnlocalizedName()+");"+item.getCount()+";"+item.getItemDamage()+";null;"+item.getEnchantmentTagList()+"\n");
-									output.append("\t\tSlot;"+i+";"+Item.getIdFromItem(item.getItem())+";("+item.getUnlocalizedName()+");"+item.stackSize+";"+item.getItemDamage()+";null;"+item.getEnchantmentTagList()+"\n");
-								}
+							if (item!=null){
+								output.append("\t\tSlot;"+i+";"+Item.getIdFromItem(item.getItem())+";("+item.getUnlocalizedName()+");"+item.stackSize+";"+item.getItemDamage()+";"+isStackCompound(item.stackTagCompound)+"\n");
 							}
 						}
 						output.append("\t\t-\n");
@@ -72,11 +67,7 @@ public class RecordingDupe {
 		if(!entitylist.isEmpty()){
 			itemcounter=entitylist.size();
 			for(int i=0;i<entitylist.size();i++){
-				if(entitylist.get(i).getEntityItem().hasDisplayName()){
-					output.append("\tItem;"+i+";"+entitylist.get(i).posX+";"+entitylist.get(i).posY+";"+entitylist.get(i).posZ+";"+Item.getIdFromItem(entitylist.get(i).getEntityItem().getItem())+";("+entitylist.get(i).getEntityItem().getUnlocalizedName()+");"+entitylist.get(i).getEntityItem().stackSize+";"+entitylist.get(i).getEntityItem().getItemDamage()+";"+entitylist.get(i).getEntityItem().getDisplayName()+";"+entitylist.get(i).getEntityItem().getEnchantmentTagList()+";"+entitylist.get(i).getAge()+";"+entitylist.get(i).delayBeforeCanPickup+"\n");
-				}else{
-					output.append("\tItem;"+i+";"+entitylist.get(i).posX+";"+entitylist.get(i).posY+";"+entitylist.get(i).posZ+";"+Item.getIdFromItem(entitylist.get(i).getEntityItem().getItem())+";("+entitylist.get(i).getEntityItem().getUnlocalizedName()+");"+entitylist.get(i).getEntityItem().stackSize+";"+entitylist.get(i).getEntityItem().getItemDamage()+";null;"+entitylist.get(i).getEntityItem().getEnchantmentTagList()+";"+entitylist.get(i).getAge()+";"+entitylist.get(i).delayBeforeCanPickup+"\n");
-				}
+				output.append("\tItem;"+i+";"+entitylist.get(i).posX+";"+entitylist.get(i).posY+";"+entitylist.get(i).posZ+";"+Item.getIdFromItem(entitylist.get(i).getEntityItem().getItem())+";("+entitylist.get(i).getEntityItem().getUnlocalizedName()+");"+entitylist.get(i).getEntityItem().stackSize+";"+entitylist.get(i).getEntityItem().getItemDamage()+";"+entitylist.get(i).getAge()+";"+entitylist.get(i).delayBeforeCanPickup+";"+isStackCompound(entitylist.get(i).getEntityItem().stackTagCompound)+"\n");
 			}
 		}
 		output.append("\t-\n");
@@ -100,5 +91,9 @@ public class RecordingDupe {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	private String isStackCompound(NBTTagCompound isNull) {
+		if(isNull==null)return "null";
+		else return isNull.toString();
 	}
 }

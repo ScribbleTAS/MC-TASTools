@@ -10,7 +10,6 @@ import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
 import de.scribble.lp.TASTools.misc.MiscEvents;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
-import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.common.MinecraftForge;
@@ -39,29 +38,10 @@ public class ClientProxy extends CommonProxy{
 		ClientRegistry.registerKeyBinding(SavestateLoadKey);
 		ClientRegistry.registerKeyBinding(DragonKey);
 		config = new Configuration(ev.getSuggestedConfigurationFile());
-		config.load();
-		GuiKeystrokes.guienabled=config.get("Keystrokes","Enabled", true, "Activates the keystrokes on startup").getBoolean();
-		String position=config.get("Keystrokes","CornerPos", "downLeft", "Sets the Keystroke to that specific corner. Options: downLeft,downRight,upRight,upLeft").getString();
-		DupeEvents.dupingenabled=config.get("Duping","Enabled", true, "Activates the duping on startup").getBoolean();
-		VelocityEvents.velocityenabledClient=config.get("Velocity", "Enabled", true, "Activates velocity saving on startup").getBoolean();
-		ModLoader.freezeenabledSP=config.get("Freeze","Enabled", false, "Freezes the game when joining singleplayer").getBoolean();
-		SavestateEvents.savestatepauseenabled=config.get("Savestate", "CustomGui", true, "Enables 'Make a Savestate' Button in the pause menu. Disable this if you use other mods that changes the pause menu").getBoolean();
-		GuiOverlayLogo.potionenabled=config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").getBoolean();
-		Util.enableSavestateScreenshotting=config.get("Screenshot", "Enabled", false, "Take a screenshot before the savestate so you know where you left off. Does not work on servers.").getBoolean();
-		config.save();
+		Util.reloadClientconfig(config);
 		
-		if (position.equals("downLeft")) {
-			GuiKeystrokes.changeCorner(0);
-		}
-		else if (position.equals("downRight")) {
-			GuiKeystrokes.changeCorner(1);
-		}
-		else if (position.equals("upRight")) {
-			GuiKeystrokes.changeCorner(2);
-		}
-		else if (position.equals("upLeft")) {
-			GuiKeystrokes.changeCorner(3);
-		}
+		
+		
 		new File (Minecraft.getMinecraft().mcDataDir,"saves"+File.separator+"savestates").mkdir();
 		super.preInit(ev);
 	}
@@ -90,5 +70,4 @@ public class ClientProxy extends CommonProxy{
 	public void postInit(FMLPostInitializationEvent ev) {
 		super.postInit(ev);
 	}
-
 }

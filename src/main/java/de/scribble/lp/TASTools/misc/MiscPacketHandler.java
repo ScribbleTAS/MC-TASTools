@@ -22,7 +22,7 @@ public class MiscPacketHandler implements IMessageHandler<MiscPacket, IMessage>{
 			@Override
 			public void run() {
 				if(message.getMode()==0) {
-					new Util().reloadClientconfig();
+					new Util().reloadClientconfig(ClientProxy.config);
 					Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentTranslation("msg.misc.reload")); //Config reloaded!
 				}else if(message.getMode()==1) {
 					EntityPlayerSP sender=Minecraft.getMinecraft().thePlayer;

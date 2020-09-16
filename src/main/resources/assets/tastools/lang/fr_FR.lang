@@ -1,0 +1,61 @@
+﻿
+#fr_FR
+#Translated by LudeGames
+
+#Keystrokes
+msg.keystrokes.disabled=§cFrappes désactivées
+msg.keystrokes.enabled=§aFrappes activées
+msg.keystrokes.tasmoderr=§cLes Frappes sont désactivées a cause des frappes de TASmod. Référez-vous s'il vous plaît à "/tasmod gui" pour changer les touches.
+msg.keystroke.multiplayerchange=Changé les Options-Touches pour %s
+
+#Duping
+msg.duping.disabled=§cDuplication désactivée
+msg.duping.enabled=§aDuplication activée
+msg.duping.dupemoderr=§cDupeMod est activée, alors cette commande est désactivée
+
+#Freeze
+msg.freezeClient.disabled=§cFreezing désactivé quand on rejoint le monde
+msg.freezeClient.enabled=§aFreezing activé quand on rejoint le monde
+msg.freezeServer.disabled=§cFreezing désactivé quand on rejoint le serveur
+msg.freezeServer.enabled=§aFreezing activé quand on rejoint le serveur
+#velocity
+msg.velocityClient.disabled=§cVelocité desactivé quand on rejoint le monde
+msg.velocityClient.enabled=§aVelocité activé quand on rejoint le monde
+msg.velocityServer.disabled=§cVelocité desactivé quand on rejoint le serveur
+msg.velocityServer.enabled=§aVelocité activé quand on rejoint le serveur
+
+#gui
+gui.savestate.ingamemenu=Faire une sauvegarde
+gui.savestate.savingscreen.msg=Sauvegarde en fabriquation, attendez!
+gui.savestate.savingscreen.credit=Idée et codage de MightyPork et de bspkrs' WorldStateCheckpoints!
+gui.savestate.loadingscreen.msg=Charger une sauvegarde
+msg.pausegui.enabled=§aPause-Gui activé
+msg.pausegui.disabled=§cPause-Gui desactivé
+msg.gameover.enabled=§aGameOver-Gui activée
+msg.gameover.disabled=§cGameOver-Gui désactivée
+
+#flintrig
+msg.flintrig.enable=§aLe gravier devient du silex
+msg.flintrig.disable=§cLe gravier devient... Du gravier
+
+#usage (Do not translate this section)
+command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | gui | pausemenu | gameover | savestatetime | flintrig>
+command.dupe.usage=/dupe
+command.dragon.usage=/dragon <phase>
+command.freeze.usage=/freeze
+command.savestate.usage=/savestate <save | load>
+
+#savestatetime
+command.savestatetime.info=§aDéfinissez ici le temps nécessaire pour enregistrer le monde. Augmentez le temps lorsque vous jouez sur de grands mondes! Usage: /tastools savestatetime <temps en millisecondes>
+command.savestatetime.toomuch=§cLe nombre est trop haut! Si le monde s'enregistre pas avec moins de 5000 contactez le créateur de ce mod. (Scribble)
+command.savestatetime.toolow=§cLe nombre doit être dessus de 0. Pourquoi avez vous fait cela?
+command.savestatetime.warn=§6Avertissement! Un nombre en dessous de 1000 peut causer des problème a l'enregistrement! Mon recommendation est de le mettre entre 1000 et 5000
+command.savestatetime.success=§aLe temps est maintenant à %s
+command.savestatetime.waytoohigh=§4Votre nombre est trop grand! C'est vraiment trop grand!
+
+#misc
+msg.misc.info=Version TASTools %s pour version Minecraft %s
+msg.gui.disabled=§cLogo désactivé en HUD
+msg.gui.enabled=§aLogo activé en HUD
+msg.gui.multiplayerchange=Logo-Options ont changé pour %s
+msg.misc.reload=Configuration chargé!

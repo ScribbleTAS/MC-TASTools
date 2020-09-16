@@ -22,7 +22,7 @@ public class SavestateCommandc extends CommandBase{
 
 	@Override
 	public String getCommandUsage(ICommandSender sender) {
-		return "/savestate <save|load>";
+		return "command.savestate.usage";
 	}
 
 	@Override

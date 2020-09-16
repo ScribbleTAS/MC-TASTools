@@ -13,6 +13,7 @@ import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -181,6 +182,12 @@ public class FreezeEvents {
 		}
 		if(!player.capabilities.isCreativeMode||!player.isSpectator()) {
 			player.capabilities.disableDamage=false;
+		}
+	}
+	@SubscribeEvent
+	public void onPlayerCreated(NameFormat ev) {
+		if(!ev.username.equals("TASbot")) {
+			ev.displayname="[TAS]"+" "+ev.displayname;
 		}
 	}
 }

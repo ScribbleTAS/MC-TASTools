@@ -2,11 +2,13 @@ package de.scribble.lp.TASTools;
 
 import java.io.File;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.scribble.lp.TASTools.duping.DupePacket;
 import de.scribble.lp.TASTools.duping.DupePacketHandler;
 import de.scribble.lp.TASTools.enderdragon.DragonEvents;
+import de.scribble.lp.TASTools.flintrig.FlintRig;
 import de.scribble.lp.TASTools.freeze.FreezeEvents;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
@@ -14,6 +16,7 @@ import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
 import de.scribble.lp.TASTools.keystroke.KeystrokesPacketHandler;
 import de.scribble.lp.TASTools.misc.MiscPacket;
 import de.scribble.lp.TASTools.misc.MiscPacketHandler;
+import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestatePacket;
 import de.scribble.lp.TASTools.savestates.SavestatePacketHandler;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
@@ -29,16 +32,13 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class CommonProxy {
 
-	public static Logger logger;
+	public static Logger logger=LogManager.getLogger("TASTools");
 	public static Configuration serverconfig;
 	public static boolean enableServerDuping;
 	private static boolean istasmodloaded;
 	private static boolean isdupemodloaded;
 
-
-	
 	public void preInit(FMLPreInitializationEvent ev) {
-		logger=ev.getModLog();
 		logger.info("TAStools initialized");
 		istasmodloaded=Loader.isModLoaded("tasmod");
 		isdupemodloaded=Loader.isModLoaded("dupemod");
@@ -57,11 +57,8 @@ public class CommonProxy {
 		if(ev.getSide()==Side.SERVER) {
 			//Make a Serverconfig
 			serverconfig=new Configuration(new File(ev.getModConfigurationDirectory().getPath()+File.separator+"tastoolsSERVER.cfg"));
-			serverconfig.load();
-			ModLoader.freezeenabledMP=serverconfig.get("Freeze","Enabled", false, "Freezes the game when starting the Server").getBoolean();
-			VelocityEvents.velocityenabledServer=serverconfig.get("Velocity","Enabled",true,"Saves and applies Velocity when joining/leaving the server").getBoolean();
-			ModLoader.stopit=serverconfig.get("Savestate","LoadSavestate", false, "This is used for loading a Savestate. When entering /savestate load, this will be set to true, and the server will delete the current world and copy the latest savestate when starting.").getBoolean();
-			serverconfig.save();
+			Util.reloadServerconfig(serverconfig);
+			
 			//Generate a folder for the savestates
 			new File(FMLCommonHandler.instance().getSavesDirectory().getPath()+File.separator+"savestates").mkdir();
 		}
@@ -71,6 +68,7 @@ public class CommonProxy {
 	public void init(FMLInitializationEvent ev) {
 		MinecraftForge.EVENT_BUS.register(new FreezeEvents());
 		MinecraftForge.EVENT_BUS.register(new DragonEvents());
+		MinecraftForge.EVENT_BUS.register(new FlintRig());
 	}
 	
 	public void postInit(FMLPostInitializationEvent ev) {

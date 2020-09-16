@@ -8,12 +8,14 @@ import java.util.List;
 
 import de.scribble.lp.TASTools.CommonProxy;
 import net.minecraft.client.Minecraft;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTException;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
@@ -86,17 +88,28 @@ public class RefillingDupe {
 										ItemStack properties= new ItemStack(Item.getItemById(Integer.parseInt(items[2])),
 																								Integer.parseInt(items[4]),
 																								Integer.parseInt(items[5]));
-										
-										/*Split items[7] into enchantmentID and enchantmentLvl*/
+										/*
 										if(!items[7].equals("[]")){
 											enchantments=items[7].split("(\\[\\{lvl:)|(s,id:)|(s\\},\\{lvl:)|(s\\})");
 											for(int index=1;index<=(enchantments.length-2)/2;index++){
-												properties.addEnchantment(Enchantment.getEnchantmentById(Integer.parseInt(enchantments[2*index])), Integer.parseInt(enchantments[2*index-1]));
+												properties.addEnchantment(Enchantment.getEnchantmentByID(Integer.parseInt(enchantments[2*index])), Integer.parseInt(enchantments[2*index-1]));
 											}
 										}
-										/*Add the custom name if available*/
 										if(!items[6].equals("null")){
 											properties.setStackDisplayName(items[6]);
+										}*/
+										
+										/*Adding NBT to the item*/
+										if(!items[6].equalsIgnoreCase("null")) {
+											NBTTagCompound newnbttag= new NBTTagCompound();
+											try {
+												newnbttag = JsonToNBT.getTagFromJson(items[6]);
+											} catch (NBTException e) {
+												CommonProxy.logger.error("Something happened while trying to convert String to NBT ._.");
+												CommonProxy.logger.catching(e);
+												file.delete();
+											}
+											properties.stackTagCompound=newnbttag;
 										}
 										foundchest.setInventorySlotContents(Integer.parseInt(items[1]), properties);	//Set the item into the slot
 										chestitemcounter++; //for logging
@@ -137,25 +150,45 @@ public class RefillingDupe {
 							ItemStack Overflow= new ItemStack(Item.getItemById(Integer.parseInt(props[5])), //Create the ItemStack
 									Integer.parseInt(props[7]),
 									Integer.parseInt(props[8]));
-							
+							/*
 							if(!props[10].equals("[]")){	//add Enchantments
 								enchantments=props[10].split("(\\[\\{lvl:)|(s,id:)|(s\\},\\{lvl:)|(s\\})");
 								for(int index=1;index<=(enchantments.length-2)/2;index++){
-									Overflow.addEnchantment(Enchantment.getEnchantmentById(Integer.parseInt(enchantments[2*index])), Integer.parseInt(enchantments[2*index-1]));
+									Overflow.addEnchantment(Enchantment.getEnchantmentByID(Integer.parseInt(enchantments[2*index])), Integer.parseInt(enchantments[2*index-1]));
 								}
 							}
 							if(!props[9].equals("null")){ //set customName
 								Overflow.setStackDisplayName(props[9]);
+							}*/
+							//Adding NBT to the item
+							NBTTagCompound newnbttag= new NBTTagCompound();
+							if(!props[11].equalsIgnoreCase("null")) {
+								try {
+									newnbttag = JsonToNBT.getTagFromJson(props[11]);
+								} catch (NBTException e) {
+									CommonProxy.logger.error("Something happened while trying to convert String to NBT");
+									CommonProxy.logger.catching(e);
+									file.delete();
+								}
+								Overflow.stackTagCompound=newnbttag;
 							}
-							//Create the EntityItem from the Itemstack Overflow
+							
+							
 							EntityItem newitem=new EntityItem(world, Double.parseDouble(props[2]), Double.parseDouble(props[3]), Double.parseDouble(props[4]), Overflow);
 							world.spawnEntityInWorld(newitem);
 							
 							//Apply the age
-							newitem.age=Integer.parseInt(props[11]);
+							try {
+							newitem.age=Integer.parseInt(props[9]);
+							}catch (NumberFormatException e) {
+								CommonProxy.logger.fatal("Input String in latest_dupe.txt is not a number. To fix this restart the game!");
+								CommonProxy.logger.catching(e);
+								file.delete();
+							}
 							
 							//Apply the pickupdelay
-							newitem.delayBeforeCanPickup=Integer.parseInt(props[12]);
+							newitem.delayBeforeCanPickup=Integer.parseInt(props[10]);
+							
 							
 							newitem.motionX=0;	//set the motion to zero so it doesn't fly around
 							newitem.motionY=0;
@@ -172,7 +205,8 @@ public class RefillingDupe {
 				CommonProxy.logger.info("Refilled "+chestcounter+" chest(s) with "+chestitemcounter+" item(s) and spawned "+ itemcounter+ " item(s) on the ground.");
 			}
 		}catch (IOException e) {
-			e.printStackTrace();
+			CommonProxy.logger.fatal("Something went wrong while getting a buffer");
+			CommonProxy.logger.catching(e);
 		}
 	}
 }

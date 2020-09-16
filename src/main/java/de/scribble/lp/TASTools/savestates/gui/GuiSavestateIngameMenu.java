@@ -16,7 +16,7 @@ import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.realms.RealmsBridge;
-
+@Deprecated
 public class GuiSavestateIngameMenu extends GuiScreen{
     private int field_146445_a;
     private int field_146444_f;
