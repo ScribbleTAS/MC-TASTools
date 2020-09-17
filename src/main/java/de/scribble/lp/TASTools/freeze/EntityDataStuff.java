@@ -23,6 +23,7 @@ public class EntityDataStuff {
 		this.motionY=motionY;
 		this.motionZ=motionZ;
 		this.falldistance=falldistance;
+		
 	}
 	public String getPlayername() {
 		return playername;

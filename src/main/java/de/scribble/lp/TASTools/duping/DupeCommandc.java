@@ -8,7 +8,6 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 public class DupeCommandc extends CommandBase{
@@ -35,13 +34,11 @@ public class DupeCommandc extends CommandBase{
 				if(args.length==0){
 					File file= new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator +Minecraft.getMinecraft().getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
 					if (file.exists()) {
-						new DupeEvents().startStopping((EntityPlayer)sender);
+						new DupeEvents().startStopping((EntityPlayer) sender);
 						new RefillingDupe().refill(file, (EntityPlayer)sender);
 					}
 				}
 			}
-		} else {
-			sender.addChatMessage(new TextComponentString("Duping is not available on a server"));
 		}
 	}
 }
