@@ -11,6 +11,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.dragon.phase.PhaseList;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -78,14 +79,20 @@ public class DragonCommandc extends CommandBase{
 				for (int i = 0; i < dragons.size(); i++) {
 					dragons.get(i).getPhaseManager().setPhase(PhaseList.TAKEOFF);
 				}
+			} else if (args.length == 1 && args[0].equalsIgnoreCase("strafe_player")) {
+				for (int i = 0; i < dragons.size(); i++) {
+					dragons.get(i).getPhaseManager().getPhase(PhaseList.STRAFE_PLAYER).setTarget((EntityPlayer)sender);
+					dragons.get(i).getPhaseManager().setPhase(PhaseList.STRAFE_PLAYER);
+				}
 			}
+			
 		}
 	}
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
 		if (args.length==1) {
-			return getListOfStringsMatchingLastWord(args, new String[] {"dying","holding_pattern","hover","landing","landing_approach","sitting_attacking","sitting_flaming","sitting_scanning","takeoff"});
+			return getListOfStringsMatchingLastWord(args, new String[] {"dying","holding_pattern","hover","landing","landing_approach","sitting_attacking","sitting_flaming","sitting_scanning","takeoff","strafe_player"});
 		}
 		return super.getTabCompletions(server, sender, args, targetPos);
 	}

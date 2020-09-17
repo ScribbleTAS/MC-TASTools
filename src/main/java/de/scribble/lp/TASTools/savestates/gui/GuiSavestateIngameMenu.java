@@ -17,12 +17,8 @@ import net.minecraft.client.gui.achievement.GuiStats;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.realms.RealmsBridge;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-@SideOnly(Side.CLIENT)
-public class GuiSavestateIngameMenu extends GuiScreen
-{
+@Deprecated
+public class GuiSavestateIngameMenu extends GuiScreen{
     private int saveStep;
     private int visibleTime;
 

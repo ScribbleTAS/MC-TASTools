@@ -18,7 +18,7 @@ public class MiscPacketHandler implements IMessageHandler<MiscPacket, IMessage>{
 	@Override
 	public IMessage onMessage(MiscPacket message, MessageContext ctx) {
 		if(message.getMode()==0) {
-			new Util().reloadClientconfig();
+			Util.reloadClientconfig(ClientProxy.config);
 		}else if(message.getMode()==1) {
 			EntityPlayerSP sender=Minecraft.getMinecraft().player;
 			if(GuiOverlayLogo.potionenabled) {

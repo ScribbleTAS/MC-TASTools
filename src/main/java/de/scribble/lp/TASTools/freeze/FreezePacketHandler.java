@@ -18,10 +18,12 @@ public class FreezePacketHandler implements IMessageHandler<FreezePacket, IMessa
 					if (msg.getMode() == 0) {
 						if (msg.startstop()) {
 							FreezeHandler.startFreezeServer();
+							ModLoader.NETWORK.sendToAll(new FreezePacket(true));
 						}
 
 						else if (!msg.startstop()) {
 							FreezeHandler.stopFreezeServer();
+							ModLoader.NETWORK.sendToAll(new FreezePacket(false));
 						}
 					}
 					else if(msg.getMode()==1) {
