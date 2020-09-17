@@ -119,6 +119,7 @@ class ApplyFreezeServer extends FreezeHandler{
 	public void onServerTick(TickEvent.ServerTickEvent ev) {
 		if (playerMP.size() > 0) {
 			for (int i = 0; i < playerMP.size(); i++) {
+
 					if (playerMP.get(i).getName().equals(entity.get(i).getPlayername())) {
 						playerMP.get(i).setPositionAndUpdate(entity.get(i).getPosX(), entity.get(i).getPosY(),
 								entity.get(i).getPosZ());

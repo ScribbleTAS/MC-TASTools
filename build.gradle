@@ -11,7 +11,7 @@ buildscript {
     }
 }
 plugins {
-    id 'com.github.johnrengelman.shadow' version '1.2.4'
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
     id 'java'
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -20,7 +20,7 @@ apply plugin: 'org.spongepowered.mixin'
 
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-version = "1.4"
+version = "1.5"
 group = "de.scribble.lp.tastools" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "TASTools-1.10.2"
 
@@ -54,7 +54,7 @@ dependencies {
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
     //compile "some.group:artifact:version"
-      compile('org.spongepowered:mixin:0.7.10-SNAPSHOT') {
+     compile('org.spongepowered:mixin:0.7.10-SNAPSHOT') {
         exclude module: 'launchwrapper'
         exclude module: 'guava'
         exclude module: 'gson'
@@ -101,7 +101,6 @@ processResources {
         // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'

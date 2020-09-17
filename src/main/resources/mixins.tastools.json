@@ -7,6 +7,10 @@
     "mixins": [
     ],
     "client": [
-	   "MixinAbstractClientPlayer"
+       "MixinGuiScreen",
+	   "MixinGuiWinGame",
+	   "MixinGuiIngameMenu",
+	   "MixinGuiGameOver",
+	   "MixinRenderItem"
     ]
-} 
+}

@@ -5,7 +5,6 @@ import java.io.File;
 import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
-import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,26 +17,25 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 public class DupeEvents {
 	private Minecraft mc= Minecraft.getMinecraft();
-	protected static EntityPlayer playa;
 	public static boolean dupingenabled;
+	protected static EntityPlayer playa;
 	
 	@SubscribeEvent
 	public void onCloseServer(PlayerEvent.PlayerLoggedOutEvent ev){
-		if(dupingenabled&&!mc.getIntegratedServer().getPublic()) {
-			CommonProxy.logger.info("Start saving...");
-			new RecordingDupe().saveFile(ev.player);
+		if(mc.currentScreen instanceof GuiIngameMenu){
+			if(dupingenabled&&!mc.getIntegratedServer().getPublic()) {
+				recordDupe(ev.player);
+			}
 		}
 	}
 	
 	@SubscribeEvent
 	public void onOpenServer(PlayerEvent.PlayerLoggedInEvent ev){
-		if(mc.currentScreen instanceof GuiIngameMenu||mc.currentScreen instanceof GuiSavestateIngameMenu){
-			if (dupingenabled&&!mc.getIntegratedServer().getPublic()) {
-				File file= new File(mc.mcDataDir, "saves" + File.separator +mc.getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
-				if (file.exists()){
-					CommonProxy.logger.info("Start refilling...");
-					new RefillingDupe().refill(file, ev.player);
-				}
+		if (dupingenabled&&!mc.getIntegratedServer().getPublic()) {
+			File file= new File(mc.mcDataDir, "saves" + File.separator +mc.getIntegratedServer().getFolderName()+File.separator+"latest_dupe.txt");
+			if (file.exists()){
+				CommonProxy.logger.debug("Start refilling dupe (DupeEvents)");
+				new RefillingDupe().refill(file, ev.player);
 			}
 		}
 	}
@@ -59,6 +57,12 @@ public class DupeEvents {
 		Minecraft.getMinecraft().thePlayer.velocityChanged=true;
 		playa.setEntityInvulnerable(true);
 		MinecraftForge.EVENT_BUS.register(stopit);
+	}
+	public void recordDupe(EntityPlayer player) {
+		if(dupingenabled&&!mc.getIntegratedServer().getPublic()) {
+			CommonProxy.logger.info("Start saving dupe(DupeEvents)");
+			new RecordingDupe().saveFile(player);
+		}
 	}
 }
 class StopMoving extends DupeEvents{

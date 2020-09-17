@@ -57,9 +57,7 @@ public class SavestateCommandc extends CommandBase{
 	public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
 		if(args.length==1) {
-			if(!server.isDedicatedServer()) {
-				return getListOfStringsMatchingLastWord(args, new String[] {"save","load"});
-			}else return getListOfStringsMatchingLastWord(args, new String[] {"save"});
+			return getListOfStringsMatchingLastWord(args, new String[] {"save","load"});
 		}else {
 			return super.getTabCompletionOptions(server, sender, args, targetPos);
 		}

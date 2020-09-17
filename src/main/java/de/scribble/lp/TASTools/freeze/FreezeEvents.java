@@ -13,6 +13,7 @@ import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -50,8 +51,8 @@ public class FreezeEvents {
 			}else { //Due to a strange bug, invulnerability and no gravity will get carried over even tho the server is shut down...
 				if(!playerev.isSpectator()&&!playerev.isCreative()) {
 					playerev.setEntityInvulnerable(false);
-					playerev.setNoGravity(false);
 				}
+				playerev.setNoGravity(false);
 			}
 		/*======================================= Open to LAN =======================================*/
 		}else {
@@ -132,6 +133,7 @@ public class FreezeEvents {
 	public void pressKeybinding(InputEvent.KeyInputEvent ev) {
 		if (ClientProxy.FreezeKey.isPressed() && Minecraft.getMinecraft().thePlayer.canCommandSenderUseCommand(2, "freeze")) {
 			ModLoader.NETWORK.sendToServer(new FreezePacket(true,1));
+
 		}
 	}
 	@SideOnly(Side.CLIENT)
@@ -177,5 +179,12 @@ public class FreezeEvents {
 		}
 		player.setEntityInvulnerable(false);
 		player.setNoGravity(false);
+	}
+	
+	@SubscribeEvent
+	public void onPlayerCreated(NameFormat ev) {
+		if(!ev.getUsername().equals("TASbot")) {
+			ev.setDisplayname("[TAS]"+" "+ev.getDisplayname());
+		}
 	}
 }

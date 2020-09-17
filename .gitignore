@@ -22,6 +22,5 @@ eclipse
 run
 *.bat
 gradlew
-gradle.properties
 *.txt
 
