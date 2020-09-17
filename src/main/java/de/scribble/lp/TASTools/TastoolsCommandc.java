@@ -192,7 +192,7 @@ public class TastoolsCommandc extends CommandBase{
 		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		ServerConfigurationManager playerlist=server.getConfigurationManager();
 		if (args.length==1) {
-			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","gui","reload","folder","pausemenu"});
+			return getListOfStringsMatchingLastWord(args, new String[] {"keystrokes","duping","freeze","velocity","gui","reload","folder","pausemenu","gameover","savestatetime", "flintrig"});
 		}
 		else if (args.length==2&&args[0].equalsIgnoreCase("keystrokes")&&!CommonProxy.isTASModLoaded()) {
 			List<String> tabs =getListOfStringsMatchingLastWord(args, new String[] {"downLeft","downRight","upRight","upLeft"});
