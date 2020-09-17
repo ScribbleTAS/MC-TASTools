@@ -9,6 +9,7 @@ import de.scribble.lp.TASTools.duping.DupePacket;
 import de.scribble.lp.TASTools.duping.DupePacketHandler;
 import de.scribble.lp.TASTools.enderdragon.DragonEvents;
 import de.scribble.lp.TASTools.fishmanip.FishManipEvents;
+import de.scribble.lp.TASTools.flintrig.FlintRig;
 import de.scribble.lp.TASTools.freeze.FreezeEvents;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
@@ -69,6 +70,7 @@ public class CommonProxy {
 		MinecraftForge.EVENT_BUS.register(new FreezeEvents());
 		MinecraftForge.EVENT_BUS.register(new DragonEvents());
 		MinecraftForge.EVENT_BUS.register(new FishManipEvents());
+		MinecraftForge.EVENT_BUS.register(new FlintRig());
 	}
 	
 	public void postInit(FMLPostInitializationEvent ev) {

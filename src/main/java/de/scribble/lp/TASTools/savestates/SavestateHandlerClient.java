@@ -23,7 +23,6 @@ import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.misc.MiscEvents;
 import de.scribble.lp.TASTools.misc.Util;
-import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateSavingScreen;
 import de.scribble.lp.TASTools.velocity.SavingVelocity;
@@ -43,7 +42,8 @@ public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
 	public static boolean isSaving=false;
 	public static boolean isLoading=false;
-	public static int endtimer;
+	public static int savetimer;
+	public static int loadtimer=2;
 	
 	private File currentworldfolder;
 	private File targetsavefolder=null;
@@ -187,10 +187,12 @@ public class SavestateHandlerClient {
 				}
 				this.mc.ingameGUI.getChatGUI().clearChatMessages(true);
 				FMLCommonHandler.instance().firePlayerLoggedOut(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers().get(0));
-	            this.mc.loadWorld((WorldClient)null);
+				this.mc.world.sendQuittingDisconnectingPacket();
+				this.mc.loadWorld((WorldClient)null);
 	            
 	            
 	            SavestateLoadEventsClient Loader=new SavestateLoadEventsClient();
+	            Loader.setName("Savestate Loader");
 	            Loader.start();
 	            try {
 					Loader.join();
@@ -363,18 +365,14 @@ public class SavestateHandlerClient {
     }
 
 	public void displayIngameMenu() {
-		if (!SavestateEvents.savestatepauseenabled) {
-			mc.displayGuiScreen(new GuiIngameMenu());
-		} else {
-			mc.displayGuiScreen(new GuiSavestateIngameMenu());
-		}
+		mc.displayGuiScreen(new GuiIngameMenu());
 	}
 
 	private class SavestateSaveEventsClient extends Thread {
 		@Override
 		public void run() {
 			try {
-				currentThread().sleep(endtimer);
+				currentThread().sleep(savetimer);
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
@@ -400,7 +398,7 @@ public class SavestateHandlerClient {
 		public void run() {
 			while (mc.isIntegratedServerRunning()) {
 				try {
-					currentThread().sleep(2);
+					Thread.sleep(loadtimer);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					isLoading = false;

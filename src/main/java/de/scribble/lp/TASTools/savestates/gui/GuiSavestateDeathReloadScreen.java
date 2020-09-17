@@ -18,7 +18,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
-
+@Deprecated
 public class GuiSavestateDeathReloadScreen extends GuiScreen{
     /** The integer value containing the number of ticks that have passed since the player's death */
     private int enableButtonsTimer;

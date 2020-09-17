@@ -34,8 +34,12 @@ msg.pausegui.disabled=§cPause-Gui disabled
 msg.gameover.enabled=§aGameOver-Gui enabled
 msg.gameover.disabled=§cGameOver-Gui disabled
 
+#flintrig
+msg.flintrig.enable=§aNow only flintdrops
+msg.flintrig.disable=§cBack to normal
+
 #usage (Do not translate this section)
-command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | gui | pausemenu>
+command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | gui | pausemenu | gameover | savestatetime | flintrig>
 command.dupe.usage=/dupe
 command.dragon.usage=/dragon <phase>
 command.freeze.usage=/freeze
@@ -47,6 +51,7 @@ command.savestatetime.toomuch=§cThe number is too high! If your world doesn't s
 command.savestatetime.toolow=§cPlease put in positive numbers!
 command.savestatetime.warn=§6Warning! A time lower than 1000 can cause issues with savestating! The suggested value is between 1000 and 5000
 command.savestatetime.success=§aSuccessfully set the time to %s
+command.savestatetime.waytoohigh=§4Your number is so big, it's not even an integer anymore! This is way to high!
 
 #misc
 msg.misc.info=TASTools version %s for Minecraft version %s

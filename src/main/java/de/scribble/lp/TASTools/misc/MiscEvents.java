@@ -14,11 +14,12 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 public class MiscEvents {
 	public static boolean ignorerespawntimerClient=false;
 	public static boolean ignorerespawntimerServer=false;
+	
 	@SubscribeEvent
 	public void onMainMenu(GuiOpenEvent ev) {
 		if(ev.getGui() instanceof GuiMainMenu) {
 			((GuiMainMenu) ev.getGui()).minceraftRoll=0;
-			((GuiMainMenu) ev.getGui()).splashText="Well, someone is using TASTools!";
+			((GuiMainMenu) ev.getGui()).splashText="TaS iS cHeAtInG !!1";
 		}
 	}
 	@SubscribeEvent

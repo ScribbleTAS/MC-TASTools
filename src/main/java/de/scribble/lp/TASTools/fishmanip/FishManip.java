@@ -399,7 +399,6 @@ public class FishManip {
 			try {
 				toEnchant.stackTagCompound=JsonToNBT.getTagFromJson("{StoredEnchantments:["+tag+"]}");
 			} catch (NBTException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

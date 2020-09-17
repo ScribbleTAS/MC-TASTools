@@ -43,8 +43,6 @@ public abstract class MixinGuiWinGame extends GuiScreen{
 	@Shadow
 	private static ResourceLocation MINECRAFT_LOGO;
 	@Shadow
-	private static ResourceLocation field_194401_g;
-	@Shadow
 	private static ResourceLocation VIGNETTE_TEXTURE;
 	@Shadow
 	private static Logger LOGGER;
@@ -145,8 +143,6 @@ public abstract class MixinGuiWinGame extends GuiScreen{
         this.drawTexturedModalRect(j + 99 + 26 + 3, k, 99, 0, 26, 44);
         this.drawTexturedModalRect(j + 155, k, 0, 45, 155, 44);
         
-        this.mc.getTextureManager().bindTexture(field_194401_g);
-        drawModalRectWithCustomSizedTexture(j + 88, k + 37, 0.0F, 0.0F, 98, 14, 128.0F, 16.0F);
         GlStateManager.disableAlpha();
         int l = k + 100;
 

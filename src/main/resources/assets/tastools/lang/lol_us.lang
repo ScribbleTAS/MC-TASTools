@@ -33,9 +33,12 @@ msg.pausegui.enabled=§aStahp-Gui enabled
 msg.pausegui.disabled=§cStahp-Gui dizabled
 msg.gameover.enabled=§aSadKitteh-Gui enabled
 msg.gameover.disabled=§cSadKitteh-Gui dizabled
+#flintrig
+msg.flintrig.enable=§aNao oanly sharpy rocks
+msg.flintrig.disable=§cNao 10 percent tschance of sharpy rocks
 
 #usage (Do not translate this section)
-command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | gui | pausemenu>
+command.tastools.usage=/tastools <keystrokes | freeze | duping | velocity | reload | gui | pausemenu | gameover | savestatetime | flintrig>
 command.dupe.usage=/dupe
 command.dragon.usage=/dragon <phase>
 command.freeze.usage=/freeze
@@ -47,6 +50,7 @@ command.savestatetime.toomuch=§cNumber iz too powerful! If dis still breaks wur
 command.savestatetime.toolow=§cPlis don't go not not negative!
 command.savestatetime.warn=§6W A R N I N G! A tiem lowa then 1000 is not big PP cus' stuff breaks with Déjà-vu-points! Maybe feed da cat and do 1000 to 5000
 command.savestatetime.success=§aSet the tiem to %s
+command.savestatetime.waytoohigh=§4Ur number iz over 2.147.483.647 & not even an integer anymoar. Slow ur buttonmashin down!
 
 #misc
 msg.misc.info=TASBot overlurd verzion %s for Minceraft verzion %s initialized... beep boop...

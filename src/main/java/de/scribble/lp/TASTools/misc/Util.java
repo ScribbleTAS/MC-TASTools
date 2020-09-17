@@ -112,7 +112,9 @@ public class Util {
 			.set(5000);
 			savestatetime=5000;
 		}
-		SavestateHandlerClient.endtimer=savestatetime;
+		SavestateHandlerClient.savetimer=savestatetime;
+		
+//		SavestateHandlerClient.loadtimer=config.get("Loadstatetime", "TimeInMillis", 50, "Set the delay for loading a savestate. One more thing to change when testing compatibility").getInt();
 		
 		Util.disableAdvancementMessages=config.get("Messages", "AdvancementMessages Enabled", false, "Disable Advancement messages in the top right").getBoolean();
 		Util.disableRecipeMessages=config.get("Messages", "RecipeMessages Enabled", true, "Disable Recipe messages in the top right").getBoolean();

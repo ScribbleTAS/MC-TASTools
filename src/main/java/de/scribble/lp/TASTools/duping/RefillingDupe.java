@@ -100,16 +100,17 @@ public class RefillingDupe {
 										}*/
 										
 										/*Adding NBT to the item*/
-										NBTTagCompound newnbttag= new NBTTagCompound();
-										try {
-											newnbttag = JsonToNBT.getTagFromJson(items[6]);
-										} catch (NBTException e) {
-											CommonProxy.logger.error("Something happened while trying to convert String to NBT ._.");
-											CommonProxy.logger.catching(e);
-											file.delete();
+										if(!items[6].equalsIgnoreCase("null")) {
+											NBTTagCompound newnbttag= new NBTTagCompound();
+											try {
+												newnbttag = JsonToNBT.getTagFromJson(items[6]);
+											} catch (NBTException e) {
+												CommonProxy.logger.error("Something happened while trying to convert String to NBT ._.");
+												CommonProxy.logger.catching(e);
+												file.delete();
+											}
+											properties.stackTagCompound=newnbttag;
 										}
-										properties.stackTagCompound=newnbttag;
-										
 										foundchest.setInventorySlotContents(Integer.parseInt(items[1]), properties);	//Set the item into the slot
 										chestitemcounter++; //for logging
 									}
@@ -161,14 +162,17 @@ public class RefillingDupe {
 							}*/
 							//Adding NBT to the item
 							NBTTagCompound newnbttag= new NBTTagCompound();
-							try {
-								newnbttag = JsonToNBT.getTagFromJson(props[11]);
-							} catch (NBTException e) {
-								CommonProxy.logger.error("Something happened while trying to convert String to NBT");
-								CommonProxy.logger.catching(e);
-								file.delete();
+							if(!props[11].equalsIgnoreCase("null")) {
+								try {
+									newnbttag = JsonToNBT.getTagFromJson(props[11]);
+								} catch (NBTException e) {
+									CommonProxy.logger.error("Something happened while trying to convert String to NBT");
+									CommonProxy.logger.catching(e);
+									file.delete();
+								}
+								Overflow.stackTagCompound=newnbttag;
 							}
-							Overflow.stackTagCompound=newnbttag;
+							
 							
 							EntityItem newitem=new EntityItem(world, Double.parseDouble(props[2]), Double.parseDouble(props[3]), Double.parseDouble(props[4]), Overflow);
 							world.spawnEntity(newitem);
