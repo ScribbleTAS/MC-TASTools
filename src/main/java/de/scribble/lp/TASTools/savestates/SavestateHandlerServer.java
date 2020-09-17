@@ -31,12 +31,13 @@ public class SavestateHandlerServer {
 	private boolean isSaving;
 	protected static File currentworldfolder;
 	protected static File targetsavefolder;
+	public static int endtimer;
 	
 	public void saveState() {
 		if(FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			if(!isSaving) {
 				isSaving=true;
-				SavestateHandlerServer.currentworldfolder = new File(FMLCommonHandler.instance().getSavesDirectory().getPath()
+				this.currentworldfolder = new File(FMLCommonHandler.instance().getSavesDirectory().getPath()
 						+ File.separator + ModLoader.getLevelname());
 				targetsavefolder = null;
 				if (!FreezeHandler.isServerFrozen()) {
@@ -65,8 +66,8 @@ public class SavestateHandlerServer {
 					i++;
 				}
 				if (VelocityEvents.velocityenabledServer) {
-					List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList()
-							.getPlayerList();
+					List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance()
+							.getPlayerList().getPlayerList();
 					for (int o = 0; o < players.size(); o++) {
 						for (int e = 0; e < FreezeHandler.entity.size(); e++) {
 							if (FreezeHandler.entity.get(e).getPlayername().equals(players.get(o).getName())) {
@@ -90,17 +91,10 @@ public class SavestateHandlerServer {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+				FMLCommonHandler.instance().getMinecraftServerInstance().saveAllWorlds(false);
 				FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().saveAllPlayerData();
-				try {
-					copyDirectory(currentworldfolder, targetsavefolder, new String[] {" "});
-					
-				} catch (IOException e) {
-					CommonProxy.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate save)");
-					e.printStackTrace();
-					return;
-				}
-				isSaving=false;
-				ModLoader.NETWORK.sendToAll(new SavestatePacket());
+				SavestateSaveEventsServer saver=new SavestateSaveEventsServer();
+				saver.start();
 			}
 		}
 	}
@@ -108,7 +102,7 @@ public class SavestateHandlerServer {
 	public void setFlagandShutdown() {
 		if(FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 			if (!isSaving) {
-				
+				File currentworldfolder = new File(FMLCommonHandler.instance().getSavesDirectory().getPath() + File.separator + ModLoader.getLevelname());
 				File targetsavefolder=null;
 				//getting latest savestate
 				int i=1;
@@ -116,11 +110,11 @@ public class SavestateHandlerServer {
 					targetsavefolder = new File(FMLCommonHandler.instance().getSavesDirectory().getPath() + File.separator + "savestates"+ File.separator + ModLoader.getLevelname() + "-Savestate" + Integer.toString(i));
 					if (!targetsavefolder.exists()) {
 						if(i-1==0) {
-							CommonProxy.logger.info("Couldn't find a valid savestate, abort loading the savestate!");
+							CommonProxy.logger.info("Couldn't find a valid savestate, abort serverstop!");
 							return;
 						}
 						if(i>300) {
-							CommonProxy.logger.error("Too many savestates found. Aborting loading for safety reasons");
+							CommonProxy.logger.error("Too many savestates found. Aborting serverstop for safety reasons");
 							return;
 						}
 						targetsavefolder = new File(FMLCommonHandler.instance().getSavesDirectory().getPath() + File.separator + "savestates"+ File.separator + ModLoader.getLevelname() + "-Savestate" + Integer.toString(i-1));
@@ -128,7 +122,6 @@ public class SavestateHandlerServer {
 					}
 					i++;
 				}
-				
 				try {
 					int[] incr=getInfoValues(getInfoFile(ModLoader.getLevelname()));
 					incr[1]++;
@@ -225,6 +218,8 @@ public class SavestateHandlerServer {
 	}
 
 	public File getInfoFile(String worldname) {
+		if(!new File(FMLCommonHandler.instance().getSavesDirectory().getPath() + File.separator + "savestates").exists())new File(FMLCommonHandler.instance().getSavesDirectory().getPath() + File.separator + "savestates").mkdir();
+		
 		File file = new File(FMLCommonHandler.instance().getSavesDirectory().getPath() + File.separator + "savestates"
 				+ File.separator + ModLoader.getLevelname() + "-info.txt");
 		return file;
@@ -307,5 +302,28 @@ public class SavestateHandlerServer {
 			e.printStackTrace();
 		}
 		CommonProxy.logger.info("Done");
+	}
+	
+	private class SavestateSaveEventsServer extends Thread {
+
+		@Override
+		public void run() {
+			try {
+				Thread.sleep(endtimer);
+			} catch (InterruptedException e1) {
+				CommonProxy.logger.catching(e1);
+			}
+			try {
+				copyDirectory(currentworldfolder, targetsavefolder, new String[] { " " });
+
+			} catch (IOException e) {
+				CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
+						+ targetsavefolder.getPath() + " for some reason (Savestate save)");
+				e.printStackTrace();
+			}
+			isSaving = false;
+			ModLoader.NETWORK.sendToAll(new SavestatePacket());
+			return;
+		}
 	}
 }

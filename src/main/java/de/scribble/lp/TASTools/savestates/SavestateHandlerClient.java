@@ -18,55 +18,54 @@ import com.google.common.io.Files;
 
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
+import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
+import de.scribble.lp.TASTools.misc.MiscEvents;
 import de.scribble.lp.TASTools.misc.Util;
-import de.scribble.lp.TASTools.savestates.gui.GuiSavestateIngameMenu;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateSavingScreen;
 import de.scribble.lp.TASTools.velocity.SavingVelocity;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
-import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldSettings;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 /**
  * This code is heavily 'inspired' from <br> bspkrs on github <br> https://github.com/bspkrs/WorldStateCheckpoints/blob/master/src/main/java/bspkrs/worldstatecheckpoints/CheckpointManager.java <br>
- * but it's more fitted to quickly load and save the savestates and removes extra gui overview. Oh, and no multithreadding, I have no idea how that works...
+ * but it's more fitted to quickly load and save the savestates and removes extra gui overview. Hey I changed this comment, and it actually supports multithreadding now...
  */
 public class SavestateHandlerClient {
 	Minecraft mc=Minecraft.getMinecraft();
-	protected static boolean isSaving=false;
-	protected static boolean isLoading=false;
-	protected static int endtimer=20;
+	public static boolean isSaving=false;
+	public static boolean isLoading=false;
+	public static int savetimer;
+	public static int loadtimer=2;
 	
-	protected static File currentworldfolder;
-	protected static File targetsavefolder=null;
-	protected static WorldSettings settings;
-	protected static String foldername;
-	protected static String worldname;
-	protected static BufferedImage screenshot;
-	protected static String screenshotname;
-	protected static BufferedImage worldIcon;
+	private File currentworldfolder;
+	private File targetsavefolder=null;
+	private WorldSettings settings;
+	private String foldername;
+	private String worldname;
+	private BufferedImage screenshot;
+	private String screenshotname;
+	private BufferedImage worldIcon;
 	
 	
 	public void saveState() {
 		if(!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
+			
 			currentworldfolder = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName());
 			targetsavefolder=null;
 			worldname=Minecraft.getMinecraft().getIntegratedServer().getFolderName();
+			
 			List<EntityPlayerMP> players=FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerList();
-			//Check for worlds in the savestate folder
-			if (!isSaving&&!isLoading) {
+			if (!isSaving && !isLoading) {
 				isSaving = true;
+				// Check for worlds in the savestate folder
 				int i = 1;
 				while (i <= 300) {
 					if (i == 300) {
@@ -98,12 +97,12 @@ public class SavestateHandlerClient {
 				File file = new File(Minecraft.getMinecraft().mcDataDir,
 						"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
 								+ File.separator + "latest_velocity.txt");
-				//Normally works without this, but low tickrates make it so the player doesn't get saved
-				Minecraft.getMinecraft().getIntegratedServer().getPlayerList().saveAllPlayerData();
-
+				
+				
+				ModLoader.NETWORK.sendToServer(new SavestatePacket(false,1)); //Tell the server to save playerdata and chunks
+				
 				// For LAN-Servers
 				if (players.size() > 1) {
-					Minecraft.getMinecraft().getIntegratedServer().saveAllWorlds(false);
 					if (!FreezeHandler.isServerFrozen()) {
 						FreezeHandler.startFreezeServer();
 						ModLoader.NETWORK.sendToAll(new FreezePacket(true));
@@ -129,6 +128,8 @@ public class SavestateHandlerClient {
 								}
 							}
 						}
+					}else {
+						new DupeEvents().recordDupe(mc.thePlayer);
 					}
 				}
 				// Save the info file
@@ -143,8 +144,8 @@ public class SavestateHandlerClient {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				SavestateSaveEventsClient lol = new SavestateSaveEventsClient();
-				MinecraftForge.EVENT_BUS.register(lol);
+				SavestateSaveEventsClient Saver = new SavestateSaveEventsClient();
+				Saver.start();
 			}else {
 				CommonProxy.logger.error("Saving savestate is blocked by another action. If this is permanent, restart the game.");
 			}
@@ -184,13 +185,27 @@ public class SavestateHandlerClient {
 					saveInfo(getInfoFile(worldname), incr);
 				} catch (IOException e) {
 					e.printStackTrace();
+					isLoading = false;
 				}
+				this.mc.ingameGUI.getChatGUI().clearChatMessages();
 				FMLCommonHandler.instance().firePlayerLoggedOut(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerList().get(0));
-				Minecraft.getMinecraft().loadWorld((WorldClient)null);
-				mc.displayGuiScreen(new GuiSavestateLoadingScreen());
-				SavestateLoadEventsClient Events=new SavestateLoadEventsClient();
-				MinecraftForge.EVENT_BUS.register(Events);
-				
+				this.mc.loadWorld((WorldClient)null);
+	            
+	            
+	            SavestateLoadEventsClient Loader=new SavestateLoadEventsClient();
+	            Loader.setName("Savestate Loader");
+	            Loader.start();
+	            try {
+					Loader.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					isLoading = false;
+				}
+	            
+	            MiscEvents.ignorerespawntimerClient=true; //Make it so the Player is vulnerable after a savestate
+	            
+	            isLoading = false;
+	            FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
 			}else {
 				CommonProxy.logger.error("Loading savestate is blocked by another action. If this is permanent, restart the game.");
 			}
@@ -294,7 +309,7 @@ public class SavestateHandlerClient {
 
     public File getInfoFile(String worldname) {
     	if(!new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates").exists()) new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates").mkdir();
-
+    	
     	File file = new File(Minecraft.getMinecraft().mcDataDir, "saves" + File.separator+"savestates"+File.separator+worldname+"-info.txt");
     	return file;
     }
@@ -351,69 +366,56 @@ public class SavestateHandlerClient {
     }
 
 	public void displayIngameMenu() {
-		if (!SavestateEvents.savestatepauseenabled) {
-			mc.displayGuiScreen(new GuiIngameMenu());
-		} else {
-			mc.displayGuiScreen(new GuiSavestateIngameMenu());
-		}
+		mc.displayGuiScreen(new GuiIngameMenu());
 	}
-}
-class SavestateSaveEventsClient extends SavestateHandlerClient{
-	int tickspassed=0;
-	@SubscribeEvent
-	public void onTick(TickEvent.ClientTickEvent ev) {
-		if (ev.phase==Phase.START) {
-			if (tickspassed>=20) {
-				try {
-					copyDirectory(currentworldfolder, targetsavefolder, new String[] {" "});
-					
-				} catch (IOException e) {
-					CommonProxy.logger.error("Could not copy the directory "+currentworldfolder.getPath()+" to "+targetsavefolder.getPath()+" for some reason (Savestate save)");
-					e.printStackTrace();
-					MinecraftForge.EVENT_BUS.unregister(this);
-					isSaving=false;
-					return;
-				}
-				if(Util.enableSavestateScreenshotting) {
+
+	private class SavestateSaveEventsClient extends Thread {
+		@Override
+		public void run() {
+			try {
+				currentThread().sleep(savetimer);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
+			try {
+				copyDirectory(currentworldfolder, targetsavefolder, new String[] { " " });
+				if (Util.enableSavestateScreenshotting) {
 					new Util().saveWorldIcon(worldIcon, targetsavefolder);
 					new Util().saveScreenshotAt(targetsavefolder, screenshotname, screenshot);
 				}
 				ModLoader.NETWORK.sendToAll(new SavestatePacket(true));
-				MinecraftForge.EVENT_BUS.unregister(this);
-				isSaving=false;
-				return;
+			} catch (IOException e) {
+				CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
+						+ targetsavefolder.getPath() + " for some reason (Savestate save)");
+				e.printStackTrace();
+			} finally {
+				isSaving = false;
 			}
-			tickspassed++;
 		}
 	}
-}
-class SavestateLoadEventsClient extends SavestateHandlerClient{
-	private int tickspassed=0;
-	@SubscribeEvent
-	public void onTick(TickEvent.ClientTickEvent ev) {
-		if (ev.phase == Phase.START) {
-			if (!mc.isIntegratedServerRunning()) {
-				if (tickspassed >= endtimer) {
-					if (!(mc.currentScreen instanceof GuiSavestateLoadingScreen)) {
-						isLoading=false;
-						return;
-					}
-					MinecraftForge.EVENT_BUS.unregister(this);
-					deleteDirContents(currentworldfolder, new String[] { " " });
-					try {
-						copyDirectory(targetsavefolder, currentworldfolder, new String[] { " " });
-					} catch (IOException e) {
-						CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
-								+ targetsavefolder.getPath() + " for some reason (Savestate load)");
-						e.printStackTrace();
-						mc.displayGuiScreen(new GuiMainMenu());
-						isLoading=false;
-						return;
-					}
-					FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
-					isLoading=false;
+
+	private class SavestateLoadEventsClient extends Thread {
+		@Override
+		public void run() {
+			while (mc.isIntegratedServerRunning()) {
+				try {
+					Thread.sleep(loadtimer);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					isLoading = false;
 				}
-				tickspassed++;
+			}
+			mc.displayGuiScreen(new GuiSavestateLoadingScreen());
+			deleteDirContents(currentworldfolder, new String[] { " " });
+			try {
+				copyDirectory(targetsavefolder, currentworldfolder, new String[] { " " });
+			} catch (IOException e) {
+				CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
+						+ targetsavefolder.getPath() + " for some reason (Savestate load)");
+				e.printStackTrace();
+				return;
+			} finally {
+				isLoading = false;
 			}
 		}
 	}

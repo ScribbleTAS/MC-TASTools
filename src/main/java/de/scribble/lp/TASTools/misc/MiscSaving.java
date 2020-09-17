@@ -1,11 +1,7 @@
 package de.scribble.lp.TASTools.misc;
 
 import java.io.File;
-import java.io.IOException;
 
-import com.google.common.io.Files;
-
-import de.scribble.lp.TASTools.CommonProxy;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class MiscSaving {
@@ -19,11 +15,6 @@ public class MiscSaving {
 		output.append("TimeUntilPortal="+player.portalCounter+"\n");
 		output.append("END");
 
-		try {
-			CommonProxy.logger.info("Saving Misc things");
-			Files.write(output.toString().getBytes(), file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		FileStuff.writeThings(output, file, "Saving Misc things");
 	}
 }
