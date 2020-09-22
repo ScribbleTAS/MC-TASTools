@@ -106,10 +106,10 @@ public class MixinGuiGameOver extends GuiScreen{
 	                return;
 	                //This is the new button!
 	            case 2:
-	            	if (Minecraft.getMinecraft().isIntegratedServerRunning()) {
+	            	if (mc.thePlayer.canCommandSenderUseCommand(2, "savestate")) {
 	    				ModLoader.NETWORK.sendToServer(new SavestatePacket(false));
 	    			}else {
-	    				ModLoader.NETWORK.sendToServer(new SavestatePacket(false));
+	    				CommonProxy.logger.info("You don't have the required permissions to use the loadstate button!");
 	    			}
 	            	return;
 	        }
