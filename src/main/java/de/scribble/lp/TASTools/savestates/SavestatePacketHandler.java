@@ -18,58 +18,59 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 	private boolean stop=false;
 	@Override
 	public IMessage onMessage(SavestatePacket message, MessageContext ctx) {
-		if (ctx.side== Side.SERVER) {
-			EntityPlayerMP player=ctx.getServerHandler().player;
-			MinecraftServer server=FMLCommonHandler.instance().getMinecraftServerInstance();
-			if(message.getMode()==0) {
+		if (ctx.side == Side.SERVER) {
+			EntityPlayerMP player = ctx.getServerHandler().player;
+			MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+			if (message.getMode() == 0) {
 				if (!server.isDedicatedServer()) {
 					ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
 						if (!player.canUseCommand(2, "savestate")) {
 							return;
 						}
-						if(message.isLoadSave()) {
-							//new SavestateHandlerClient().saveState();
-							if(server.getCurrentPlayerCount()==1) {
-								ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), (EntityPlayerMP) player);
+						if (message.isLoadSave()) {
+							// new SavestateHandlerClient().saveState();
+							if (server.getCurrentPlayerCount() == 1) {
+								ModLoader.NETWORK.sendTo(new SavestatePacket(true, 1), (EntityPlayerMP) player);
+							} else if (server.getCurrentPlayerCount() > 1) {
+								ModLoader.NETWORK.sendTo(new SavestatePacket(true, 1),server.getPlayerList().getPlayers().get(0));
 							}
-							else if(server.getCurrentPlayerCount()>1){
-								ModLoader.NETWORK.sendTo(new SavestatePacket(true,1), server.getPlayerList().getPlayers().get(0));
-							}
-						}
-						else {
-							if(server.getCurrentPlayerCount()==1) {
-								ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) player);
-							}
-							else {
-								ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), server.getPlayerList().getPlayers().get(0));
+						} else {
+							if (server.getCurrentPlayerCount() == 1) {
+								ModLoader.NETWORK.sendTo(new SavestatePacket(false, 1), (EntityPlayerMP) player);
+							} else {
+								ModLoader.NETWORK.sendTo(new SavestatePacket(false, 1),server.getPlayerList().getPlayers().get(0));
 							}
 						}
 					});
-				}else {
+				} else {
 					ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
-						if(message.isLoadSave())new SavestateHandlerServer().saveState();
-						else new SavestateHandlerServer().setFlagandShutdown();
+						if (!player.canUseCommand(2, "savestate")) {
+							return;
+						}
+						if (message.isLoadSave())
+							new SavestateHandlerServer().saveState();
+						else
+							new SavestateHandlerServer().setFlagandShutdown();
 					});
 				}
-			}else if(message.getMode()==1) {
+			} else if (message.getMode() == 1) {
 				ctx.getServerHandler().player.getServerWorld().addScheduledTask(() -> {
 					CommonProxy.logger.debug("Saving worlds and playerdata on the integrated Server");
-					for (int i = 0; i < server.worlds.length; ++i)
-		            {
-		                if (server.worlds[i] != null)
-		                {
-		                    WorldServer worldserver = server.worlds[i];
-		                    boolean flag = worldserver.disableLevelSaving;
-		                    worldserver.disableLevelSaving = false;
-		                    try {
-								worldserver.saveAllChunks(true, (IProgressUpdate)null);
+					for (int i = 0; i < server.worlds.length; ++i) {
+						if (server.worlds[i] != null) {
+							WorldServer worldserver = server.worlds[i];
+							boolean flag = worldserver.disableLevelSaving;
+							worldserver.disableLevelSaving = false;
+							try {
+								worldserver.saveAllChunks(true, (IProgressUpdate) null);
 							} catch (MinecraftException e) {
-								CommonProxy.logger.debug("Something went wrong while Saving Chunks (SavestatePacketHandler)");
+								CommonProxy.logger
+										.debug("Something went wrong while Saving Chunks (SavestatePacketHandler)");
 								CommonProxy.logger.catching(e);
 							}
-		                    worldserver.disableLevelSaving = flag;
-		                }
-		            }
+							worldserver.disableLevelSaving = flag;
+						}
+					}
 					server.getPlayerList().saveAllPlayerData();
 				});
 			}
