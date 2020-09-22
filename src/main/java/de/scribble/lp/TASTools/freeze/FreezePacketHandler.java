@@ -1,6 +1,7 @@
 package de.scribble.lp.TASTools.freeze;
 
 import de.scribble.lp.TASTools.ModLoader;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -12,9 +13,13 @@ public class FreezePacketHandler implements IMessageHandler<FreezePacket, IMessa
 	@Override
 	public FreezePacket onMessage(final FreezePacket msg, MessageContext ctx) {
 		if (ctx.side == Side.SERVER) {
+			final EntityPlayerMP player = ctx.getServerHandler().playerEntity;
 			ctx.getServerHandler().playerEntity.getServer().addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
+					if (!player.canCommandSenderUseCommand(2, "freeze")) {
+							return;
+						}
 					if (msg.getMode() == 0) {
 						if (msg.startstop()) {
 							FreezeHandler.startFreezeServer();
