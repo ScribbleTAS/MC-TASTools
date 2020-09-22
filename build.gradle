@@ -40,6 +40,11 @@ minecraft {
     mappings = "snapshot_20171003"
     makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     replace '${version}':project.version,'${mcversion}':project.minecraft.version
+
+    clientJvmArgs += "-Dfml.coreMods.load=de.scribble.lp.TASTools.core.CoreMod"
+    serverJvmArgs += "-Dfml.coreMods.load=de.scribble.lp.TASTools.core.CoreMod"
+    clientRunArgs += "--mixin mixins.tastools.json"
+    serverRunArgs += "--mixin mixins.tastools.json"
 }
 repositories {
     mavenCentral()
