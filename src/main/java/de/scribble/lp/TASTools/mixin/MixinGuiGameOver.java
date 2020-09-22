@@ -106,11 +106,7 @@ public class MixinGuiGameOver extends GuiScreen{
 	                return;
 	                //This is the new button!
 	            case 2:
-	            	if (Minecraft.getMinecraft().isIntegratedServerRunning()) {
-	    				ModLoader.NETWORK.sendToServer(new SavestatePacket(false));
-	    			}else {
-	    				ModLoader.NETWORK.sendToServer(new SavestatePacket(false));
-	    			}
+	    			ModLoader.NETWORK.sendToServer(new SavestatePacket(false));
 	            	return;
 	        }
 		} else {
