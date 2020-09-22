@@ -34,6 +34,9 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 							}
 						}
 						else {
+							if (!player.canUseCommand(2, "savestate")) {
+								return;
+							}
 							if(server.getCurrentPlayerCount()==1) {
 								ModLoader.NETWORK.sendTo(new SavestatePacket(false,1), (EntityPlayerMP) player);
 							}
@@ -47,6 +50,9 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 				ctx.getServerHandler().playerEntity.getServerWorld().addScheduledTask(new Runnable() {
 					@Override
 					public void run() {
+						if (!player.canUseCommand(2, "savestate")) {
+							return;
+						}
 						if(message.isLoadSave())new SavestateHandlerServer().saveState();
 						else new SavestateHandlerServer().setFlagandShutdown();
 					}
