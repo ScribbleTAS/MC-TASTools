@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GuiScreen.class)
@@ -40,5 +41,10 @@ public class MixinGuiScreen extends Gui {
         bufferbuilder2.pos(this.width, 0.0D, 0.0D).tex((float) this.width / 32.0F, tint).color(rgba[0], rgba[1], rgba[2], rgba[3]).endVertex();
         bufferbuilder2.pos(0.0D, 0.0D, 0.0D).tex(0.0D, tint).color(rgba[0], rgba[1], rgba[2], rgba[3]).endVertex();
         tessellator2.draw();
+    }
+    @Redirect(method= "drawBackground", at = @At(value="INVOKE", target="Lnet/minecraft/client/renderer/BufferBuilder;color(IIII)Lnet/minecraft/client/renderer/BufferBuilder;",ordinal=3))
+    public BufferBuilder addTint(BufferBuilder builder) {
+    	builder.color(74, 64, 64, 255);
+    	return builder;
     }
 }
