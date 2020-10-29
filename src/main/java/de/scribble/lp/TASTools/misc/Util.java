@@ -100,21 +100,34 @@ public class Util {
 		GuiOverlayLogo.potionenabled=config.get("GuiPotion","Enabled",true,"Enables the MC-TAS-Logo in the Gui").getBoolean();
 		Util.enableSavestateScreenshotting=config.get("Screenshot", "Enabled", false, "Take a screenshot before the savestate so you know where you left off. Does not work on servers.").getBoolean();
 		
-		int savestatetime=config.get("Savestatetime","TimeInMillis", 5000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that").getInt();
+		int savestatetime=config.get("Savestatetime","TimeInMillis", 5000, "Sets the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that").getInt();
 		if (savestatetime>50000) {
 			ClientProxy.logger.warn("Savestatetime in config is too high! Correcting it to 50000");
-			config.get("Savestatetime","TimeInMillis", 5000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that")
+			config.get("Savestatetime","TimeInMillis", 5000, "Sets the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that")
 			.set(50000);
 			savestatetime=50000;
 		}else if(savestatetime<0) {
 			ClientProxy.logger.warn("Savestatetime in config is negative! Correcting it to the default");
-			config.get("Savestatetime","TimeInMillis", 5000, "Set's the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that")
+			config.get("Savestatetime","TimeInMillis", 5000, "Sets the delay between Minecraft saving all chunks and the mod starting to copy files... Big worlds need a bit longer to save the world, so here you can adjust that")
 			.set(5000);
 			savestatetime=5000;
 		}
 		SavestateHandlerClient.savetimer=savestatetime;
 		
-//		SavestateHandlerClient.loadtimer=config.get("Loadstatetime", "TimeInMillis", 50, "Set the delay for loading a savestate. One more thing to change when testing compatibility").getInt();
+		int loadstatetime=config.get("Loadstatetime","Frames", 100, "Sets the delay on how long the guiscreen 'Loading a savestate' is up").getInt();
+		if(loadstatetime>500000) {
+			ClientProxy.logger.warn("Loadtatetime in config is too high! Correcting it to 50000");
+			config.get("Loadstatetime","Frames", 100, "Sets the delay on how long the guiscreen 'Loading a savestate' is up")
+			.set(50000);
+			loadstatetime=50000;
+		}else if(loadstatetime<0) {
+			ClientProxy.logger.warn("Loadtatetime in config is negative! Correcting it to the default");
+			config.get("Loadstatetime","Frames", 100, "Sets the delay on how long the guiscreen 'Loading a savestate' is up")
+			.set(100);
+			loadstatetime=100;
+		}
+		SavestateHandlerClient.loadtimer=loadstatetime;
+		
 		
 		Util.disableAdvancementMessages=config.get("Messages", "AdvancementMessages Enabled", false, "Disable Advancement messages in the top right").getBoolean();
 		Util.disableRecipeMessages=config.get("Messages", "RecipeMessages Enabled", true, "Disable Recipe messages in the top right").getBoolean();

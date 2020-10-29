@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.KeyStore.LoadStoreParameter;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -47,7 +48,7 @@ public class SavestateHandlerClient {
 	public static boolean isSaving=false;
 	public static boolean isLoading=false;
 	public static int savetimer;
-	public static int loadtimer=2;
+	public static int loadtimer;
 	
 	private File currentworldfolder;
 	private File targetsavefolder=null;
@@ -383,32 +384,14 @@ public class SavestateHandlerClient {
 		}
 	}
 
-	private class SavestateLoadEventsClient extends Thread {
-		@Override
-		public void run() {
-			while (mc.isIntegratedServerRunning()) {
-				try {
-					Thread.sleep(loadtimer);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					isLoading = false;
-				}
-			}
-			deleteDirContents(currentworldfolder, new String[] { " " });
-			try {
-				copyDirectory(targetsavefolder, currentworldfolder, new String[] { " " });
-			} catch (IOException e) {
-				CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
-						+ targetsavefolder.getPath() + " for some reason (Savestate load)");
-				e.printStackTrace();
-				return;
-			} finally {
-				isLoading = false;
-			}
-		}
-	}
+	/**
+	 * Subscribes to the forge event bus for a brief amount of time to keep up a guiscreen. This is needed for the loadstate functions since errors occur when mc is closed when no guiscreen is up.
+	 * 
+	 * @author ScribbleLP
+	 *
+	 */
 	private class SavestateBrake{
-		int cooldown=100;
+		int cooldown=loadtimer;
 		Minecraft mc;
 		public SavestateBrake(Minecraft mc) {
 			this.mc=mc;
@@ -441,5 +424,31 @@ public class SavestateHandlerClient {
 				cooldown--;
 			}
 		}
+		
+	private class SavestateLoadEventsClient extends Thread {
+		@Override
+		public void run() {
+			while (mc.isIntegratedServerRunning()) {
+				try {
+					Thread.sleep(2L);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					isLoading = false;
+				}
+			}
+			deleteDirContents(currentworldfolder, new String[] { " " });
+			try {
+				copyDirectory(targetsavefolder, currentworldfolder, new String[] { " " });
+			} catch (IOException e) {
+				CommonProxy.logger.error("Could not copy the directory " + currentworldfolder.getPath() + " to "
+						+ targetsavefolder.getPath() + " for some reason (Savestate load)");
+				e.printStackTrace();
+				return;
+			} finally {
+				isLoading = false;
+			}
+		}
+	}
+
 	}
 }
