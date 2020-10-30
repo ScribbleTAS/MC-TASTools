@@ -30,6 +30,7 @@ public class ClientProxy extends CommonProxy{
 	
 	public static Configuration config;
 	
+	@Override
 	public void preInit(FMLPreInitializationEvent ev) {
 		
 		ClientRegistry.registerKeyBinding(DupeKey);
@@ -47,6 +48,7 @@ public class ClientProxy extends CommonProxy{
 		super.preInit(ev);
 	}
 	
+	@Override
 	public void init(FMLInitializationEvent ev) {
 		super.init(ev);
 		//disable dupemod in this mod
@@ -66,6 +68,7 @@ public class ClientProxy extends CommonProxy{
 		MinecraftForge.EVENT_BUS.register(new ShieldDownloader());
 	}
 	
+	@Override
 	public void postInit(FMLPostInitializationEvent ev) {
 		super.postInit(ev);
 	}
