@@ -32,8 +32,12 @@ import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.WorldSettings;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 /**
  * This code is heavily 'inspired' from <br> bspkrs on github <br> https://github.com/bspkrs/WorldStateCheckpoints/blob/master/src/main/java/bspkrs/worldstatecheckpoints/CheckpointManager.java <br>
  * but it's more fitted to quickly load and save the savestates and removes extra gui overview. Hey I changed this comment, and it actually supports multithreadding now...
@@ -188,23 +192,9 @@ public class SavestateHandlerClient {
 				}
 				this.mc.ingameGUI.getChatGUI().clearChatMessages();
 				FMLCommonHandler.instance().firePlayerLoggedOut(FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerList().get(0));
-				this.mc.loadWorld((WorldClient)null);
-	            
-	            
-	            SavestateLoadEventsClient Loader=new SavestateLoadEventsClient();
-	            Loader.setName("Savestate Loader");
-	            Loader.start();
-	            try {
-					Loader.join();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					isLoading = false;
-				}
-	            
-	            MiscEvents.ignorerespawntimerClient=true; //Make it so the Player is vulnerable after a savestate
-	            
-	            isLoading = false;
-	            FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
+				mc.displayGuiScreen(new GuiSavestateLoadingScreen());
+				
+				MinecraftForge.EVENT_BUS.register(new SavestateBrake(mc));
 			}else {
 				CommonProxy.logger.error("Loading savestate is blocked by another action. If this is permanent, restart the game.");
 			}
@@ -392,18 +382,60 @@ public class SavestateHandlerClient {
 		}
 	}
 
+	/**
+	 * Subscribes to the forge event bus for a brief amount of time to keep up a guiscreen. This is needed for the loadstate functions since errors occur when mc is closed when no guiscreen is up.
+	 * 
+	 * @author ScribbleLP
+	 *
+	 */
+	private class SavestateBrake{
+		int cooldown=loadtimer;
+		Minecraft mc;
+		public SavestateBrake(Minecraft mc) {
+			this.mc=mc;
+		}
+		@SubscribeEvent
+		public void event(TickEvent.RenderTickEvent ev) {
+			if(ev.phase==Phase.START) {
+				if (cooldown==0) {
+					this.mc.theWorld.sendQuittingDisconnectingPacket();
+					this.mc.loadWorld((WorldClient)null);
+		            
+		            SavestateLoadEventsClient Loader=new SavestateLoadEventsClient();
+		            Loader.setName("Savestate Loader");
+		            try {
+		            	Loader.start();
+						Loader.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+						isLoading = false;
+					} catch (Exception e){
+						e.printStackTrace();
+					}
+		            
+		            MiscEvents.ignorerespawntimerClient=true; //Make it so the Player is vulnerable after a savestate
+		            
+		            isLoading = false;
+		            MinecraftForge.EVENT_BUS.unregister(this);
+		            FMLClientHandler.instance().getClient().launchIntegratedServer(foldername, worldname, null);
+		            cooldown--;
+				}else if (cooldown>0){
+					cooldown--;
+				}
+			}
+		}
+	}
 	private class SavestateLoadEventsClient extends Thread {
 		@Override
 		public void run() {
 			while (mc.isIntegratedServerRunning()) {
 				try {
-					Thread.sleep(loadtimer);
+					Thread.sleep(2L);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					isLoading = false;
 				}
 			}
-			mc.displayGuiScreen(new GuiSavestateLoadingScreen());
 			deleteDirContents(currentworldfolder, new String[] { " " });
 			try {
 				copyDirectory(targetsavefolder, currentworldfolder, new String[] { " " });
