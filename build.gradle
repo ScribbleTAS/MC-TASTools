@@ -19,8 +19,8 @@ apply plugin: 'org.spongepowered.mixin'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-version = "1.5.1"
-group = "de.scribble.lp.tastools" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = "1.5.2"
+group = "de.scribble.lp.TASTools" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "TASTools-1.11.2"
 
 sourceCompatibility = targetCompatibility = "1.6" // Need this here so eclipse task generates correctly.
