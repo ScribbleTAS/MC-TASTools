@@ -25,6 +25,6 @@ public class GuiSavestateLoadingScreen extends GuiScreen{
 	
 	@Override
 	public boolean doesGuiPauseGame() {
-		return false;
+		return true;
 	}
 }

@@ -108,8 +108,20 @@ public class Util {
 		}
 		SavestateHandlerClient.savetimer=savestatetime;
 		
-//		SavestateHandlerClient.loadtimer=config.get("Loadstatetime", "TimeInMillis", 50, "Set the delay for loading a savestate. One more thing to change when testing compatibility").getInt();
-		
+		int loadstatetime=config.get("Loadstatetime","Frames", 100, "Sets the delay on how long the guiscreen 'Loading a savestate' is up").getInt();
+		if(loadstatetime>500000) {
+			ClientProxy.logger.warn("Loadtatetime in config is too high! Correcting it to 50000");
+			config.get("Loadstatetime","Frames", 100, "Sets the delay on how long the guiscreen 'Loading a savestate' is up")
+			.set(50000);
+			loadstatetime=50000;
+		}else if(loadstatetime<0) {
+			ClientProxy.logger.warn("Loadtatetime in config is negative! Correcting it to the default");
+			config.get("Loadstatetime","Frames", 100, "Sets the delay on how long the guiscreen 'Loading a savestate' is up")
+			.set(100);
+			loadstatetime=100;
+		}
+		SavestateHandlerClient.loadtimer=loadstatetime;
+				
 		config.save();
 	}
 	@SideOnly(Side.CLIENT)

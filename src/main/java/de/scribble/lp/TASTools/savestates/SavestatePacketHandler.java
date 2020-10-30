@@ -24,6 +24,9 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 	
 						@Override
 						public void run() {
+							if (!player.canCommandSenderUseCommand(2, "savestate")) {
+								return;
+							}
 							if(server.getPlayerList().canSendCommands(player.getGameProfile())){
 								if (message.isLoadSave()) {
 									//new SavestateHandlerClient().saveState();
@@ -50,6 +53,9 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 	
 						@Override
 						public void run() {
+							if (!player.canCommandSenderUseCommand(2, "savestate")) {
+								return;
+							}
 							if(server.getPlayerList().canSendCommands(player.getGameProfile())){
 								if (message.getMode()==0) {
 									if(message.isLoadSave())new SavestateHandlerServer().saveState();
