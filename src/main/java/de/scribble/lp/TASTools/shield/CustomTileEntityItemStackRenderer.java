@@ -72,8 +72,14 @@ public class CustomTileEntityItemStackRenderer {
             }
             else
             {
-            	if(entity!=null) {
-            		Minecraft.getMinecraft().getTextureManager().bindTexture(shieldD.getResourceLocation(entity));
+            	if(entity!=null&&p_192838_1_!=null) {
+            		if(entity.getHeldItemMainhand()!=null&&entity.getHeldItemMainhand().equals(p_192838_1_)) {
+            			Minecraft.getMinecraft().getTextureManager().bindTexture(shieldD.getResourceLocation(entity));
+            		}else if(entity.getHeldItemOffhand()!=null&&entity.getHeldItemOffhand().equals(p_192838_1_)) {
+            			Minecraft.getMinecraft().getTextureManager().bindTexture(shieldD.getResourceLocation(entity));
+            		}else {
+            			Minecraft.getMinecraft().getTextureManager().bindTexture(BannerTextures.SHIELD_BASE_TEXTURE);
+            		}
             	}else {
             		Minecraft.getMinecraft().getTextureManager().bindTexture(BannerTextures.SHIELD_BASE_TEXTURE);
             	}

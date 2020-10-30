@@ -186,5 +186,11 @@ public class FreezeEvents {
 		if(!ev.getUsername().equals("TASBot")) {
 			ev.setDisplayname("[TAS]"+" "+ev.getDisplayname());
 		}
+//		if (ev.getUsername().equals("Curcuit_Block")) {
+//			ev.setDisplayname("shitass");
+//		}
+//		if (ev.getUsername().equals("ScribbleLP")) {
+//			ev.setDisplayname("Dream");
+//		}
 	}
 }

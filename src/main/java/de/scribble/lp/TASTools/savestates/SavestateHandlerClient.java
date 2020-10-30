@@ -424,7 +424,7 @@ public class SavestateHandlerClient {
 				cooldown--;
 			}
 		}
-		
+	}
 	private class SavestateLoadEventsClient extends Thread {
 		@Override
 		public void run() {
@@ -448,7 +448,5 @@ public class SavestateHandlerClient {
 				isLoading = false;
 			}
 		}
-	}
-
 	}
 }
