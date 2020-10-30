@@ -183,7 +183,7 @@ public class FreezeEvents {
 	
 	@SubscribeEvent
 	public void onPlayerCreated(NameFormat ev) {
-		if(!ev.getUsername().equals("TASbot")) {
+		if(!ev.getUsername().equals("TASBot")) {
 			ev.setDisplayname("[TAS]"+" "+ev.getDisplayname());
 		}
 	}
