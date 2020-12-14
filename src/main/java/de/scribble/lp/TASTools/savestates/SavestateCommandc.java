@@ -35,19 +35,19 @@ public class SavestateCommandc extends CommandBase{
 				}
 			}else {
 				if (args.length == 1 && args[0].equalsIgnoreCase("save")) {
-					new SavestateHandlerServer().saveState();
+					CommonProxy.getSaveHandler().saveState();
 					
 				}else if(args.length == 1 && args[0].equalsIgnoreCase("load")) {
-					new SavestateHandlerServer().setFlagandShutdown();
+					CommonProxy.getSaveHandler().setFlagandShutdown();
 				}
 			}
 		}else {
 			if (args.length == 1 && args[0].equalsIgnoreCase("save")&&server.isDedicatedServer()) {
 				CommonProxy.logger.info("Making a Savestate! Hold on...");
-				new SavestateHandlerServer().saveState();
+				CommonProxy.getSaveHandler().saveState();
 				CommonProxy.logger.info("Done!");
 			}else if(args.length == 1 && args[0].equalsIgnoreCase("load")) {
-				new SavestateHandlerServer().setFlagandShutdown();
+				CommonProxy.getSaveHandler().setFlagandShutdown();
 				CommonProxy.logger.info("Loading a savestate");
 			}
 		}
@@ -57,9 +57,7 @@ public class SavestateCommandc extends CommandBase{
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
 		if(args.length==1) {
-			if(!server.isDedicatedServer()) {
-				return getListOfStringsMatchingLastWord(args, new String[] {"save","load"});
-			}else return getListOfStringsMatchingLastWord(args, new String[] {"save"});
+			return getListOfStringsMatchingLastWord(args, new String[] {"save","load"});
 		}else {
 			return super.getTabCompletions(server, sender, args, targetPos);
 		}

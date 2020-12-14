@@ -82,10 +82,10 @@ public class GuiKeystrokes extends Gui {
 			new Gui().drawString(mc.fontRenderer, "Ctrl", 92, height-13, 0xFFFFFF);
 		}
 		if(mc.gameSettings.keyBindAttack.isKeyDown()){
-			new Gui().drawString(mc.fontRenderer, "LK", 113, height-13, 0xFFFFFF);
+			new Gui().drawString(mc.fontRenderer, "LC", 113, height-13, 0xFFFFFF);
 		}
 		if(mc.gameSettings.keyBindUseItem.isKeyDown()){
-			new Gui().drawString(mc.fontRenderer, "RK", 127, height-13, 0xFFFFFF);
+			new Gui().drawString(mc.fontRenderer, "RC", 127, height-13, 0xFFFFFF);
 		}
 	}
 	
@@ -112,10 +112,10 @@ public class GuiKeystrokes extends Gui {
 			new Gui().drawString(mc.fontRenderer, "Ctrl", width-50, height-13, 0xFFFFFF);
 		}
 		if(mc.gameSettings.keyBindAttack.isKeyDown()){
-			new Gui().drawString(mc.fontRenderer, "LK", width-29, height-13, 0xFFFFFF);
+			new Gui().drawString(mc.fontRenderer, "LC", width-29, height-13, 0xFFFFFF);
 		}
 		if(mc.gameSettings.keyBindUseItem.isKeyDown()){
-			new Gui().drawString(mc.fontRenderer, "RK", width-15, height-13, 0xFFFFFF);
+			new Gui().drawString(mc.fontRenderer, "RC", width-15, height-13, 0xFFFFFF);
 		}
 	}
 	
@@ -142,10 +142,10 @@ public class GuiKeystrokes extends Gui {
 			new Gui().drawString(mc.fontRenderer, "Ctrl", width-50, 5, 0xFFFFFF);
 		}
 		if(mc.gameSettings.keyBindAttack.isKeyDown()){
-			new Gui().drawString(mc.fontRenderer, "LK", width-29, 5, 0xFFFFFF);
+			new Gui().drawString(mc.fontRenderer, "LC", width-29, 5, 0xFFFFFF);
 		}
 		if(mc.gameSettings.keyBindUseItem.isKeyDown()){
-			new Gui().drawString(mc.fontRenderer, "RK", width-15, 5, 0xFFFFFF);
+			new Gui().drawString(mc.fontRenderer, "RC", width-15, 5, 0xFFFFFF);
 		}
 	}
 
@@ -172,10 +172,10 @@ public class GuiKeystrokes extends Gui {
 			new Gui().drawString(mc.fontRenderer, "Ctrl", 92, 5, 0xFFFFFF);
 		}
 		if(mc.gameSettings.keyBindAttack.isKeyDown()){
-			new Gui().drawString(mc.fontRenderer, "LK", 113, 5, 0xFFFFFF);
+			new Gui().drawString(mc.fontRenderer, "LC", 113, 5, 0xFFFFFF);
 		}
 		if(mc.gameSettings.keyBindUseItem.isKeyDown()){
-			new Gui().drawString(mc.fontRenderer, "RK", 127, 5, 0xFFFFFF);
+			new Gui().drawString(mc.fontRenderer, "RC", 127, 5, 0xFFFFFF);
 		}
 	}
 }

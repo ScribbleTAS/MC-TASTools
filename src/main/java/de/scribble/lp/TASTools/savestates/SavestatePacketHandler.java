@@ -1,5 +1,6 @@
 package de.scribble.lp.TASTools.savestates;
 
+import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import net.minecraft.client.Minecraft;
@@ -78,16 +79,16 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 			Minecraft.getMinecraft().addScheduledTask(()->{
 				if (message.getMode()==0) {
 					if(!message.isLoadSave()) {
-						new SavestateHandlerClient().displayLoadingScreen();
+						ClientProxy.getSaveHandlerClient().displayLoadingScreen();
 					}else {
 						new SavestateHandlerClient().displayIngameMenu();
 					}
 				}else if (message.getMode()==1) {
 					if (!message.isLoadSave()) {
-						new SavestateHandlerClient().loadLastSavestate();
+						ClientProxy.getSaveHandlerClient().loadLastSavestate();
 					}
 					else {
-						new SavestateHandlerClient().saveState();
+						ClientProxy.getSaveHandlerClient().saveState();
 					}
 				}
 			});

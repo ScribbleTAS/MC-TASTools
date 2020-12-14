@@ -2,10 +2,12 @@ package de.scribble.lp.TASTools;
 
 import de.scribble.lp.TASTools.duping.DupeCommandc;
 import de.scribble.lp.TASTools.enderdragon.DragonCommandc;
+import de.scribble.lp.TASTools.flintrig.ZombieDropCommand;
 import de.scribble.lp.TASTools.freeze.FreezeCommandc;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateCommandc;
+import de.scribble.lp.TASTools.savestates.SavestateHandlerClient;
 import de.scribble.lp.TASTools.savestates.SavestateHandlerServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -74,6 +76,7 @@ public class ModLoader {
 		ev.registerServerCommand(new FreezeCommandc());
 		ev.registerServerCommand(new SavestateCommandc());
 		ev.registerServerCommand(new DragonCommandc());
+		ev.registerServerCommand(new ZombieDropCommand());
 	}
 	
 	@EventHandler

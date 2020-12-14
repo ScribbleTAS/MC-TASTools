@@ -10,6 +10,7 @@ import de.scribble.lp.TASTools.duping.DupePacketHandler;
 import de.scribble.lp.TASTools.enderdragon.DragonEvents;
 import de.scribble.lp.TASTools.fishmanip.FishManipEvents;
 import de.scribble.lp.TASTools.flintrig.FlintRig;
+import de.scribble.lp.TASTools.flintrig.ZombieDrops;
 import de.scribble.lp.TASTools.freeze.FreezeEvents;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
@@ -18,6 +19,7 @@ import de.scribble.lp.TASTools.keystroke.KeystrokesPacketHandler;
 import de.scribble.lp.TASTools.misc.MiscPacket;
 import de.scribble.lp.TASTools.misc.MiscPacketHandler;
 import de.scribble.lp.TASTools.misc.Util;
+import de.scribble.lp.TASTools.savestates.SavestateHandlerServer;
 import de.scribble.lp.TASTools.savestates.SavestatePacket;
 import de.scribble.lp.TASTools.savestates.SavestatePacketHandler;
 import de.scribble.lp.TASTools.velocity.VelocityEvents;
@@ -38,6 +40,8 @@ public class CommonProxy {
 	public static boolean enableServerDuping;
 	private static boolean istasmodloaded;
 	private static boolean isdupemodloaded;
+	
+	private static SavestateHandlerServer saveHandler;
 
 	public void preInit(FMLPreInitializationEvent ev) {
 		logger.info("TAStools initialized");
@@ -62,8 +66,9 @@ public class CommonProxy {
 			
 			//Generate a folder for the savestates
 			new File(FMLCommonHandler.instance().getSavesDirectory().getPath()+File.separator+"savestates").mkdir();
+			
+			saveHandler=new SavestateHandlerServer();
 		}
-		
 	}
 	
 	public void init(FMLInitializationEvent ev) {
@@ -71,6 +76,7 @@ public class CommonProxy {
 		MinecraftForge.EVENT_BUS.register(new DragonEvents());
 		MinecraftForge.EVENT_BUS.register(new FishManipEvents());
 		MinecraftForge.EVENT_BUS.register(new FlintRig());
+		MinecraftForge.EVENT_BUS.register(new ZombieDrops());
 	}
 	
 	public void postInit(FMLPostInitializationEvent ev) {
@@ -82,5 +88,7 @@ public class CommonProxy {
 	public static boolean isDupeModLoaded() {
 		return isdupemodloaded;
 	}
-
+	public static SavestateHandlerServer getSaveHandler() {
+		return saveHandler;
+	}
 }

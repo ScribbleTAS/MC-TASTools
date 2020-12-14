@@ -10,6 +10,7 @@ import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
 import de.scribble.lp.TASTools.misc.MiscEvents;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
+import de.scribble.lp.TASTools.savestates.SavestateHandlerClient;
 import de.scribble.lp.TASTools.shield.ShieldDownloader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -29,6 +30,8 @@ public class ClientProxy extends CommonProxy{
 	public static KeyBinding TestingKey = new KeyBinding("A keybind for quickly testing things", Keyboard.KEY_H, "TASTools");
 	
 	public static Configuration config;
+	
+	private static SavestateHandlerClient saveHandler;
 	
 	public void preInit(FMLPreInitializationEvent ev) {
 		
@@ -64,9 +67,14 @@ public class ClientProxy extends CommonProxy{
 		MinecraftForge.EVENT_BUS.register(new SavestateEvents());
 		MinecraftForge.EVENT_BUS.register(new MiscEvents());
 		MinecraftForge.EVENT_BUS.register(new ShieldDownloader());
+		
+		saveHandler=new SavestateHandlerClient();
 	}
 	
 	public void postInit(FMLPostInitializationEvent ev) {
 		super.postInit(ev);
+	}
+	public static SavestateHandlerClient getSaveHandlerClient() {
+		return saveHandler;
 	}
 }
