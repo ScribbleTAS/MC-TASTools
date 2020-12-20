@@ -317,7 +317,7 @@ public abstract class MixinEntityLivingBase extends Entity{
         this.limbSwing += this.limbSwingAmount;
         ci.cancel();
 	}
-	@Redirect(method = "travel", at = @At(value = "INVOKE", target = "move"))
+	@Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;move(Lnet/minecraft/entity/MoverType;DDD)V"))
 	public void redirectTravelMotion(EntityLivingBase entity, MoverType type, double x, double y, double z) {
 		if((EntityLivingBase)(Object)this instanceof EntityPlayerSP) {
         	FreezeHandlerVer2.redirectMotion(entity, x, y, z);
@@ -327,7 +327,7 @@ public abstract class MixinEntityLivingBase extends Entity{
         }
 		this.move(type, motionX, motionY, motionZ);
 	}
-	@Redirect(method = "travel", at = @At(value = "INVOKE", target = "moveRelative"))
+	@Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;moveRelative(FFFF)V"))
 	public void redirectTravelRelMotion(EntityLivingBase entity, float x, float y, float z, float friction) {
 		if((EntityLivingBase)(Object)this instanceof EntityPlayerSP) {
         	FreezeHandlerVer2.redirectRelativeMotion(entity, x, y, z);
