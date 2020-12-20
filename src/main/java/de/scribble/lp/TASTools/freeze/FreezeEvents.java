@@ -7,7 +7,7 @@ import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.velocity.ReapplyingVelocity;
-import de.scribble.lp.TASTools.velocity.VelocityEvents;
+import de.scribble.lp.TASTools.velocity.VelocityEventsOld;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMultiplayer;
@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+@Deprecated
 public class FreezeEvents {
 	@SubscribeEvent
 	public void onjoinServer(PlayerLoggedInEvent ev) {
@@ -30,7 +30,7 @@ public class FreezeEvents {
 		/*======================================= Multiplayer =======================================*/
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) { 
 			if (FreezeHandler.isServerFrozen()) {
-				if (VelocityEvents.velocityenabledServer) { // If velocity in the server config is enabled
+				if (VelocityEventsOld.velocityenabledServer) { // If velocity in the server config is enabled
 					File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath()
 							+ File.separator + playerev.getEntityWorld().getWorldInfo().getWorldName() + File.separator
 							+ playerev.getName() + "_velocity.txt");
@@ -60,7 +60,7 @@ public class FreezeEvents {
 					.getPlayers();
 			if (playerMP.size() > 1) {
 				if (FreezeHandler.isServerFrozen()) {
-					if (VelocityEvents.velocityenabledClient) {
+					if (VelocityEventsOld.velocityenabledClient) {
 						File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath()
 								+ File.separator + ev.player.getEntityWorld().getWorldInfo().getWorldName()
 								+ File.separator + playerev.getName() + "_velocity.txt");
@@ -84,7 +84,7 @@ public class FreezeEvents {
 		/*====================================== Singleplayer =======================================*/
 			} else {
 				if(ModLoader.freezeenabledSP) {
-					if (VelocityEvents.velocityenabledClient) {
+					if (VelocityEventsOld.velocityenabledClient) {
 						File file = new File(Minecraft.getMinecraft().mcDataDir,
 								"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
 										+ File.separator + "latest_velocity.txt");

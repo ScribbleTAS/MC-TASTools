@@ -7,6 +7,7 @@ import org.lwjgl.input.Keyboard;
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
+import de.scribble.lp.TASTools.misc.InfoGui;
 import de.scribble.lp.TASTools.misc.MiscEvents;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
@@ -67,6 +68,7 @@ public class ClientProxy extends CommonProxy{
 		MinecraftForge.EVENT_BUS.register(new SavestateEvents());
 		MinecraftForge.EVENT_BUS.register(new MiscEvents());
 		MinecraftForge.EVENT_BUS.register(new ShieldDownloader());
+//		MinecraftForge.EVENT_BUS.register(new InfoGui());
 		
 		saveHandler=new SavestateHandlerClient();
 	}

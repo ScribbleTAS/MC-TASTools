@@ -27,7 +27,7 @@ import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateSavingScreen;
 import de.scribble.lp.TASTools.velocity.SavingVelocity;
-import de.scribble.lp.TASTools.velocity.VelocityEvents;
+import de.scribble.lp.TASTools.velocity.VelocityEventsOld;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -115,7 +115,7 @@ public class SavestateHandlerClient {
 
 				}
 				// Save the velocity
-				if (VelocityEvents.velocityenabledClient) {
+				if (VelocityEventsOld.velocityenabledClient) {
 					new SavingVelocity().saveVelocity(mc.player, file);
 					// Save Velocity for other LAN-Players
 					if (players.size() > 1) {

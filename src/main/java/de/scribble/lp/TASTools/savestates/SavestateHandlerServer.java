@@ -20,7 +20,7 @@ import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.freeze.FreezeHandler;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.velocity.SavingVelocity;
-import de.scribble.lp.TASTools.velocity.VelocityEvents;
+import de.scribble.lp.TASTools.velocity.VelocityEventsOld;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -65,7 +65,7 @@ public class SavestateHandlerServer {
 					}
 					i++;
 				}
-				if (VelocityEvents.velocityenabledServer) {
+				if (VelocityEventsOld.velocityenabledServer) {
 					List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance()
 							.getPlayerList().getPlayers();
 					for (int o = 0; o < players.size(); o++) {

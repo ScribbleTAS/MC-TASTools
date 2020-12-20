@@ -7,7 +7,7 @@ import com.google.common.io.Files;
 
 import de.scribble.lp.TASTools.CommonProxy;
 import net.minecraft.entity.player.EntityPlayer;
-
+@Deprecated
 public class SavingVelocity {
 	private StringBuilder output = new StringBuilder();
 	

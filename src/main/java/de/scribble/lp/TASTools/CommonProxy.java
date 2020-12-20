@@ -12,6 +12,7 @@ import de.scribble.lp.TASTools.fishmanip.FishManipEvents;
 import de.scribble.lp.TASTools.flintrig.FlintRig;
 import de.scribble.lp.TASTools.flintrig.ZombieDrops;
 import de.scribble.lp.TASTools.freeze.FreezeEvents;
+import de.scribble.lp.TASTools.freeze.FreezeHandlerVer2;
 import de.scribble.lp.TASTools.freeze.FreezePacket;
 import de.scribble.lp.TASTools.freeze.FreezePacketHandler;
 import de.scribble.lp.TASTools.keystroke.KeystrokesPacket;
@@ -22,7 +23,7 @@ import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateHandlerServer;
 import de.scribble.lp.TASTools.savestates.SavestatePacket;
 import de.scribble.lp.TASTools.savestates.SavestatePacketHandler;
-import de.scribble.lp.TASTools.velocity.VelocityEvents;
+import de.scribble.lp.TASTools.velocity.VelocityEventsOld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -48,7 +49,7 @@ public class CommonProxy {
 		istasmodloaded=Loader.isModLoaded("tasmod");
 		isdupemodloaded=Loader.isModLoaded("dupemod");
 		
-		MinecraftForge.EVENT_BUS.register(new VelocityEvents());
+		MinecraftForge.EVENT_BUS.register(new VelocityEventsOld());
 		
 		ModLoader.NETWORK= NetworkRegistry.INSTANCE.newSimpleChannel("tastools");
 		ModLoader.NETWORK.registerMessage(FreezePacketHandler.class, FreezePacket.class, 0, Side.SERVER);
@@ -72,7 +73,7 @@ public class CommonProxy {
 	}
 	
 	public void init(FMLInitializationEvent ev) {
-		MinecraftForge.EVENT_BUS.register(new FreezeEvents());
+		MinecraftForge.EVENT_BUS.register(new FreezeHandlerVer2());
 		MinecraftForge.EVENT_BUS.register(new DragonEvents());
 		MinecraftForge.EVENT_BUS.register(new FishManipEvents());
 		MinecraftForge.EVENT_BUS.register(new FlintRig());
