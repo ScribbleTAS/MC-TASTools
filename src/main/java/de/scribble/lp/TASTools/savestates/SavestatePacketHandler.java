@@ -3,6 +3,7 @@ package de.scribble.lp.TASTools.savestates;
 import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
+import de.scribble.lp.TASTools.velocityV2.RequestVelocityPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -36,6 +37,7 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 								ModLoader.NETWORK.sendTo(new SavestatePacket(true, 1),server.getPlayerList().getPlayers().get(0));
 							}
 						} else {
+							ModLoader.NETWORK.sendToAll(new RequestVelocityPacket());
 							if (server.getCurrentPlayerCount() == 1) {
 								ModLoader.NETWORK.sendTo(new SavestatePacket(false, 1), (EntityPlayerMP) player);
 							} else {
@@ -48,10 +50,12 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 						if (!player.canUseCommand(2, "savestate")) {
 							return;
 						}
-						if (message.isLoadSave())
+						if (message.isLoadSave()) {
+							ModLoader.NETWORK.sendToAll(new RequestVelocityPacket());
 							new SavestateHandlerServer().saveState();
-						else
+						}else {
 							new SavestateHandlerServer().setFlagandShutdown();
+						}
 					});
 				}
 			} else if (message.getMode() == 1) {

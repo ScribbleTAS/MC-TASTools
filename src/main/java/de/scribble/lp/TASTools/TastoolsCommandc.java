@@ -12,7 +12,6 @@ import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;
 import de.scribble.lp.TASTools.savestates.SavestateHandlerClient;
 import de.scribble.lp.TASTools.savestates.SavestateHandlerServer;
-import de.scribble.lp.TASTools.velocity.VelocityEventsOld;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -123,10 +122,10 @@ public class TastoolsCommandc extends CommandBase{
 			}
 			//velocity singleplayer
 			if (args.length == 1 && args[0].equalsIgnoreCase("velocity")&&!isdedicated) {
-				velocitySP(sender);
+//				velocitySP(sender);
 			//velocity multiplayer
 			} else if (args.length == 1 && args[0].equalsIgnoreCase("velocity")) {
-				velocityMP(sender);
+//				velocityMP(sender);
 			}
 			//reload config
 			if(args.length == 1 && args[0].equalsIgnoreCase("reload")) {
@@ -164,7 +163,7 @@ public class TastoolsCommandc extends CommandBase{
 				// velocity multiplayer
 
 			} else if (args.length == 1 && args[0].equalsIgnoreCase("velocity")) {
-				velocityCB();
+//				velocityCB();
 
 			} else if (args.length == 1 && args[0].equalsIgnoreCase("keystrokes")) {
 				CommonProxy.logger.warn("Cannot enable keystrokes");
@@ -268,36 +267,36 @@ public class TastoolsCommandc extends CommandBase{
 			}
 		}
 	}
-	private void velocitySP(ICommandSender sender) {
-		if (VelocityEventsOld.velocityenabledClient) {
-			sender.sendMessage(new TextComponentTranslation("msg.velocityClient.disabled"));	//§cDisabled Velocity when joining the world
-			VelocityEventsOld.velocityenabledClient = false;
-			ClientProxy.config.get("Velocity", "Enabled", true, "Activates velocity saving on startup")
-					.set(false);
-			ClientProxy.config.save();
-		} else if (!VelocityEventsOld.velocityenabledClient) {
-			sender.sendMessage(new TextComponentTranslation("msg.velocityClient.enabled"));		//§aEnabled Velocity when joining the world
-			VelocityEventsOld.velocityenabledClient = true;
-			ClientProxy.config.get("Velocity", "Enabled", true, "Activates velocity saving on startup")
-					.set(true);
-			ClientProxy.config.save();
-		}
-	}
-	private void velocityMP(ICommandSender sender) {
-		if (VelocityEventsOld.velocityenabledServer) {
-			sender.sendMessage(new TextComponentTranslation("msg.velocityServer.disabled"));	//§cDisabled Velocity when logging into the server
-			VelocityEventsOld.velocityenabledServer = false;
-			CommonProxy.serverconfig.get("Velocity", "Enabled", true,
-					"Saves and applies Velocity when joining/leaving the server").set(false);
-			CommonProxy.serverconfig.save();
-		} else if (!VelocityEventsOld.velocityenabledServer) {
-			sender.sendMessage(new TextComponentTranslation("msg.velocityServer.enabled"));		//§aEnabled Velocity when logging into the server
-			VelocityEventsOld.velocityenabledServer = true;
-			CommonProxy.serverconfig.get("Velocity", "Enabled", true,
-					"Saves and applies Velocity when joining/leaving the server").set(true);
-			CommonProxy.serverconfig.save();
-		}
-	}
+//	private void velocitySP(ICommandSender sender) {
+//		if (VelocityEvents.velocityenabledClient) {
+//			sender.sendMessage(new TextComponentTranslation("msg.velocityClient.disabled"));	//§cDisabled Velocity when joining the world
+//			VelocityEvents.velocityenabledClient = false;
+//			ClientProxy.config.get("Velocity", "Enabled", true, "Activates velocity saving on startup")
+//					.set(false);
+//			ClientProxy.config.save();
+//		} else if (!VelocityEvents.velocityenabledClient) {
+//			sender.sendMessage(new TextComponentTranslation("msg.velocityClient.enabled"));		//§aEnabled Velocity when joining the world
+//			VelocityEvents.velocityenabledClient = true;
+//			ClientProxy.config.get("Velocity", "Enabled", true, "Activates velocity saving on startup")
+//					.set(true);
+//			ClientProxy.config.save();
+//		}
+//	}
+//	private void velocityMP(ICommandSender sender) {
+//		if (VelocityEvents.velocityenabledServer) {
+//			sender.sendMessage(new TextComponentTranslation("msg.velocityServer.disabled"));	//§cDisabled Velocity when logging into the server
+//			VelocityEvents.velocityenabledServer = false;
+//			CommonProxy.serverconfig.get("Velocity", "Enabled", true,
+//					"Saves and applies Velocity when joining/leaving the server").set(false);
+//			CommonProxy.serverconfig.save();
+//		} else if (!VelocityEvents.velocityenabledServer) {
+//			sender.sendMessage(new TextComponentTranslation("msg.velocityServer.enabled"));		//§aEnabled Velocity when logging into the server
+//			VelocityEvents.velocityenabledServer = true;
+//			CommonProxy.serverconfig.get("Velocity", "Enabled", true,
+//					"Saves and applies Velocity when joining/leaving the server").set(true);
+//			CommonProxy.serverconfig.save();
+//		}
+//	}
 	private void reloadConfig(MinecraftServer server, ICommandSender sender) {
 		if (!server.isDedicatedServer() && server.getCurrentPlayerCount() == 1) {
 			ClientProxy.config.load();
@@ -404,21 +403,21 @@ public class TastoolsCommandc extends CommandBase{
 			CommonProxy.serverconfig.save();
 		}
 	}
-	private void velocityCB() {
-		if (VelocityEventsOld.velocityenabledServer) {
-			CommonProxy.logger.info("Disabled Serverside settings for 'velocity'");
-			VelocityEventsOld.velocityenabledServer = false;
-			CommonProxy.serverconfig.get("Velocity", "Enabled", true,
-					"Saves and applies Velocity when joining/leaving the server").set(false);
-			CommonProxy.serverconfig.save();
-		} else if (!VelocityEventsOld.velocityenabledServer) {
-			CommonProxy.logger.info("Enabled Serverside settings for 'velocity'");
-			VelocityEventsOld.velocityenabledServer = true;
-			CommonProxy.serverconfig.get("Velocity", "Enabled", true,
-					"Saves and applies Velocity when joining/leaving the server").set(true);
-			CommonProxy.serverconfig.save();
-		}
-	}
+//	private void velocityCB() {
+//		if (VelocityEvents.velocityenabledServer) {
+//			CommonProxy.logger.info("Disabled Serverside settings for 'velocity'");
+//			VelocityEvents.velocityenabledServer = false;
+//			CommonProxy.serverconfig.get("Velocity", "Enabled", true,
+//					"Saves and applies Velocity when joining/leaving the server").set(false);
+//			CommonProxy.serverconfig.save();
+//		} else if (!VelocityEvents.velocityenabledServer) {
+//			CommonProxy.logger.info("Enabled Serverside settings for 'velocity'");
+//			VelocityEvents.velocityenabledServer = true;
+//			CommonProxy.serverconfig.get("Velocity", "Enabled", true,
+//					"Saves and applies Velocity when joining/leaving the server").set(true);
+//			CommonProxy.serverconfig.save();
+//		}
+//	}
 	private void flintRig(ICommandSender sender) throws CommandException {
 		FlintRig.enable = !FlintRig.enable;
 		if (sender.canUseCommand(2, "Heck")) {

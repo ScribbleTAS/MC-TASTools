@@ -2,7 +2,7 @@ package de.scribble.lp.TASTools.misc;
 
 import java.awt.MouseInfo;
 
-import de.scribble.lp.TASTools.freeze.FreezeHandlerVer2;
+import de.scribble.lp.TASTools.freezeV2.FreezeHandlerClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -26,7 +26,7 @@ public class InfoGui extends Gui{
         int width = scaled.getScaledWidth();
         int height = scaled.getScaledHeight();
         if (!(mc.gameSettings.showDebugInfo)) {
-                new Gui().drawCenteredString(mc.fontRenderer, FreezeHandlerVer2.getRelX()+ " " + FreezeHandlerVer2.getRelY() + " " + FreezeHandlerVer2.getRelZ(), width/2, 10, 0xFFFFFF);    //Coordinates
+                new Gui().drawCenteredString(mc.fontRenderer, FreezeHandlerClient.getRelX()+ " " + FreezeHandlerClient.getRelY() + " " + FreezeHandlerClient.getRelZ(), width/2, 10, 0xFFFFFF);    //Coordinates
         }
     }
 }

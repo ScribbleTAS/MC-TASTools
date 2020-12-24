@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import de.scribble.lp.TASTools.freeze.FreezeHandlerVer2;
+import de.scribble.lp.TASTools.freezeV2.FreezeHandlerClient;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -33,20 +33,20 @@ public abstract class MixinEntityLivingBase extends Entity{
 	@Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;move(Lnet/minecraft/entity/MoverType;DDD)V"))
 	public void redirectTravelMotion(EntityLivingBase entity, MoverType type, double x, double y, double z) {
 		if((EntityLivingBase)(Object)this instanceof EntityPlayerSP) {
-        	FreezeHandlerVer2.redirectMotion(entity, x, y, z);
-        	motionX=FreezeHandlerVer2.getMoX();
-        	motionY=FreezeHandlerVer2.getMoY();
-        	motionZ=FreezeHandlerVer2.getMoZ();
+        	FreezeHandlerClient.redirectMotion(entity, x, y, z);
+        	motionX=FreezeHandlerClient.getMoX();
+        	motionY=FreezeHandlerClient.getMoY();
+        	motionZ=FreezeHandlerClient.getMoZ();
         }
 		this.move(type, motionX, motionY, motionZ);
 	}
 	@Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;moveRelative(FFFF)V"))
 	public void redirectTravelRelMotion(EntityLivingBase entity, float x, float y, float z, float friction) {
 		if((EntityLivingBase)(Object)this instanceof EntityPlayerSP) {
-        	FreezeHandlerVer2.redirectRelativeMotion(entity, x, y, z);
-        	x=FreezeHandlerVer2.getRelX();
-        	y=FreezeHandlerVer2.getRelY();
-        	z=FreezeHandlerVer2.getRelZ();
+        	FreezeHandlerClient.redirectRelativeMotion(entity, x, y, z);
+        	x=FreezeHandlerClient.getRelX();
+        	y=FreezeHandlerClient.getRelY();
+        	z=FreezeHandlerClient.getRelZ();
         }
 		this.moveRelative(x, y, z, friction);
 	}

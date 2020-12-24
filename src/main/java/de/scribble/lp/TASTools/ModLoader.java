@@ -3,12 +3,12 @@ package de.scribble.lp.TASTools;
 import de.scribble.lp.TASTools.duping.DupeCommandc;
 import de.scribble.lp.TASTools.enderdragon.DragonCommandc;
 import de.scribble.lp.TASTools.flintrig.ZombieDropCommand;
-import de.scribble.lp.TASTools.freeze.FreezeCommandc;
-import de.scribble.lp.TASTools.freeze.FreezeHandler;
+import de.scribble.lp.TASTools.freezeV2.FreezeCommandc;
+import de.scribble.lp.TASTools.freezeV2.FreezeHandlerServer;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateCommandc;
-import de.scribble.lp.TASTools.savestates.SavestateHandlerClient;
 import de.scribble.lp.TASTools.savestates.SavestateHandlerServer;
+import net.minecraft.pathfinding.FlyingNodeProcessor;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -82,9 +82,9 @@ public class ModLoader {
 	@EventHandler
 	public void serverStarted(FMLServerStartedEvent ev) {
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
-			if(freezeenabledMP) {
-				FreezeHandler.startFreezeServer();
-			}
+				FreezeHandlerServer.activate(freezeenabledMP);
+		}else {
+			FreezeHandlerServer.activate(freezeenabledSP);
 		}
 	}
 	@EventHandler

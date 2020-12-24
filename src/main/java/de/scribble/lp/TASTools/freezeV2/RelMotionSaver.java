@@ -1,4 +1,4 @@
-package de.scribble.lp.TASTools.freeze;
+package de.scribble.lp.TASTools.freezeV2;
 
 public class RelMotionSaver {
 	private String playername;
@@ -12,6 +12,8 @@ public class RelMotionSaver {
 		this.relSavedX=relSavedX;
 		this.relSavedY=relSavedY;
 		this.relSavedZ=relSavedZ;
+		
+		this.applied=applied;
 	}
 	public void setRelativeMotionSaved(float[] in) {
 		relSavedX=in[0];

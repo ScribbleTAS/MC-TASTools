@@ -9,7 +9,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -17,11 +16,8 @@ import com.google.common.io.Files;
 
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
-import de.scribble.lp.TASTools.freeze.FreezeHandler;
-import de.scribble.lp.TASTools.freeze.FreezePacket;
-import de.scribble.lp.TASTools.velocity.SavingVelocity;
-import de.scribble.lp.TASTools.velocity.VelocityEventsOld;
-import net.minecraft.entity.player.EntityPlayerMP;
+import de.scribble.lp.TASTools.freezeV2.FreezeHandlerServer;
+import de.scribble.lp.TASTools.freezeV2.networking.FreezePacket;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -40,9 +36,9 @@ public class SavestateHandlerServer {
 				this.currentworldfolder = new File(FMLCommonHandler.instance().getSavesDirectory().getPath()
 						+ File.separator + ModLoader.getLevelname());
 				targetsavefolder = null;
-				if (!FreezeHandler.isServerFrozen()) {
-					FreezeHandler.startFreezeServer();
-					ModLoader.NETWORK.sendToAll(new FreezePacket(true));
+				if (!FreezeHandlerServer.isEnabled()) {
+					FreezeHandlerServer.activate(true);
+					ModLoader.NETWORK.sendToAll(new FreezePacket(true, true));
 				}
 				ModLoader.NETWORK.sendToAll(new SavestatePacket());
 				int i = 1;
@@ -65,20 +61,20 @@ public class SavestateHandlerServer {
 					}
 					i++;
 				}
-				if (VelocityEventsOld.velocityenabledServer) {
-					List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance()
-							.getPlayerList().getPlayers();
-					for (int o = 0; o < players.size(); o++) {
-						for (int e = 0; e < FreezeHandler.entity.size(); e++) {
-							if (FreezeHandler.entity.get(e).getPlayername().equals(players.get(o).getName())) {
-								new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(o).getMotionX(),
-										FreezeHandler.entity.get(o).getMotionY(),
-										FreezeHandler.entity.get(o).getMotionZ(), new File(currentworldfolder.getPath()
-												+ File.separator + players.get(o).getName() + "_velocity.txt"));
-							}
-						}
-					}
-				}
+//				if (VelocityEvents.velocityenabledServer) {
+//					List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance()
+//							.getPlayerList().getPlayers();
+//					for (int o = 0; o < players.size(); o++) {
+//						for (int e = 0; e < FreezeHandler.entity.size(); e++) {
+//							if (FreezeHandler.entity.get(e).getPlayername().equals(players.get(o).getName())) {
+//								new SavingVelocity().saveVelocityCustom(FreezeHandler.entity.get(o).getMotionX(),
+//										FreezeHandler.entity.get(o).getMotionY(),
+//										FreezeHandler.entity.get(o).getMotionZ(), new File(currentworldfolder.getPath()
+//												+ File.separator + players.get(o).getName() + "_velocity.txt"));
+//							}
+//						}
+//					}
+//				}
 				try {
 					int[] incr = getInfoValues(getInfoFile(ModLoader.getLevelname()));
 					if (incr[0] == 0) {

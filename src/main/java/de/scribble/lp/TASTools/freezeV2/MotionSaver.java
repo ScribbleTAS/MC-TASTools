@@ -1,4 +1,4 @@
-package de.scribble.lp.TASTools.freeze;
+package de.scribble.lp.TASTools.freezeV2;
 
 public class MotionSaver {
 	private String playername;

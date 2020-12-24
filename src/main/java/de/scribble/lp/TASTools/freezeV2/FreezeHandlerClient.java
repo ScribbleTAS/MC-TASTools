@@ -1,4 +1,4 @@
-package de.scribble.lp.TASTools.freeze;
+package de.scribble.lp.TASTools.freezeV2;
 
 
 import java.util.Map;
@@ -9,8 +9,12 @@ import com.google.common.collect.Maps;
 
 import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
+import de.scribble.lp.TASTools.ModLoader;
+import de.scribble.lp.TASTools.freezeV2.networking.MovementPacket;
+import de.scribble.lp.TASTools.freezeV2.networking.PermissionPacket;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMultiplayer;
 import net.minecraft.entity.Entity;
@@ -21,12 +25,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class FreezeHandlerVer2 {
+public class FreezeHandlerClient {
 	/**
 	 * Indicates Server side freezing. Mouse Input freezing is indicated by "clientfrozen"
 	 */
@@ -36,102 +41,92 @@ public class FreezeHandlerVer2 {
 	 */
 	private static boolean clientfrozen;
 	
-	static double moX;
-	static double moY;
-	static double moZ;
+	private static double moX=0;
+	private static double moY=0;
+	private static double moZ=0;
 	
-	static float relX;
-	static float relY;
-	static float relZ;
+	private static float relX=0;
+	private static float relY=0;
+	private static float relZ=0;
 	
-	static int cooldown=20;
-	static boolean enabled=false;
-	static boolean once=false;
+	private static boolean enabled=false;
 	
-//	public static double motionSavedX=0;
-//	public static double motionSavedY=0;
-//	public static double motionSavedZ=0;
-//	
-//	public static float relSavedX=0;
-//	public static float relSavedY=0;
-//	public static float relSavedZ=0;
-	
-	public static MotionSaver saver;
-	public static RelMotionSaver relsaver;
+	private static MotionSaver saverClient;
+	private static RelMotionSaver relsaverClient;
 	
 	public static void redirectRelativeMotion(EntityLivingBase entity, float xrel, float yrel, float zrel) {
 		EntityPlayer player=(EntityPlayer)entity;
-		if (ClientProxy.FreezeKey.isPressed() && Minecraft.getMinecraft().player.canUseCommand(2, "freeze")) {
-			enabled=!enabled;
-		}
-		if(relsaver==null) {
-			relsaver=new RelMotionSaver(player.getName(), enabled, xrel, yrel, zrel);
+		
+		if(relsaverClient==null) {
+			relsaverClient=new RelMotionSaver(player.getName(), enabled, xrel, yrel, zrel);
 		}
 		
 		if(enabled) {
-			if(relsaver.isApplied()) {
+			if(relsaverClient.isApplied()) {
 			}else {
-				relsaver.setApplied(true);
+				relsaverClient.setApplied(true);
 			}
 			relX = 0F;
 			relY = 0F;
 			relZ = 0F;
 		}else {
-			if(!relsaver.isApplied()) {
+			if(!relsaverClient.isApplied()) {
 				float[] in= {xrel, yrel, zrel};
-				relsaver.setRelativeMotionSaved(in);
+				relsaverClient.setRelativeMotionSaved(in);
 			}else {
-				relsaver.setApplied(false);
+				relsaverClient.setApplied(false);
 			}
-			relX=relsaver.getRelSavedX();
-			relY=relsaver.getRelSavedY();
-			relZ=relsaver.getRelSavedZ();
+			relX=relsaverClient.getRelSavedX();
+			relY=relsaverClient.getRelSavedY();
+			relZ=relsaverClient.getRelSavedZ();
 		}
 	}
 	public static void redirectMotion(EntityLivingBase entity, double x, double y, double z) {
 		EntityPlayer player=(EntityPlayer)entity;
-		if (ClientProxy.FreezeKey.isPressed() && Minecraft.getMinecraft().player.canUseCommand(2, "freeze")) {
-			enabled=!enabled;
-		}
-		if(saver==null) {
-			saver=new MotionSaver(player.getName(), enabled, x, y, z);
+		
+		if(saverClient==null) {
+			saverClient=new MotionSaver(player.getName(), enabled, x, y, z);
 		}
 		
 		if(enabled) {
-			if(saver.isApplied()) {	//If freeze is enabled
+			if(saverClient.isApplied()) {	//If freeze is enabled
 			}else {					//The first tick freeze is enabled
-				saver.setApplied(true);
+				saverClient.setApplied(true);
 			}
 			moX = 0D;
 			moY = 0D;
 			moZ = 0D;
 		}else {
-			if(!saver.isApplied()) {	//If this freeze is disabled
+			if(!saverClient.isApplied()) {	//If this freeze is disabled
 				double[] in= {x, y, z};
-				saver.setMotionSaved(in);
+				saverClient.setMotionSaved(in);
 			}else {						//The first tick freeze is disabled
-				saver.setMotionSavedY(saver.getMotionSavedY()+y);
-				saver.setApplied(false);
+				saverClient.setMotionSavedY(saverClient.getMotionSavedY()+y);
+				saverClient.setApplied(false);
 			}
-			moX=saver.getMotionSavedX();
-			moY=saver.getMotionSavedY();
-			moZ=saver.getMotionSavedZ();
+			moX=saverClient.getMotionSavedX();
+			moY=saverClient.getMotionSavedY();
+			moZ=saverClient.getMotionSavedZ();
 		}
 	}
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void pressKeybinding(InputEvent.KeyInputEvent ev) {
-//		if (ClientProxy.FreezeKey.isPressed() && Minecraft.getMinecraft().player.canUseCommand(2, "freeze")) {
-//			enabled=!enabled;
-//		}
+		if (ClientProxy.FreezeKey.isPressed() && Minecraft.getMinecraft().player.canUseCommand(2, "freeze")) {
+			ModLoader.NETWORK.sendToServer(new PermissionPacket());
+		}
 	}
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onMenus(GuiOpenEvent ev) {
 		if(ev.getGui() instanceof GuiMainMenu||ev.getGui() instanceof GuiMultiplayer) {
-			if(FreezeHandler.isClientFrozen()) {
+			if(enabled) {
 				CommonProxy.logger.info("Unfreezing the mouse");
-				FreezeHandler.stopFreezeClient();
+				enabled=false;
+			}
+		}else if(ev.getGui() instanceof GuiIngameMenu) {
+			if(!enabled) {
+				ModLoader.NETWORK.sendToServer(new MovementPacket(moX, moY, moZ, relX, relY, relZ));
 			}
 		}
 	}
@@ -153,10 +148,19 @@ public class FreezeHandlerVer2 {
 	public static float getRelZ() {
 		return relZ;
 	}
-	public static boolean isClientfrozen() {
-		return clientfrozen;
+	public static void enable(boolean enable) {
+		enabled=enable;
 	}
-	public static boolean isServerfrozen() {
-		return serverfrozen;
+	public static RelMotionSaver getRelsaverClient() {
+		return relsaverClient;
+	}
+	public static MotionSaver getSaverClient() {
+		return saverClient;
+	}
+	@SubscribeEvent
+	public void onPlayerCreated(NameFormat ev) {
+		if(!ev.getUsername().equals("TASBot")) {
+			ev.setDisplayname("[TAS]"+" "+ev.getDisplayname());
+		}
 	}
 }

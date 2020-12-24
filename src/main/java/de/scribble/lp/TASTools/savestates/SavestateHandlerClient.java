@@ -10,7 +10,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.KeyStore.LoadStoreParameter;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -19,15 +18,13 @@ import com.google.common.io.Files;
 
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
-import de.scribble.lp.TASTools.duping.DupeEvents;
-import de.scribble.lp.TASTools.freeze.FreezeHandler;
-import de.scribble.lp.TASTools.freeze.FreezePacket;
+import de.scribble.lp.TASTools.freezeV2.FreezeHandlerServer;
+import de.scribble.lp.TASTools.freezeV2.networking.FreezePacket;
 import de.scribble.lp.TASTools.misc.MiscEvents;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateSavingScreen;
-import de.scribble.lp.TASTools.velocity.SavingVelocity;
-import de.scribble.lp.TASTools.velocity.VelocityEventsOld;
+import de.scribble.lp.TASTools.velocityV2.RequestVelocityPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -108,31 +105,9 @@ public class SavestateHandlerClient {
 				
 				// For LAN-Servers
 				if (players.size() > 1) {
-					if (!FreezeHandler.isServerFrozen()) {
-						FreezeHandler.startFreezeServer();
-						ModLoader.NETWORK.sendToAll(new FreezePacket(true));
-					}
-
-				}
-				// Save the velocity
-				if (VelocityEventsOld.velocityenabledClient) {
-					new SavingVelocity().saveVelocity(mc.player, file);
-					// Save Velocity for other LAN-Players
-					if (players.size() > 1) {
-						if (FreezeHandler.isServerFrozen()) {
-							for (int i1 = 0; i1 < players.size(); i1++) {
-								for (int j = 0; j < FreezeHandler.entity.size(); j++) {
-									if (FreezeHandler.entity.get(j).getPlayername().equals(players.get(i1).getName())) {
-										new SavingVelocity().saveVelocityCustom(
-												FreezeHandler.entity.get(j).getMotionX(),
-												FreezeHandler.entity.get(i1).getMotionY(),
-												FreezeHandler.entity.get(i1).getMotionZ(), file);
-									}
-								}
-							}
-						}
-					}else {
-						new DupeEvents().recordDupe(mc.player);
+					if (!FreezeHandlerServer.isEnabled()) {
+						FreezeHandlerServer.activate(true);
+						ModLoader.NETWORK.sendToAll(new FreezePacket(true, true));
 					}
 				}
 				// Save the info file
