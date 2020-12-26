@@ -24,7 +24,7 @@ import de.scribble.lp.TASTools.misc.MiscEvents;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateLoadingScreen;
 import de.scribble.lp.TASTools.savestates.gui.GuiSavestateSavingScreen;
-import de.scribble.lp.TASTools.velocityV2.RequestVelocityPacket;
+import de.scribble.lp.TASTools.velocityV2.VelocityHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -100,14 +100,13 @@ public class SavestateHandlerClient {
 						"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
 								+ File.separator + "latest_velocity.txt");
 				
-				
 				ModLoader.NETWORK.sendToServer(new SavestatePacket(false,1)); //Tell the server to save playerdata and chunks
 				
 				// For LAN-Servers
 				if (players.size() > 1) {
 					if (!FreezeHandlerServer.isEnabled()) {
 						FreezeHandlerServer.activate(true);
-						ModLoader.NETWORK.sendToAll(new FreezePacket(true, true));
+						ModLoader.NETWORK.sendToAll(new FreezePacket(true, false));
 					}
 				}
 				// Save the info file
@@ -337,6 +336,14 @@ public class SavestateHandlerClient {
 	private class SavestateSaveEventsClient extends Thread {
 		@Override
 		public void run() {
+			try {
+				while(!FreezeHandlerServer.isEveryMotionSaved()) {
+					Thread.sleep(5);
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			VelocityHandler.saveAllMotion(FMLCommonHandler.instance().getMinecraftServerInstance());
 			try {
 				currentThread().sleep(savetimer);
 			} catch (InterruptedException e1) {

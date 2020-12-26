@@ -1,7 +1,5 @@
 package de.scribble.lp.TASTools.misc;
 
-import java.awt.MouseInfo;
-
 import de.scribble.lp.TASTools.freezeV2.FreezeHandlerClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;

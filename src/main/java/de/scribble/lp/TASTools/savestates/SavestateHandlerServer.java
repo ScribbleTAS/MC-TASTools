@@ -18,6 +18,7 @@ import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.freezeV2.FreezeHandlerServer;
 import de.scribble.lp.TASTools.freezeV2.networking.FreezePacket;
+import de.scribble.lp.TASTools.velocityV2.VelocityHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,7 +39,7 @@ public class SavestateHandlerServer {
 				targetsavefolder = null;
 				if (!FreezeHandlerServer.isEnabled()) {
 					FreezeHandlerServer.activate(true);
-					ModLoader.NETWORK.sendToAll(new FreezePacket(true, true));
+					ModLoader.NETWORK.sendToAll(new FreezePacket(true, false));
 				}
 				ModLoader.NETWORK.sendToAll(new SavestatePacket());
 				int i = 1;
@@ -304,11 +305,20 @@ public class SavestateHandlerServer {
 		@Override
 		public void run() {
 			try {
+				while(!FreezeHandlerServer.isEveryMotionSaved()) {
+					Thread.sleep(5);
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			VelocityHandler.saveAllMotion(FMLCommonHandler.instance().getMinecraftServerInstance());
+			try {
 				Thread.sleep(endtimer);
 			} catch (InterruptedException e1) {
 				CommonProxy.logger.catching(e1);
 			}
 			try {
+				VelocityHandler.saveAllMotion(FMLCommonHandler.instance().getMinecraftServerInstance());
 				copyDirectory(currentworldfolder, targetsavefolder, new String[] { " " });
 
 			} catch (IOException e) {

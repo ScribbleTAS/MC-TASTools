@@ -1,7 +1,10 @@
 package de.scribble.lp.TASTools.freezeV2.networking;
 
+import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.freezeV2.FreezeHandlerClient;
 import de.scribble.lp.TASTools.freezeV2.FreezeHandlerServer;
+import de.scribble.lp.TASTools.freezeV2.MotionSaver;
+import de.scribble.lp.TASTools.freezeV2.RelMotionSaver;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -28,18 +31,16 @@ public class MovementPacketHandler implements IMessageHandler<MovementPacket, IM
 			});
 		}else {
 			Minecraft.getMinecraft().addScheduledTask(()->{
-				if(FreezeHandlerClient.getSaverClient()!=null||FreezeHandlerClient.getRelsaverClient()!=null) {
-					FreezeHandlerClient.getSaverClient().setMotionSavedX(message.getMoX());
-					FreezeHandlerClient.getSaverClient().setMotionSavedY(message.getMoY());
-					FreezeHandlerClient.getSaverClient().setMotionSavedZ(message.getMoZ());
+				String playername=Minecraft.getMinecraft().player.getName();
+				
+				FreezeHandlerClient.saverClient=new MotionSaver(playername, FreezeHandlerClient.isEnabled(), message.getMoX(), message.getMoY(), message.getMoZ());
 					
-					float[] in={message.getRelX(),message.getRelY(), message.getRelZ()};
-					
-					FreezeHandlerClient.getRelsaverClient().setRelativeMotionSaved(in);
-				}
+				FreezeHandlerClient.relsaverClient=new RelMotionSaver(playername, FreezeHandlerClient.isEnabled(), message.getRelX(), message.getRelY(), message.getRelZ());
+				
+				ModLoader.NETWORK.sendToServer(new AcknowledgePacket());
+				FreezeHandlerClient.motionapplied=true;
 			});
 		}
 		return null;
 	}
-
 }

@@ -1,17 +1,18 @@
 package de.scribble.lp.TASTools.mixin;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
+
 import de.scribble.lp.TASTools.fishmanip.FishManipEvents;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 
 @Mixin(EntityFishHook.class)
 public abstract class MixinEntityFishHook {

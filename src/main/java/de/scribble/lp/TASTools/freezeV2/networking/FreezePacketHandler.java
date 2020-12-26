@@ -1,12 +1,10 @@
 package de.scribble.lp.TASTools.freezeV2.networking;
 
-import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.freezeV2.FreezeHandlerClient;
 import de.scribble.lp.TASTools.freezeV2.MotionSaver;
 import de.scribble.lp.TASTools.freezeV2.RelMotionSaver;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;

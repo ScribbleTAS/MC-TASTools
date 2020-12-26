@@ -26,7 +26,9 @@ public class FreezeCommandc extends CommandBase {
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-			
+		boolean freezeStatus=FreezeHandlerServer.isEnabled();
+		FreezeHandlerServer.activate(!freezeStatus);
+		ModLoader.NETWORK.sendToAll(new FreezePacket(FreezeHandlerServer.isEnabled(), true));
 	}
 
 }

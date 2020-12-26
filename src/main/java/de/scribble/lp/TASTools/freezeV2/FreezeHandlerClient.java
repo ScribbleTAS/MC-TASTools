@@ -1,30 +1,19 @@
 package de.scribble.lp.TASTools.freezeV2;
 
 
-import java.util.Map;
-
-import org.lwjgl.input.Keyboard;
-
-import com.google.common.collect.Maps;
-
 import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.freezeV2.networking.MovementPacket;
 import de.scribble.lp.TASTools.freezeV2.networking.PermissionPacket;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMultiplayer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -32,14 +21,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class FreezeHandlerClient {
-	/**
-	 * Indicates Server side freezing. Mouse Input freezing is indicated by "clientfrozen"
-	 */
-	private static boolean serverfrozen;
-	/**
-	 * Client isn't actually frozen, the server handles freezing... this is just to show that the mouse is diabled
-	 */
-	private static boolean clientfrozen;
 	
 	private static double moX=0;
 	private static double moY=0;
@@ -51,8 +32,10 @@ public class FreezeHandlerClient {
 	
 	private static boolean enabled=false;
 	
-	private static MotionSaver saverClient;
-	private static RelMotionSaver relsaverClient;
+	public static MotionSaver saverClient;
+	public static RelMotionSaver relsaverClient;
+	
+	public static boolean motionapplied;
 	
 	public static void redirectRelativeMotion(EntityLivingBase entity, float xrel, float yrel, float zrel) {
 		EntityPlayer player=(EntityPlayer)entity;
@@ -122,6 +105,8 @@ public class FreezeHandlerClient {
 		if(ev.getGui() instanceof GuiMainMenu||ev.getGui() instanceof GuiMultiplayer) {
 			if(enabled) {
 				CommonProxy.logger.info("Unfreezing the mouse");
+				saverClient=null;
+				relsaverClient=null;
 				enabled=false;
 			}
 		}else if(ev.getGui() instanceof GuiIngameMenu) {
@@ -161,6 +146,16 @@ public class FreezeHandlerClient {
 	public void onPlayerCreated(NameFormat ev) {
 		if(!ev.getUsername().equals("TASBot")) {
 			ev.setDisplayname("[TAS]"+" "+ev.getDisplayname());
+		}
+	}
+	public static boolean isEnabled() {
+		return enabled;
+	}
+		
+	@SubscribeEvent
+	public void disableMouse(MouseEvent ev) {
+		if(enabled) {
+			ev.setCanceled(true);
 		}
 	}
 }

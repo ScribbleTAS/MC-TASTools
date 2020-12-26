@@ -1,11 +1,17 @@
 package de.scribble.lp.TASTools.mixin;
 
-import de.scribble.lp.TASTools.misc.Util;
-import net.minecraft.client.gui.toasts.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import de.scribble.lp.TASTools.misc.Util;
+import net.minecraft.client.gui.toasts.AdvancementToast;
+import net.minecraft.client.gui.toasts.GuiToast;
+import net.minecraft.client.gui.toasts.IToast;
+import net.minecraft.client.gui.toasts.RecipeToast;
+import net.minecraft.client.gui.toasts.SystemToast;
+import net.minecraft.client.gui.toasts.TutorialToast;
 
 @Mixin(GuiToast.class)
 public class MixinGuiToast {

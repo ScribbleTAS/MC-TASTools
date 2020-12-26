@@ -8,7 +8,6 @@ import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.freezeV2.FreezeHandlerClient;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
 import de.scribble.lp.TASTools.misc.GuiOverlayLogo;
-import de.scribble.lp.TASTools.misc.InfoGui;
 import de.scribble.lp.TASTools.misc.MiscEvents;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateEvents;

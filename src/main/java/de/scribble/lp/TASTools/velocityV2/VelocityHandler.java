@@ -3,9 +3,12 @@ package de.scribble.lp.TASTools.velocityV2;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import com.google.common.collect.Maps;
+
+import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.freezeV2.FreezeHandlerServer;
 import de.scribble.lp.TASTools.freezeV2.MotionSaverServer;
@@ -21,21 +24,11 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 
 public class VelocityHandler {
-	
+	public static Map<String,PacketSender> playeracknowledge=Maps.<String,PacketSender>newHashMap();
 	@SubscribeEvent
 	public void onLogout(PlayerLoggedOutEvent ev) {
-		EntityPlayerMP player= (EntityPlayerMP) ev.player;
-		MinecraftServer server=player.getServer();
-		
-		if(!server.isDedicatedServer()) {
-			if(server.getPlayerList().getPlayers().get(0).getName().equalsIgnoreCase(player.getName())) {
-				saveFile(FreezeHandlerServer.get("singleplayer"));
-			}else {
-				saveFile(FreezeHandlerServer.get(player.getName()));
-			}
-		}else {
-			saveFile(FreezeHandlerServer.get(player.getName()));
-		}
+		playeracknowledge.remove(ev.player.getName());
+		saveMotion((EntityPlayerMP) ev.player);
 	}
 	@SubscribeEvent
 	public void onLogin(PlayerLoggedInEvent ev) {
@@ -51,14 +44,16 @@ public class VelocityHandler {
 						"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
 								+ File.separator + "singleplayer" + "_motion.txt");
 				if(!file.exists()) {
+					CommonProxy.logger.info("File for player"+player.getName()+" doesn't exist. Not applying motion to this player");
 					return;
 				}
 				saver=readFile(file, "singleplayer");
 			}else {
 				File file = new File(Minecraft.getMinecraft().mcDataDir,
 						"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
-								+ File.separator + ev.player.getName() + "_motion.txt");
+								+ File.separator + player.getName() + "_motion.txt");
 				if(!file.exists()) {
+					CommonProxy.logger.info("File for player"+player.getName()+" doesn't exist. Not applying motion to this player");
 					return;
 				}
 				saver=readFile(file, player.getName());
@@ -71,10 +66,37 @@ public class VelocityHandler {
 			}
 			saver=readFile(file, player.getName());
 		}
+//		System.out.println(saver.getMotionSavedX()+" "+saver.getMotionSavedY() +" "+saver.getMotionSavedZ()+" "+ saver.getRelSavedX()+" "+ saver.getRelSavedY()+" "+ saver.getRelSavedZ());
 		player.fallDistance=saver.getFalldistance();
-		ModLoader.NETWORK.sendTo(new MovementPacket(saver.getMotionSavedX(), saver.getMotionSavedY(), saver.getMotionSavedZ(), saver.getRelSavedX(), saver.getRelSavedY(), saver.getRelSavedZ()), (EntityPlayerMP) ev.player);
+		playeracknowledge.put(player.getName(), new PacketSender(player, saver.getMotionSavedX(), saver.getMotionSavedY(), saver.getMotionSavedZ(), saver.getRelSavedX(), saver.getRelSavedY(), saver.getRelSavedZ()));
+		playeracknowledge.get(player.getName()).start();
 	}
-	public void saveFile(MotionSaverServer saver) {
+	public static void saveMotion(EntityPlayerMP player){
+		MinecraftServer server=player.getServer();
+		
+		if(!server.isDedicatedServer()) {
+			if(server.getPlayerList().getPlayers().get(0).getName().equalsIgnoreCase(player.getName())) {
+				File file = new File(Minecraft.getMinecraft().mcDataDir,
+						"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
+								+ File.separator + "singleplayer" + "_motion.txt");
+				saveFile(FreezeHandlerServer.get("singleplayer"), file);
+			}else {
+				File file = new File(Minecraft.getMinecraft().mcDataDir,
+						"saves" + File.separator + Minecraft.getMinecraft().getIntegratedServer().getFolderName()
+								+ File.separator + player.getName() + "_motion.txt");
+				saveFile(FreezeHandlerServer.get(player.getName()), file);
+			}
+		}else {
+			File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath() + File.separator + ModLoader.getLevelname() +File.separator
+					+ player.getName() + "_motion.txt");
+			saveFile(FreezeHandlerServer.get(player.getName()),file);
+		}
+	}
+	private static void saveFile(MotionSaverServer saver, File file) {
+		if(saver==null) {
+			CommonProxy.logger.error("Couldn't save file: "+file);
+			return;
+		}
 		StringBuilder output=new StringBuilder();
 		String playername=saver.getPlayername();
 		
@@ -87,9 +109,6 @@ public class VelocityHandler {
 		float rz=saver.getRelSavedZ();
 		
 		float fallDistance=saver.getFalldistance();
-		
-		File file = new File(FMLCommonHandler.instance().getSavesDirectory().getAbsolutePath() + File.separator + ModLoader.getLevelname() +File.separator
-				+ playername + "_motion.txt");
 		
 		output.append("#This file was generated by TASTools, the author is ScribbleLP. To prevent this file being generated, check the tastools.cfg\n"
 				+ "\n"
@@ -148,5 +167,49 @@ public class VelocityHandler {
 			}
 		}
 		return new MotionSaverServer(playername, x, y, z, rx, ry, rz, fallDistance);
+	}
+	public static void saveAllMotion(MinecraftServer server) {
+		List<EntityPlayerMP> players= server.getPlayerList().getPlayers();
+		for(EntityPlayerMP player : players) {
+			saveMotion(player);
+		}
+	}
+	
+	public class PacketSender extends Thread{
+		EntityPlayerMP playername;
+		boolean breaks=false;
+		private double moX;
+		private double moY;
+		private double moZ;
+		private float relX;
+		private float relY;
+		private float relZ;
+		
+		public PacketSender(EntityPlayerMP player,double x, double y, double z, float rx, float ry, float rz) {
+			this.playername=player;
+			this.setName("MotionSenderThread-"+player.getName());
+			moX=x;
+			moY=y;
+			moZ=z;
+			
+			relX=rx;
+			relY=ry;
+			relZ=rz;
+		}
+		@Override
+		public void run() {
+			while(!breaks) {
+				System.out.println(playername.getName());
+				ModLoader.NETWORK.sendTo(new MovementPacket(moX, moY, moZ, relX, relY, relZ), playername);
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		public void setBreaks(boolean breaks) {
+			this.breaks = breaks;
+		}
 	}
 }

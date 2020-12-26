@@ -8,7 +8,6 @@ import de.scribble.lp.TASTools.freezeV2.FreezeHandlerServer;
 import de.scribble.lp.TASTools.misc.Util;
 import de.scribble.lp.TASTools.savestates.SavestateCommandc;
 import de.scribble.lp.TASTools.savestates.SavestateHandlerServer;
-import net.minecraft.pathfinding.FlyingNodeProcessor;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -83,8 +82,10 @@ public class ModLoader {
 	public void serverStarted(FMLServerStartedEvent ev) {
 		if (FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer()) {
 				FreezeHandlerServer.activate(freezeenabledMP);
+				if(freezeenabledMP) FreezeHandlerServer.once1=FreezeHandlerServer.once2=true;
 		}else {
 			FreezeHandlerServer.activate(freezeenabledSP);
+			if(freezeenabledSP) FreezeHandlerServer.once1=FreezeHandlerServer.once2=true;
 		}
 	}
 	@EventHandler

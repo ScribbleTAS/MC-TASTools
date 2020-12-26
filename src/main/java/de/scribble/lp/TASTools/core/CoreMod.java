@@ -1,16 +1,18 @@
 package de.scribble.lp.TASTools.core;
 
-import net.minecraftforge.fml.relauncher.CoreModManager;
-import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
-import org.apache.logging.log4j.LogManager;
-import org.spongepowered.asm.launch.MixinBootstrap;
-
-import javax.annotation.Nullable;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.CodeSource;
 import java.util.Map;
+
+import javax.annotation.Nullable;
+
+import org.apache.logging.log4j.LogManager;
+import org.spongepowered.asm.launch.MixinBootstrap;
+
+import net.minecraftforge.fml.relauncher.CoreModManager;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 public class CoreMod implements IFMLLoadingPlugin {
 

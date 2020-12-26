@@ -11,6 +11,9 @@ import de.scribble.lp.TASTools.enderdragon.DragonEvents;
 import de.scribble.lp.TASTools.fishmanip.FishManipEvents;
 import de.scribble.lp.TASTools.flintrig.FlintRig;
 import de.scribble.lp.TASTools.flintrig.ZombieDrops;
+import de.scribble.lp.TASTools.freezeV2.FreezeHandlerServer;
+import de.scribble.lp.TASTools.freezeV2.networking.AcknowledgePacket;
+import de.scribble.lp.TASTools.freezeV2.networking.AcknowledgePacketHandler;
 import de.scribble.lp.TASTools.freezeV2.networking.FreezePacket;
 import de.scribble.lp.TASTools.freezeV2.networking.FreezePacketHandler;
 import de.scribble.lp.TASTools.freezeV2.networking.MovementPacket;
@@ -63,6 +66,7 @@ public class CommonProxy {
 		ModLoader.NETWORK.registerMessage(MovementPacketHandler.class, MovementPacket.class, 7, Side.SERVER);
 		ModLoader.NETWORK.registerMessage(MovementPacketHandler.class, MovementPacket.class, 8, Side.CLIENT);
 		ModLoader.NETWORK.registerMessage(RequestVelocityPacketHandler.class, RequestVelocityPacket.class, 9, Side.CLIENT);
+		ModLoader.NETWORK.registerMessage(AcknowledgePacketHandler.class, AcknowledgePacket.class, 10, Side.SERVER);
 		
 		if(ev.getSide()==Side.SERVER) {
 			//Make a Serverconfig
@@ -82,6 +86,7 @@ public class CommonProxy {
 		MinecraftForge.EVENT_BUS.register(new FlintRig());
 		MinecraftForge.EVENT_BUS.register(new ZombieDrops());
 		MinecraftForge.EVENT_BUS.register(new VelocityHandler());
+		MinecraftForge.EVENT_BUS.register(new FreezeHandlerServer());
 	}
 	
 	public void postInit(FMLPostInitializationEvent ev) {

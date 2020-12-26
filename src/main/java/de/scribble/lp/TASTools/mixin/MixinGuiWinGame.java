@@ -1,13 +1,14 @@
 package de.scribble.lp.TASTools.mixin;
 
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiWinGame;
-import net.minecraft.util.Session;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiWinGame;
+import net.minecraft.util.Session;
 
 @Mixin(GuiWinGame.class)
 public abstract class MixinGuiWinGame extends GuiScreen {

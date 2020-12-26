@@ -3,6 +3,7 @@ package de.scribble.lp.TASTools.savestates;
 import de.scribble.lp.TASTools.ClientProxy;
 import de.scribble.lp.TASTools.CommonProxy;
 import de.scribble.lp.TASTools.ModLoader;
+import de.scribble.lp.TASTools.freezeV2.FreezeHandlerServer;
 import de.scribble.lp.TASTools.velocityV2.RequestVelocityPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -30,14 +31,14 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 							return;
 						}
 						if (message.isLoadSave()) {
-							// new SavestateHandlerClient().saveState();
+							FreezeHandlerServer.clear();
+							ModLoader.NETWORK.sendToAll(new RequestVelocityPacket());
 							if (server.getCurrentPlayerCount() == 1) {
 								ModLoader.NETWORK.sendTo(new SavestatePacket(true, 1), (EntityPlayerMP) player);
 							} else if (server.getCurrentPlayerCount() > 1) {
 								ModLoader.NETWORK.sendTo(new SavestatePacket(true, 1),server.getPlayerList().getPlayers().get(0));
 							}
 						} else {
-							ModLoader.NETWORK.sendToAll(new RequestVelocityPacket());
 							if (server.getCurrentPlayerCount() == 1) {
 								ModLoader.NETWORK.sendTo(new SavestatePacket(false, 1), (EntityPlayerMP) player);
 							} else {
@@ -51,6 +52,7 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 							return;
 						}
 						if (message.isLoadSave()) {
+							FreezeHandlerServer.clear();
 							ModLoader.NETWORK.sendToAll(new RequestVelocityPacket());
 							new SavestateHandlerServer().saveState();
 						}else {
@@ -85,7 +87,7 @@ public class SavestatePacketHandler implements IMessageHandler<SavestatePacket, 
 					if(!message.isLoadSave()) {
 						ClientProxy.getSaveHandlerClient().displayLoadingScreen();
 					}else {
-						new SavestateHandlerClient().displayIngameMenu();
+						ClientProxy.getSaveHandlerClient().displayIngameMenu();
 					}
 				}else if (message.getMode()==1) {
 					if (!message.isLoadSave()) {
