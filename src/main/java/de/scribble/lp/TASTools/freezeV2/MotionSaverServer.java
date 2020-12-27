@@ -12,8 +12,11 @@ public class MotionSaverServer {
 	private float relSavedZ;
 	
 	private float falldistance;
+	
+	private float pitch;
+	private float yaw;
 
-	public MotionSaverServer(String playername, double motionSavedX, double motionSavedY, double motionSavedZ, float relSavedX, float relSavedY, float relSavedZ, float falldistance) {
+	public MotionSaverServer(String playername, double motionSavedX, double motionSavedY, double motionSavedZ, float relSavedX, float relSavedY, float relSavedZ, float falldistance, float pitch, float yaw) {
 		this.playername=playername;
 		this.motionSavedX=motionSavedX;
 		this.motionSavedY=motionSavedY;
@@ -24,6 +27,9 @@ public class MotionSaverServer {
 		this.relSavedZ=relSavedZ;
 		
 		this.falldistance=falldistance;
+		
+		this.pitch=pitch;
+		this.yaw=yaw;
 	}
 	public float getRelSavedX() {
 		return relSavedX;
@@ -48,5 +54,11 @@ public class MotionSaverServer {
 	}
 	public float getFalldistance() {
 		return falldistance;
+	}
+	public float getPitch() {
+		return pitch;
+	}
+	public float getYaw() {
+		return yaw;
 	}
 }

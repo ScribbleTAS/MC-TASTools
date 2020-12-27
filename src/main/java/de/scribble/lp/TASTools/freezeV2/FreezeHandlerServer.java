@@ -32,18 +32,18 @@ public class FreezeHandlerServer {
 		}
 		enabled=enable;
 	}
-	public static void add(EntityPlayerMP player, double motionSavedX, double motionSavedY, double motionSavedZ, float relSavedX, float relSavedY, float relSavedZ) {
+	public static void add(EntityPlayerMP player, double motionSavedX, double motionSavedY, double motionSavedZ, float relSavedX, float relSavedY, float relSavedZ, float pitch, float yaw) {
 		MinecraftServer server = player.getServer();
 		if(!server.isDedicatedServer()) {
 			if(server.getPlayerList().getPlayers().get(0).getName().equalsIgnoreCase(player.getName())) {
-				MotionSaverServer saver= new MotionSaverServer("singleplayer", motionSavedX, motionSavedY, motionSavedZ, relSavedX, relSavedY, relSavedZ, player.fallDistance);
+				MotionSaverServer saver= new MotionSaverServer("singleplayer", motionSavedX, motionSavedY, motionSavedZ, relSavedX, relSavedY, relSavedZ, player.fallDistance, pitch, yaw);
 				playerMotion.put("singleplayer", saver);
 			}else {
-				MotionSaverServer saver= new MotionSaverServer(player.getName(), motionSavedX, motionSavedY, motionSavedZ, relSavedX, relSavedY, relSavedZ, player.fallDistance);
+				MotionSaverServer saver= new MotionSaverServer(player.getName(), motionSavedX, motionSavedY, motionSavedZ, relSavedX, relSavedY, relSavedZ, player.fallDistance, pitch, yaw);
 				playerMotion.put(player.getName(), saver);
 			}
 		}else {
-			MotionSaverServer saver= new MotionSaverServer(player.getName(), motionSavedX, motionSavedY, motionSavedZ, relSavedX, relSavedY, relSavedZ, player.fallDistance);
+			MotionSaverServer saver= new MotionSaverServer(player.getName(), motionSavedX, motionSavedY, motionSavedZ, relSavedX, relSavedY, relSavedZ, player.fallDistance, pitch, yaw);
 			playerMotion.put(player.getName(), saver);
 		}
 	}

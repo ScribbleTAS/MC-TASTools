@@ -31,7 +31,10 @@ public class FreezePacketHandler implements IMessageHandler<FreezePacket, IMessa
 						float ry=relsaver.getRelSavedY();
 						float rz=relsaver.getRelSavedZ();
 						
-						ModLoader.NETWORK.sendToServer(new MovementPacket(x,y,z,rx,ry,rz));
+						float pitch=FreezeHandlerClient.pitch;
+						float yaw=FreezeHandlerClient.yaw;
+						
+						ModLoader.NETWORK.sendToServer(new MovementPacket(x,y,z,rx,ry,rz,pitch,yaw));
 					}
 				}else {
 					FreezeHandlerClient.enable(enabled);

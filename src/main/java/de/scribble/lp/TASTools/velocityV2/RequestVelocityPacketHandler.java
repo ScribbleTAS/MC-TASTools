@@ -23,6 +23,9 @@ public class RequestVelocityPacketHandler implements IMessageHandler<RequestVelo
 				float rx = FreezeHandlerClient.getRelX();
 				float ry = FreezeHandlerClient.getRelY();
 				float rz = FreezeHandlerClient.getRelZ();
+				
+				float pitch= FreezeHandlerClient.pitch;
+				float yaw= FreezeHandlerClient.yaw;
 				if(FreezeHandlerClient.isEnabled()) {
 					MotionSaver saver=FreezeHandlerClient.getSaverClient();
 					x=saver.getMotionSavedX();
@@ -32,8 +35,9 @@ public class RequestVelocityPacketHandler implements IMessageHandler<RequestVelo
 					rx=relsaver.getRelSavedX();
 					ry=relsaver.getRelSavedY();
 					rz=relsaver.getRelSavedZ();
+					
 				}
-				ModLoader.NETWORK.sendToServer(new MovementPacket(x, y, z, rx, ry, rz));
+				ModLoader.NETWORK.sendToServer(new MovementPacket(x, y, z, rx, ry, rz, pitch, yaw));
 			});
 		}
 		return null;

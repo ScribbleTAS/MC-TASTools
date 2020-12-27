@@ -120,13 +120,6 @@ public class TastoolsCommandc extends CommandBase{
 			if (args.length==1&&args[0].equalsIgnoreCase("duping")) {
 				duping(isdedicated, sender);
 			}
-			//velocity singleplayer
-			if (args.length == 1 && args[0].equalsIgnoreCase("velocity")&&!isdedicated) {
-//				velocitySP(sender);
-			//velocity multiplayer
-			} else if (args.length == 1 && args[0].equalsIgnoreCase("velocity")) {
-//				velocityMP(sender);
-			}
 			//reload config
 			if(args.length == 1 && args[0].equalsIgnoreCase("reload")) {
 				reloadConfig(server, sender);
@@ -162,10 +155,7 @@ public class TastoolsCommandc extends CommandBase{
 				freezeCB();
 				// velocity multiplayer
 
-			} else if (args.length == 1 && args[0].equalsIgnoreCase("velocity")) {
-//				velocityCB();
-
-			} else if (args.length == 1 && args[0].equalsIgnoreCase("keystrokes")) {
+			}  else if (args.length == 1 && args[0].equalsIgnoreCase("keystrokes")) {
 				CommonProxy.logger.warn("Cannot enable keystrokes");
 			} else if (args.length == 2 && args[0].equalsIgnoreCase("keystrokes") && server.getPlayerList().getPlayers()
 					.contains(server.getPlayerList().getPlayerByUsername(args[1]))) {

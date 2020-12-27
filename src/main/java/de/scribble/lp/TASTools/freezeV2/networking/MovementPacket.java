@@ -11,9 +11,12 @@ public class MovementPacket implements IMessage{
 	private  float relX;
 	private  float relY;
 	private  float relZ;
+	
+	private float pitch;
+	private float yaw;
 	public MovementPacket() {
 	}
-	public MovementPacket(double x, double y, double z, float rx, float ry, float rz) {
+	public MovementPacket(double x, double y, double z, float rx, float ry, float rz, float pitch, float yaw) {
 		moX=x;
 		moY=y;
 		moZ=z;
@@ -21,6 +24,9 @@ public class MovementPacket implements IMessage{
 		relX=rx;
 		relY=ry;
 		relZ=rz;
+		
+		this.pitch=pitch;
+		this.yaw=yaw;
 	}
 
 	@Override
@@ -32,6 +38,9 @@ public class MovementPacket implements IMessage{
 		relX=buf.readFloat();
 		relY=buf.readFloat();
 		relZ=buf.readFloat();
+		
+		pitch=buf.readFloat();
+		yaw=buf.readFloat();
 	}
 
 	@Override
@@ -43,6 +52,9 @@ public class MovementPacket implements IMessage{
 		buf.writeFloat(relX);
 		buf.writeFloat(relY);
 		buf.writeFloat(relZ);
+		
+		buf.writeFloat(pitch);
+		buf.writeFloat(yaw);
 	}
 	public double getMoX() {
 		return moX;
@@ -61,5 +73,11 @@ public class MovementPacket implements IMessage{
 	}
 	public float getRelZ() {
 		return relZ;
+	}
+	public float getPitch() {
+		return pitch;
+	}
+	public float getYaw() {
+		return yaw;
 	}
 }

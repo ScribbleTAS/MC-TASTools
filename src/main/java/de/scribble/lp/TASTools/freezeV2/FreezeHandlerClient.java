@@ -7,6 +7,7 @@ import de.scribble.lp.TASTools.ModLoader;
 import de.scribble.lp.TASTools.freezeV2.networking.MovementPacket;
 import de.scribble.lp.TASTools.freezeV2.networking.PermissionPacket;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiMultiplayer;
@@ -17,18 +18,24 @@ import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class FreezeHandlerClient {
 	
-	private static double moX=0;
-	private static double moY=0;
-	private static double moZ=0;
+	public static double moX=0;
+	public static double moY=0;
+	public static double moZ=0;
 	
-	private static float relX=0;
-	private static float relY=0;
-	private static float relZ=0;
+	public static float relX=0;
+	public static float relY=0;
+	public static float relZ=0;
+	
+	public static float pitch;
+	public static float yaw;
+	public static boolean pitchapplied;
 	
 	private static boolean enabled=false;
 	
@@ -111,7 +118,7 @@ public class FreezeHandlerClient {
 			}
 		}else if(ev.getGui() instanceof GuiIngameMenu) {
 			if(!enabled) {
-				ModLoader.NETWORK.sendToServer(new MovementPacket(moX, moY, moZ, relX, relY, relZ));
+				ModLoader.NETWORK.sendToServer(new MovementPacket(moX, moY, moZ, relX, relY, relZ, pitch, yaw));
 			}
 		}
 	}
@@ -156,6 +163,30 @@ public class FreezeHandlerClient {
 	public void disableMouse(MouseEvent ev) {
 		if(enabled) {
 			ev.setCanceled(true);
+		}
+	}
+	@SubscribeEvent
+	public void onRender(TickEvent.RenderTickEvent ev) {
+		if (ev.phase == Phase.START) {
+			EntityPlayerSP player = Minecraft.getMinecraft().player;
+			if (player != null) {
+				if (enabled) {
+					if (pitchapplied) {
+					} else {
+						pitchapplied = true;
+					}
+				} else {
+
+					if (!pitchapplied) {
+						pitch = player.rotationPitch;
+						yaw = player.rotationYaw;
+					} else {
+						pitchapplied = false;
+					}
+				}
+				player.rotationPitch = pitch;
+				player.rotationYaw = yaw;
+			}
 		}
 	}
 }

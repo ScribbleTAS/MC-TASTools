@@ -27,15 +27,29 @@ public class MovementPacketHandler implements IMessageHandler<MovementPacket, IM
 				float ry=message.getRelY();
 				float rz=message.getRelZ();
 				
-				FreezeHandlerServer.add(player, x, y, z, rx, ry, rz);
+				float pitch=message.getPitch();
+				float yaw=message.getYaw();
+				
+				FreezeHandlerServer.add(player, x, y, z, rx, ry, rz, pitch, yaw);
 			});
 		}else {
 			Minecraft.getMinecraft().addScheduledTask(()->{
 				String playername=Minecraft.getMinecraft().player.getName();
-				
-				FreezeHandlerClient.saverClient=new MotionSaver(playername, FreezeHandlerClient.isEnabled(), message.getMoX(), message.getMoY(), message.getMoZ());
+				if(FreezeHandlerClient.isEnabled()) {
+					FreezeHandlerClient.saverClient=new MotionSaver(playername, FreezeHandlerClient.isEnabled(), message.getMoX(), message.getMoY(), message.getMoZ());
+						
+					FreezeHandlerClient.relsaverClient=new RelMotionSaver(playername, FreezeHandlerClient.isEnabled(), message.getRelX(), message.getRelY(), message.getRelZ());
+				}else {
+					FreezeHandlerClient.moX=message.getMoX();
+					FreezeHandlerClient.moY=message.getMoY();
+					FreezeHandlerClient.moZ=message.getMoZ();
 					
-				FreezeHandlerClient.relsaverClient=new RelMotionSaver(playername, FreezeHandlerClient.isEnabled(), message.getRelX(), message.getRelY(), message.getRelZ());
+					FreezeHandlerClient.relX=message.getRelX();
+					FreezeHandlerClient.relY=message.getRelY();
+					FreezeHandlerClient.relZ=message.getRelZ();
+				}
+				FreezeHandlerClient.pitch=message.getPitch();
+				FreezeHandlerClient.yaw=message.getYaw();
 				
 				ModLoader.NETWORK.sendToServer(new AcknowledgePacket());
 				FreezeHandlerClient.motionapplied=true;
