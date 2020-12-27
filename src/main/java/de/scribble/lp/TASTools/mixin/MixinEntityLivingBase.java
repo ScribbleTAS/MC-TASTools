@@ -16,6 +16,7 @@ public abstract class MixinEntityLivingBase extends Entity{
 	public MixinEntityLivingBase(World worldIn) {
 		super(worldIn);
 	}
+	
 	@Redirect(method = "travel", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;move(Lnet/minecraft/entity/MoverType;DDD)V"))
 	public void redirectTravelMotion(EntityLivingBase entity, MoverType type, double x, double y, double z) {
 		if((EntityLivingBase)(Object)this instanceof EntityPlayerSP) {
