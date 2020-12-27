@@ -29,7 +29,7 @@ public class CoreMod implements IFMLLoadingPlugin {
                 }
             } catch (URISyntaxException ignored) {}
         } else {
-            LogManager.getLogger().warn("No CodeSource, if this is not a development environment we might run into problems!");
+            LogManager.getLogger().warn("No CodeSource, if this is not a development environment we might run into problems!"); // MIGHT
             LogManager.getLogger().warn(this.getClass().getProtectionDomain());
         }
     }

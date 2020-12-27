@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.lwjgl.input.Keyboard;
 
+import de.pfannekuchen.TASTools.tracer.Trajectories;
 import de.scribble.lp.TASTools.duping.DupeEvents;
 import de.scribble.lp.TASTools.freezeV2.FreezeHandlerClient;
 import de.scribble.lp.TASTools.keystroke.GuiKeystrokes;
@@ -28,6 +29,7 @@ public class ClientProxy extends CommonProxy{
 	public static KeyBinding FreezeKey = new KeyBinding("Freeze/Unfreeze Players", Keyboard.KEY_Y, "TASTools");
 	public static KeyBinding SavestateSaveKey = new KeyBinding("Create Savestate", Keyboard.KEY_J, "TASTools");
 	public static KeyBinding SavestateLoadKey = new KeyBinding("Load Latest Savestate", Keyboard.KEY_K, "TASTools");
+	public static KeyBinding TracerlineToggleKey = new KeyBinding("Toggle trajectory lines", Keyboard.KEY_O, "TASTools");
 	public static KeyBinding TestingKey = new KeyBinding("A keybind for quickly testing things", Keyboard.KEY_H, "TASTools");
 	
 	public static Configuration config;
@@ -40,6 +42,7 @@ public class ClientProxy extends CommonProxy{
 		ClientRegistry.registerKeyBinding(FreezeKey);
 		ClientRegistry.registerKeyBinding(SavestateSaveKey);
 		ClientRegistry.registerKeyBinding(SavestateLoadKey);
+		ClientRegistry.registerKeyBinding(TracerlineToggleKey);
 		//ClientRegistry.registerKeyBinding(TestingKey);
 		
 		config = new Configuration(ev.getSuggestedConfigurationFile());
@@ -67,6 +70,7 @@ public class ClientProxy extends CommonProxy{
 		MinecraftForge.EVENT_BUS.register(new GuiOverlayLogo());
 		MinecraftForge.EVENT_BUS.register(new SavestateEvents());
 		MinecraftForge.EVENT_BUS.register(new MiscEvents());
+		MinecraftForge.EVENT_BUS.register(new Trajectories());
 		MinecraftForge.EVENT_BUS.register(new ShieldDownloader());
 		MinecraftForge.EVENT_BUS.register(new FreezeHandlerClient());
 //		MinecraftForge.EVENT_BUS.register(new InfoGui());
